@@ -1,0 +1,8 @@
+import {Heart,Mic,MicOff,Volume2,VolumeX} from 'lucide-react'
+import CallControls from './CallControls'
+export default function ActiveCall({resident,seconds,count,question,busy,sound,listening,onSound,onMicrophone,onFinish}){
+ const duration=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`
+ return <section className="phone-card active-card" aria-label="통화 중"><div className="phone-top"><span>안심온</span><span>연결됨</span></div><div className="phone-middle"><div className="avatar"><Heart fill="currentColor" size={46}/></div><h1 className="phone-heading">안심온 돌봄전화</h1><p className="phone-subtitle">{resident.name} 님과 안부 확인 통화 중</p><div className="phone-time"><span aria-label="통화 시간">{duration}</span> · {count}/5 답변</div></div><div className="phone-current"><div className="oncall-tag"><span className="pulse"/>안심온 질문</div><p>{question||'모든 질문에 답변하셨습니다.'}</p></div>
+ <div className="phone-tools"><button onClick={onSound} aria-label={sound?'음성 끄기':'음성 켜기'}>{sound?<Volume2/>:<VolumeX/>}<span>음성 {sound?'켜짐':'꺼짐'}</span></button><button disabled={busy||count===5} className={listening?'mic-live':''} onClick={onMicrophone} aria-label={listening?'말하기 중지':'말하기'}>{listening?<MicOff/>:<Mic/>}<span>{listening?'듣는 중':'말하기'}</span></button></div>
+ <CallControls busy={busy} complete={count===5} onFinish={onFinish}/></section>
+}

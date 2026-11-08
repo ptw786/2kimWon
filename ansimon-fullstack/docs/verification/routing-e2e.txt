@@ -1,0 +1,12 @@
+PASS: actual stopped-backend proxy returns 502 with explanation
+PASS: backend startup, resident list and real retry requests
+PASS: independent resident loading during injected dashboard 500
+PASS: elder route, real Web Audio ringtone and accept cleanup
+PASS: start, answers, in-call reload recovery, committed finish retry, saved summary/detail
+PASS: malformed and missing elder IDs and unknown route
+PASS: injected autoplay restriction with native audio, manual enable, cadence/re-render singleton, quiet volume, large mobile controls, decline/reset/navigation cleanup
+PASS: rapid double accept creates one call; answer and interrupted finish persist
+PASS: navigation aborts pending API work; records URL reload persists completed/declined/interrupted calls
+PASS: call loading API 500 retry and lost start response recovery without duplicate calls
+PASS: unsupported Web Audio gives explanation without blocking receive controls
+PASS: browser refresh and backend restart retain records; no browser JS errors

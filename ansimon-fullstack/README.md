@@ -44,9 +44,9 @@ npm run dev
 
 1. **대시보드**에서 관리 대상/안부 확인 상태 및 어르신 목록 확인.
 2. 어르신 행의 **전화 체험** 클릭 → 어르신 전용 전화 화면으로 이동.
-3. **전화 받기** 클릭 → 음성 질문 출력 → **말하기** 버튼으로 답변(Chrome/Edge 마이크 허용) 또는 입력창 답변.
+3. `/call/{어르신ID}`의 별도 어르신용 화면에서 벨소리가 차단되어 있으면 **벨소리 켜기** 클릭. **전화 받기** 클릭 → 음성 질문 출력 → **말하기** 버튼으로 답변(Chrome/Edge 마이크 허용) 또는 입력창 답변.
 4. 다섯 질문에 답하면 **안부 확인 완료**. 중간에 끊으면 **통화 중단**, 수신을 거절하면 **수신 거절**.
-5. **통화 기록**에서 날짜/결과/요약/실제 답변 확인. 새로고침해도 SQLite에 남습니다.
+5. `/records`의 **통화 기록**에서 날짜/결과/요약/실제 답변 확인. 새로고침해도 SQLite에 남습니다.
 
 음성 인식이 되지 않아도 입력창과 빠른 답변 버튼으로 앱 전체 흐름을 확인할 수 있습니다.
 
@@ -60,7 +60,10 @@ ansimon-fullstack/
 │   ├── index.html            # React 진입 HTML
 │   └── src/
 │       ├── main.jsx          # React 실행
-│       ├── App.jsx           # 대시보드, 기록, 전화 페이지
+│       ├── App.jsx           # React Router: /, /call/:elderId, /records
+│       ├── pages/            # 대시보드·어르신 전화·통화 기록
+│       ├── components/       # 사이드바·수신/통화 화면·입력·대화
+│       ├── hooks/            # 통화 상태·요청 취소·Web Audio 벨소리
 │       ├── api.js            # 서버 API 호출
 │       └── styles.css        # Tailwind + 사용자 정의 UI
 ├── backend/
@@ -165,3 +168,11 @@ backend\.venv\Scripts\python.exe frontend/tests/e2e.py
 ```
 
 테스트는 임시 DB를 사용합니다. Linux에서 루트 `.venv`를 만든 경우 `python frontend/tests/e2e.py`로 실행할 수 있으며, 다른 Python 경로는 `ANSIMON_PYTHON`에 지정하세요. 브라우저 테스트에는 별도의 Playwright 설치가 필요합니다. 마이크·한국어 음성 출력은 실제 OS·권한 환경에서 별도 확인해야 합니다.
+
+## 화면 분리·벨소리 업데이트 (2026-11-09)
+
+- 생활지원사 대시보드 `/`, 별도 어르신 전화 화면 `/call/:elderId`, 기록 `/records`로 분리했습니다.
+- Web Audio 벨소리와 자동 재생 차단 시 켜기 버튼, 수신·거절·화면 이동·종료 시 리소스 정리를 적용했습니다.
+- 기존 백엔드 테스트 8개, 실제 서버·Chromium 검증 12개 시나리오 묶음, React 빌드가 통과했습니다.
+- [수정 파일·테스트·알려진 제한](docs/ROUTING_RINGTONE_REPORT.md)을 확인하세요.
+- 브라우저 테스트는 기존 `frontend/tests/e2e.py` 명령을 사용하며, Playwright/Chromium이 필요합니다. `ANSIMON_SCREENSHOT_DIR`을 지정하면 검증 화면을 해당 폴더에 저장합니다.
