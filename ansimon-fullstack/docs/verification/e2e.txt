@@ -1,0 +1,5 @@
+PASS: actual stopped-backend proxy returns 502 with explanation
+PASS: backend startup, resident list and real retry requests
+PASS: independent resident loading during injected dashboard 500
+PASS: start, answers, in-call reload recovery, committed finish retry, saved summary/detail
+PASS: browser refresh and backend restart retain records; no browser JS errors
