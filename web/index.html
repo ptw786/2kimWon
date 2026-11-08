@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>안심온 · 안부 확인</title><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script></head>
+<body><header><div><span class="logo">안심온</span><span>따뜻한 안부, 함께하는 일상</span></div><small>로컬 시연 · 실제 전화 발신 없음</small></header><main>
+<nav aria-label="주요 메뉴"><button data-view="dashboard">생활지원사 화면</button><button data-view="phone">안부전화 체험</button><button data-view="history">통화 기록</button></nav>
+<p id="error" role="alert" hidden></p>
+<section id="dashboard"><h1>오늘의 안부 확인</h1><p>어르신의 완료 상태와 확인이 필요한 내용을 살펴보세요.</p><div id="stats" class="cards"></div><div id="residents" class="cards"></div><button id="refresh">새로고침</button></section>
+<section id="phone" hidden><h1>안부전화 체험</h1><p>시연용 답변을 입력해 주세요. 실제 긴급 상황에서는 119에 직접 연락하세요.</p><label for="resident">시연 대상</label><select id="resident"></select><div class="actions"><button id="start">전화 받기</button><button id="decline" class="secondary">수신 거절</button></div><div id="conversation" aria-live="polite"></div><form id="answer-form" hidden><label for="answer">답변</label><textarea id="answer" required maxlength="500" placeholder="오늘은 몸이 괜찮아요"></textarea><div class="actions"><button type="submit">답변 보내기</button><button type="button" id="mic" class="secondary">음성 입력</button><button type="button" id="stop" class="secondary">통화 중단</button></div></form><label><input id="read-aloud" type="checkbox"> 질문 읽어주기</label><p id="call-state" role="status"></p></section>
+<section id="history" hidden><h1>통화 기록</h1><button id="reload-history">기록 새로고침</button><div id="calls"></div></section>
+<section id="detail" hidden><h1>통화 상세</h1><div id="detail-content"></div><button id="back">기록으로 돌아가기</button></section>
+</main><footer>안심온 웹앱 시연판 · 규칙 기반 확인 결과는 생활지원사의 검토를 돕습니다.</footer></body></html>
