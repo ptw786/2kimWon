@@ -28,9 +28,9 @@ def test_retry_and_concurrent_writes():
     assert len(client.get('/api/calls').json()) == 1
     assert client.post('/api/residents/1/calls').status_code == 409
     assert client.post('/api/residents/2/calls', headers=key).status_code == 409
-    for index in range(5):
+    for index,text in enumerate(['안 아파','밥 먹었어','잘 잤어','약 먹었어','기분 좋아']):
         def answer(_):
-            return client.post(f'/api/calls/{cid}/turns', json={'index':index,'answer':'잘 지내요'})
+            return client.post(f'/api/calls/{cid}/turns', json={'index':index,'answer':text})
         with ThreadPoolExecutor(max_workers=4) as pool:
             answers = list(pool.map(answer, range(4)))
         assert all(r.status_code == 201 for r in answers)

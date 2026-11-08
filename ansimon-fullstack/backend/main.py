@@ -2,6 +2,7 @@
 from __future__ import annotations
 import os
 import logging
+import json
 import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
@@ -11,6 +12,7 @@ from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from fastapi.responses import JSONResponse
+from conversation import QUESTIONS, LABELS, CLASS_LABELS, MAX_REASKS, assess, summary_for
 
 DB_PATH = Path(os.getenv('ANSIMON_DB', str(Path(__file__).resolve().parent / 'ansimon.db'))).resolve()
 # Korean service dates do not require an OS IANA timezone database (Windows).
@@ -18,15 +20,6 @@ KST = timezone(timedelta(hours=9), name='Asia/Seoul')
 logger = logging.getLogger('uvicorn.error')
 app = FastAPI(title='안심온 API', version='1.0.0', description='로컬 개발용 규칙 기반 안부 확인 API')
 app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=False, allow_methods=['GET', 'POST'], allow_headers=['Content-Type', 'Idempotency-Key'])
-
-QUESTIONS = [
-    ('condition', '안녕하세요. 안심온입니다. 오늘 몸 상태는 어떠세요?'),
-    ('meal', '오늘 식사는 잘 챙겨 드셨나요?'),
-    ('sleep', '어젯밤 잠은 편히 주무셨나요?'),
-    ('medicine', '평소 드시는 약이 있다면 잘 챙겨 드셨나요?'),
-    ('mood', '오늘 기분은 어떠세요?'),
-]
-LABELS = dict(condition='몸 상태', meal='식사', sleep='수면', medicine='복약', mood='기분')
 
 @contextmanager
 def db(write=False):
@@ -78,6 +71,21 @@ def init_db():
             if 'request_key' not in {row['name'] for row in c.execute(f'PRAGMA table_info({table})')}:
                 c.execute(f'ALTER TABLE {table} ADD COLUMN request_key TEXT')
         c.execute('CREATE UNIQUE INDEX IF NOT EXISTS calls_request_key ON calls(request_key)')
+        turn_columns = {row['name'] for row in c.execute('PRAGMA table_info(turns)')}
+        for name, definition in [('classification', "TEXT NOT NULL DEFAULT 'unclassified'"),
+                                 ('reply', "TEXT NOT NULL DEFAULT ''"), ('emergency', 'INTEGER NOT NULL DEFAULT 0')]:
+            if name not in turn_columns:
+                c.execute(f'ALTER TABLE turns ADD COLUMN {name} {definition}')
+        c.execute('''CREATE TABLE IF NOT EXISTS turn_attempts (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          call_id INTEGER NOT NULL REFERENCES calls(id) ON DELETE CASCADE,
+          question_index INTEGER NOT NULL, attempt INTEGER NOT NULL,
+          request_key TEXT, question TEXT NOT NULL, answer TEXT NOT NULL,
+          classification TEXT NOT NULL, reply TEXT NOT NULL,
+          emergency INTEGER NOT NULL DEFAULT 0, result_json TEXT NOT NULL,
+          created_at TEXT NOT NULL,
+          UNIQUE(call_id,question_index,attempt), UNIQUE(call_id,request_key)
+        )''')
         if c.execute('SELECT COUNT(*) FROM residents').fetchone()[0] == 0:
             c.executemany('INSERT INTO residents(id,name,age,neighborhood,call_time) VALUES(?,?,?,?,?)', [
                 (1,'김영자',78,'중구 은행동','10:00'),(2,'이순희',82,'서구 둔산동','10:30'),(3,'박정호',75,'유성구 봉명동','11:00'),(4,'최복순',80,'동구 가양동','11:20')
@@ -96,6 +104,7 @@ async def database_error(request: Request, exc: sqlite3.Error):
 class TurnInput(BaseModel):
     answer: str = Field(min_length=1, max_length=500)
     index: int | None = Field(default=None, ge=0, lt=len(QUESTIONS))
+    attempt: int | None = Field(default=None, ge=0, le=MAX_REASKS)
 
 class FinishInput(BaseModel):
     status: Literal['completed', 'interrupted']
@@ -110,22 +119,17 @@ def fetch_call(c, call_id):
     return row
 
 def fetch_turns(c, call_id):
-    return [dict(row) for row in c.execute('SELECT id,topic,question,answer,created_at FROM turns WHERE call_id=? ORDER BY id', (call_id,))]
+    return [dict(row) for row in c.execute('SELECT id,topic,question,answer,classification,reply,emergency,created_at FROM turns WHERE call_id=? ORDER BY id', (call_id,))]
 
-def response_for(topic: str, answer: str) -> str:
-    text = answer.replace(' ', '')
-    if any(word in text for word in ['못먹', '안먹', '못잤', '아파', '힘들', '외로', '우울']):
-        return '말씀해 주셔서 감사합니다. 필요한 도움이 있다면 담당 생활지원사에게 꼭 알려주세요.'
-    if topic == 'meal':
-        return '식사에 대해 알려주셔서 감사합니다.'
-    if topic == 'sleep':
-        return '잠은 충분히 주무시는 게 중요하지요. 알려주셔서 감사합니다.'
-    return '네, 말씀 잘 들었습니다.'
+def fetch_attempts(c, call_id):
+    return [dict(row) for row in c.execute('SELECT id,question_index,attempt,question,answer,classification,reply,emergency,created_at FROM turn_attempts WHERE call_id=? ORDER BY id', (call_id,))]
 
-def summarize(turns):
-    if not turns:
-        return '답변 없이 통화가 종료되었습니다.'
-    return ' / '.join(f"{LABELS.get(t['topic'],t['topic'])}: {t['answer']}" for t in turns)
+def dialogue_state(c, call_id):
+    count = c.execute('SELECT COUNT(*) FROM turns WHERE call_id=?', (call_id,)).fetchone()[0]
+    attempts = c.execute('SELECT COUNT(*) FROM turn_attempts WHERE call_id=? AND question_index=?', (call_id,count)).fetchone()[0]
+    return {'count':count, 'index':count, 'attempt':min(attempts,MAX_REASKS),
+            'retry_count':min(attempts,MAX_REASKS), 'finished':count >= len(QUESTIONS),
+            'question':QUESTIONS[count][1] if count < len(QUESTIONS) else None}
 
 @app.get('/api/health')
 def health():
@@ -173,34 +177,50 @@ def decline_call(resident_id: int, request_key: str | None = Header(default=None
         return {'id':cur.lastrowid,'status':'declined'}
 
 @app.post('/api/calls/{call_id}/turns', status_code=201)
-def add_turn(call_id: int, body: TurnInput):
+def add_turn(call_id: int, body: TurnInput, request_key: str | None = Header(default=None, alias='Idempotency-Key', max_length=128)):
     answer = body.answer.strip()
     if not answer:
         raise HTTPException(422, '빈 답변은 저장할 수 없습니다.')
     with db(write=True) as c:
         call = fetch_call(c, call_id)
-        turns = fetch_turns(c, call_id)
-        if body.index is not None and body.index < len(turns):
-            old = turns[body.index]
+        state = dialogue_state(c, call_id)
+        index = body.index if body.index is not None else state['index']
+        attempt = body.attempt if body.attempt is not None else (state['attempt'] if index == state['index'] else 0)
+        old = c.execute('SELECT * FROM turn_attempts WHERE call_id=? AND question_index=? AND attempt=?', (call_id,index,attempt)).fetchone()
+        if request_key:
+            keyed = c.execute('SELECT * FROM turn_attempts WHERE call_id=? AND request_key=?', (call_id,request_key)).fetchone()
+            if keyed and (keyed['question_index'] != index or keyed['attempt'] != attempt):
+                raise HTTPException(409, '다른 답변에 사용된 중복 방지 키입니다.')
+        if old:
             if old['answer'] != answer:
-                raise HTTPException(409, '이미 저장된 질문입니다. 통화 상태를 새로 불러오세요.')
-            return turn_result(body.index, answer)
-        if body.index is not None and body.index != len(turns):
-            raise HTTPException(409, '질문 순서가 다릅니다. 통화 상태를 새로 불러오세요.')
+                raise HTTPException(409, '이미 저장된 답변 순번입니다. 통화 상태를 새로 불러오세요.')
+            return json.loads(old['result_json'])
         if call['status'] != 'in_progress':
             raise HTTPException(409, '종료된 통화입니다.')
-        index = c.execute('SELECT COUNT(*) FROM turns WHERE call_id=?', (call_id,)).fetchone()[0]
+        if index != state['index'] or attempt != state['attempt']:
+            raise HTTPException(409, '질문 또는 재질문 순서가 다릅니다. 통화 상태를 새로 불러오세요.')
         if index >= len(QUESTIONS):
             raise HTTPException(409, '모든 질문이 완료되었습니다.')
         topic, question = QUESTIONS[index]
-        c.execute('INSERT INTO turns(call_id,topic,question,answer,created_at) VALUES(?,?,?,?,?)', (call_id,topic,question,answer,now()))
-        return turn_result(index, answer)
-
-def turn_result(index, answer):
-    next_index = index + 1
-    return {'count':next_index, 'reply':response_for(QUESTIONS[index][0], answer),
-            'finished':next_index == len(QUESTIONS),
-            'next_question':QUESTIONS[next_index][1] if next_index < len(QUESTIONS) else None}
+        assessment = assess(topic, answer)
+        needs_retry = assessment.classification == 'unknown' and attempt < MAX_REASKS
+        reply = assessment.reply if assessment.classification != 'unknown' or needs_retry else '답변을 확인하기 어려워 이 항목은 확인 불가로 기록할게요.'
+        count = index if needs_retry else index + 1
+        result = {'count':count, 'question_index':index, 'attempt':attempt,
+                  'classification':assessment.classification,
+                  'classification_label':CLASS_LABELS[assessment.classification],
+                  'reply':reply, 'emergency':assessment.emergency,
+                  'needs_retry':needs_retry, 'retry_count':min(attempt+1,MAX_REASKS) if needs_retry else attempt,
+                  'next_attempt':attempt+1 if needs_retry else 0,
+                  'finished':count == len(QUESTIONS),
+                  'next_question':QUESTIONS[count][1] if count < len(QUESTIONS) else None}
+        # Both attempts and final answers commit atomically before the response.
+        c.execute('INSERT INTO turn_attempts(call_id,question_index,attempt,request_key,question,answer,classification,reply,emergency,result_json,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                  (call_id,index,attempt,request_key,question,answer,assessment.classification,reply,int(assessment.emergency),json.dumps(result,ensure_ascii=False),now()))
+        if not needs_retry:
+            c.execute('INSERT INTO turns(call_id,topic,question,answer,classification,reply,emergency,created_at) VALUES(?,?,?,?,?,?,?,?)',
+                      (call_id,topic,question,answer,assessment.classification,reply,int(assessment.emergency),now()))
+        return result
 
 @app.post('/api/calls/{call_id}/finish')
 def finish_call(call_id: int, body: FinishInput):
@@ -213,7 +233,7 @@ def finish_call(call_id: int, body: FinishInput):
         turns = fetch_turns(c,call_id)
         if body.status == 'completed' and len(turns) != len(QUESTIONS):
             raise HTTPException(422,'5개 질문에 모두 답해야 완료 처리할 수 있습니다.')
-        summary = summarize(turns)
+        summary = summary_for(turns)
         c.execute('UPDATE calls SET ended_at=?,status=?,summary=? WHERE id=?',(now(),body.status,summary,call_id))
         return {'id':call_id,'status':body.status,'summary':summary,'answered':len(turns)}
 
@@ -231,7 +251,7 @@ def calls(limit: int = 100, resident_id: int | None = None):
 def call_detail(call_id: int):
     with db() as c:
         row = fetch_call(c, call_id)
-        return {**dict(row),'turns':fetch_turns(c,call_id)}
+        return {**dict(row),'turns':fetch_turns(c,call_id), 'attempts':fetch_attempts(c,call_id), 'dialogue_state':dialogue_state(c,call_id)}
 
 @app.get('/api/dashboard')
 def dashboard():

@@ -89,7 +89,7 @@ def run_extra_scenarios(browser,page,errors):
     expect(page.get_by_label('답변 입력')).to_be_enabled()
     assert_audio_closed(page)
     assert len(page.request.get(URL+'/api/calls?resident_id=3').json())==1
-    page.get_by_label('답변 입력').fill('중단 전 답변')
+    page.get_by_label('답변 입력').fill('몸이 괜찮아요')
     page.get_by_label('답변 입력').press('Enter')
     expect(page.locator('.step-indicator')).to_have_text('1 / 5')
     if screenshot:
@@ -251,7 +251,7 @@ def main():
                     cid=records[0]['id']
                     detail=page.request.get(URL+f'/api/calls/{cid}').json()
                     assert len(detail['turns'])==5 and detail['status']=='completed'
-                    assert detail['summary'].startswith('몸 상태: 몸 상태 좋아요')
+                    assert detail['summary'].startswith('건강 상태: 몸 상태 좋아요')
                     print('PASS: start, answers, in-call reload recovery, committed finish retry, saved summary/detail')
                     page.reload()
                     page.get_by_role('link',name='통화 기록',exact=True).first.click()
@@ -262,6 +262,8 @@ def main():
                     backend=start_backend()
                     assert page.request.get(URL+f'/api/calls/{cid}').json()==detail
                     run_extra_scenarios(browser,page,errors)
+                    from conversation_scenarios import run_conversation_scenarios
+                    run_conversation_scenarios(browser,errors)
                     assert not errors, errors
                     print('PASS: browser refresh and backend restart retain records; no browser JS errors')
                     browser.close()

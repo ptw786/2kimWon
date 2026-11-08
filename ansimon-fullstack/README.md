@@ -176,3 +176,11 @@ backend\.venv\Scripts\python.exe frontend/tests/e2e.py
 - 기존 백엔드 테스트 8개, 실제 서버·Chromium 검증 12개 시나리오 묶음, React 빌드가 통과했습니다.
 - [수정 파일·테스트·알려진 제한](docs/ROUTING_RINGTONE_REPORT.md)을 확인하세요.
 - 브라우저 테스트는 기존 `frontend/tests/e2e.py` 명령을 사용하며, Playwright/Chromium이 필요합니다. `ANSIMON_SCREENSHOT_DIR`을 지정하면 검증 화면을 해당 폴더에 저장합니다.
+
+## 규칙 기반 안부 대화 업데이트 (2026-11-09)
+
+질문별 긍정·부정·중립·확인 불가 분류, 문맥에 맞는 후속 응답, 최대 2회 재질문을 지원합니다. 답변과 재질문 횟수는 FastAPI/SQLite에 저장됩니다. 저장 실패 시 현재 화면의 원문을 보존해 재시도하고, 후속 응답의 TTS가 끝난 후 다음 질문을 읽습니다. 5문항 확정 후 종료하며 도중 종료해도 저장된 답변을 유지합니다.
+
+OpenAI API나 유료 대화 API를 호출하지 않습니다. 기존 DB는 변경 전에 백업하고 보존합니다. 긴급 표현에는 직접 119에 연락하도록 안내하며 실제 신고를 수행하지 않습니다.
+
+분류 규칙, API 필드, 수정 파일 및 70개 백엔드·18개 브라우저 시나리오의 검증 범위는 [대화 엔진 보고서](docs/CONVERSATION_ENGINE.md)를 확인하세요.
