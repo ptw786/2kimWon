@@ -126,7 +126,7 @@ def run_conversation_scenarios(browser,errors):
     saved=detail(retry,2)
     assert len(saved['attempts'])==7 and len(saved['turns'])==5
     assert saved['turns'][0]['classification']=='unknown'
-    assert 'qwerty' not in saved['summary'] and '확인 불가 항목: 건강 상태' in saved['summary']
+    assert 'qwerty' not in saved['summary'] and '확인되지 않음: 건강 상태' in saved['summary']
     retry.close()
     print('PASS: two persisted reasks, response-loss retry does not duplicate, reload keeps retry count, third unknown finalizes, summary excludes gibberish')
 
@@ -138,7 +138,7 @@ def run_conversation_scenarios(browser,errors):
     urgent.get_by_role('button',name='통화 종료',exact=True).click()
     expect(urgent.locator('.phone-ended')).to_contain_text('통화 중단')
     saved=detail(urgent,3)
-    assert saved['turns'][0]['emergency'] and '자동 신고 없음' in saved['summary']
+    assert saved['analysis_events'][0]['emergency'] and '자동 신고 없음' in saved['summary']
     urgent.close()
     print('PASS: urgent text displays and queues direct 119 guidance; saved records never claim dispatch')
 
@@ -150,7 +150,7 @@ def run_conversation_scenarios(browser,errors):
     interrupted.get_by_role('button',name='통화 종료',exact=True).click()
     expect(interrupted.locator('.phone-ended')).to_contain_text('통화 중단')
     assert len(detail(interrupted,4)['turns'])==1
-    assert detail(interrupted,4)['summary']=='건강 상태: 안 아파'
+    assert detail(interrupted,4)['summary'].startswith('건강 상태: 안 아파 / 확인되지 않음:')
     assert interrupted.evaluate('window.__tts.pending===null')
     assert len(interrupted.evaluate('window.__tts.calls'))==2
     interrupted.close()

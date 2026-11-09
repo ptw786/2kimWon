@@ -12,6 +12,7 @@ from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from fastapi.responses import JSONResponse
+from dialogue_manager import transition
 from conversation import QUESTIONS, LABELS, CLASS_LABELS, MAX_REASKS, assess, summary_for
 
 DB_PATH = Path(os.getenv('ANSIMON_DB', str(Path(__file__).resolve().parent / 'ansimon.db'))).resolve()
@@ -91,6 +92,9 @@ def init_db():
                 (1,'김영자',78,'중구 은행동','10:00'),(2,'이순희',82,'서구 둔산동','10:30'),(3,'박정호',75,'유성구 봉명동','11:00'),(4,'최복순',80,'동구 가양동','11:20')
             ])
 
+        c.execute('CREATE TABLE IF NOT EXISTS hybrid_state (call_id INTEGER PRIMARY KEY REFERENCES calls(id), state_json TEXT NOT NULL)')
+        c.execute('CREATE TABLE IF NOT EXISTS hybrid_events (id INTEGER PRIMARY KEY, call_id INTEGER NOT NULL REFERENCES calls(id), analysis_json TEXT NOT NULL, created_at TEXT NOT NULL)')
+
 init_db()
 
 @app.exception_handler(sqlite3.Error)
@@ -104,7 +108,9 @@ async def database_error(request: Request, exc: sqlite3.Error):
 class TurnInput(BaseModel):
     answer: str = Field(min_length=1, max_length=500)
     index: int | None = Field(default=None, ge=0, lt=len(QUESTIONS))
-    attempt: int | None = Field(default=None, ge=0, le=MAX_REASKS)
+    attempt: int | None = Field(default=None, ge=0, le=10000)
+    engine: Literal["legacy", "hybrid"] = "legacy"
+    source: Literal["text", "stt", "stt_error", "silence"] = "text"
 
 class FinishInput(BaseModel):
     status: Literal['completed', 'interrupted']
@@ -125,6 +131,9 @@ def fetch_attempts(c, call_id):
     return [dict(row) for row in c.execute('SELECT id,question_index,attempt,question,answer,classification,reply,emergency,created_at FROM turn_attempts WHERE call_id=? ORDER BY id', (call_id,))]
 
 def dialogue_state(c, call_id):
+    saved = c.execute('SELECT state_json FROM hybrid_state WHERE call_id=?',(call_id,)).fetchone()
+    if saved:
+        return json.loads(saved[0])
     count = c.execute('SELECT COUNT(*) FROM turns WHERE call_id=?', (call_id,)).fetchone()[0]
     attempts = c.execute('SELECT COUNT(*) FROM turn_attempts WHERE call_id=? AND question_index=?', (call_id,count)).fetchone()[0]
     return {'count':count, 'index':count, 'attempt':min(attempts,MAX_REASKS),
@@ -141,6 +150,8 @@ def health():
     try:
         with db() as c:
             for query in (
+                'SELECT call_id,state_json FROM hybrid_state LIMIT 0',
+                'SELECT call_id,analysis_json,created_at FROM hybrid_events LIMIT 0',
                 'SELECT id,name,age,neighborhood,call_time FROM residents LIMIT 0',
                 'SELECT id,resident_id,started_at,ended_at,status,summary,request_key FROM calls LIMIT 0',
                 'SELECT id,call_id,topic,question,answer,classification,reply,emergency,created_at FROM turns LIMIT 0',
@@ -219,6 +230,26 @@ def add_turn(call_id: int, body: TurnInput, request_key: str | None = Header(def
         if index >= len(QUESTIONS):
             raise HTTPException(409, '모든 질문이 완료되었습니다.')
         topic, question = QUESTIONS[index]
+        if body.engine == 'hybrid' or c.execute('SELECT 1 FROM hybrid_state WHERE call_id=?',(call_id,)).fetchone():
+            if 'facts' not in state:
+                previous=fetch_turns(c,call_id)
+                state['facts']={t['topic']:{'classification':t['classification'],'evidence':t['answer']} for t in previous if t['classification'] in ('positive','negative','neutral')}
+                state['completed']=[t['topic'] for t in previous]
+                state['unconfirmed']=[t['topic'] for t in previous if t['classification'] not in ('positive','negative','neutral')]
+            state, analysis = transition(state, answer, body.source)
+            result = {**analysis, 'count':state['count'], 'question_index':index, 'attempt':attempt,
+                      'classification_label':CLASS_LABELS[analysis['classification']],
+                      'needs_retry':state['index']==index, 'retry_count':state['checks'],
+                      'next_attempt':state['attempt'], 'finished':state['finished'],
+                      'next_question':state['question'], 'dialogue_state':state}
+            c.execute('INSERT INTO turn_attempts(call_id,question_index,attempt,request_key,question,answer,classification,reply,emergency,result_json,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                      (call_id,index,attempt,request_key,question,answer,analysis['classification'],analysis['reply'],int(analysis['emergency']),json.dumps(result,ensure_ascii=False),now()))
+            c.execute('INSERT INTO hybrid_state VALUES(?,?) ON CONFLICT(call_id) DO UPDATE SET state_json=excluded.state_json',(call_id,json.dumps(state,ensure_ascii=False)))
+            c.execute('INSERT INTO hybrid_events(call_id,analysis_json,created_at) VALUES(?,?,?)',(call_id,json.dumps({'raw':answer,**analysis},ensure_ascii=False),now()))
+            if state['index']!=index:
+                c.execute('INSERT INTO turns(call_id,topic,question,answer,classification,reply,emergency,created_at) VALUES(?,?,?,?,?,?,?,?)',
+                          (call_id,topic,question,answer,analysis['classification'],analysis['reply'],int(analysis['emergency']),now()))
+            return result
         assessment = assess(topic, answer)
         needs_retry = assessment.classification == 'unknown' and attempt < MAX_REASKS
         reply = assessment.reply if assessment.classification != 'unknown' or needs_retry else '답변을 확인하기 어려워 이 항목은 확인 불가로 기록할게요.'
@@ -251,6 +282,13 @@ def finish_call(call_id: int, body: FinishInput):
         if body.status == 'completed' and len(turns) != len(QUESTIONS):
             raise HTTPException(422,'5개 질문에 모두 답해야 완료 처리할 수 있습니다.')
         summary = summary_for(turns)
+        saved=c.execute('SELECT state_json FROM hybrid_state WHERE call_id=?',(call_id,)).fetchone()
+        if saved:
+            state=json.loads(saved[0])
+            summary=' / '.join(LABELS[k]+': '+v['evidence'] for k,v in state.get('facts',{}).items()) or '확인된 답변 없음'
+            missing=[LABELS[k] for k,_ in QUESTIONS if k not in state.get('facts',{})]
+            if missing: summary+=' / 확인되지 않음: '+', '.join(missing)
+            if state.get('safety_paused'):summary+=' / 위험 표현: 직접 119 연락 안내, 자동 신고 없음'
         c.execute('UPDATE calls SET ended_at=?,status=?,summary=? WHERE id=?',(now(),body.status,summary,call_id))
         return {'id':call_id,'status':body.status,'summary':summary,'answered':len(turns)}
 
@@ -268,7 +306,7 @@ def calls(limit: int = 100, resident_id: int | None = None):
 def call_detail(call_id: int):
     with db() as c:
         row = fetch_call(c, call_id)
-        return {**dict(row),'turns':fetch_turns(c,call_id), 'attempts':fetch_attempts(c,call_id), 'dialogue_state':dialogue_state(c,call_id)}
+        return {**dict(row),'turns':fetch_turns(c,call_id), 'attempts':fetch_attempts(c,call_id), 'dialogue_state':dialogue_state(c,call_id), 'analysis_events':[json.loads(r[0]) for r in c.execute('SELECT analysis_json FROM hybrid_events WHERE call_id=? ORDER BY id',(call_id,))]}
 
 @app.get('/api/dashboard')
 def dashboard():

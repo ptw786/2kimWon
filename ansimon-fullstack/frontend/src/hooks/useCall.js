@@ -49,7 +49,7 @@ export function useCall(elderId){
   if(detail.status==='in_progress'&&dialogue.question)messages.push({who:'ai',text:dialogue.question})
   patch({callId:detail.id,count:dialogue.count,attempt:dialogue.attempt,retryCount:dialogue.retry_count,
    startedAt:Date.parse(detail.started_at),phase:detail.status==='in_progress'?'active':'ended',
-   result:results[detail.status]||'',question:dialogue.question||'',messages,
+   result:results[detail.status]||'',question:dialogue.safety_paused?'안전을 위해 질문을 멈췄습니다. 직접 119 또는 가까운 분에게 도움을 요청해 주세요.':dialogue.question||'',messages,
    emergency:[...detail.turns,...(detail.attempts||[])].some(item=>item.emergency)})
  },[patch])
  const load=useCallback(async()=>{
@@ -80,7 +80,7 @@ export function useCall(elderId){
   alive.current=true
   speechInput.current=new SpeechInput({host:window,
    canStart:()=>alive.current&&current.current.phase==='active'&&!busy.current&&!current.current.pendingAnswer&&!current.current.speaking&&current.current.count<5,
-   onState:patch,onFinal:text=>submitRef.current?.(text)})
+   onState:patch,onFinal:text=>submitRef.current?.(text,'stt')})
   speechOutput.current=new SpeechOutput({host:window,beforeSpeak:()=>speechInput.current?.stop(),
    onState:patch,onNotice:ttsNotice=>patch({ttsNotice}),enabled:()=>current.current.sound})
   load()
@@ -127,12 +127,12 @@ export function useCall(elderId){
   if(current.current.speaking){operation.current++;stopMedia();busy.current=false}
   return transact(signal=>saveFinish(current.current.count===5?'completed':'interrupted',signal))
  }
- const submitAnswer=value=>{
+ const submitAnswer=(value,source='text')=>{
   const answer=typeof value==='string'?value.trim():''
   if(busy.current||current.current.phase!=='active'||current.current.count===5)return
   if(!answer)return
   if(answer.length>500){patch({answer,error:'답변은 500자 이내로 입력해 주세요.'});return}
-  const body=pending.current||{answer,index:current.current.count,attempt:current.current.attempt}
+  const body=pending.current||{answer,index:current.current.count,attempt:current.current.attempt,engine:'hybrid',source}
   pending.current=body
   patch({answer:body.answer,pendingAnswer:true,submitting:true,sttError:''})
   return transact(async signal=>{
@@ -145,6 +145,9 @@ export function useCall(elderId){
     messages:[...current.current.messages,{who:'user',text:body.answer,classification:result.classification},{who:'ai',text:result.reply}]})
    // Speak the follow-up first. Only its completion displays/speaks the next prompt.
    if(!await say(result.reply,`${current.current.callId}:reply:${body.index}:${body.attempt}`)||signal.aborted)return
+   if(result.action==='safety_pause'){
+    patch({question:'안전을 위해 질문을 멈췄습니다. 직접 119 또는 가까운 분에게 도움을 요청해 주세요.'});return
+   }
    if(result.finished){
     const closing='안부 확인을 마쳤습니다. 오늘도 편안한 하루 보내세요.'
     patch({question:'',messages:[...current.current.messages,{who:'ai',text:closing}]})

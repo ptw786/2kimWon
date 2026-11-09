@@ -78,7 +78,7 @@ def test_default_db_path_is_independent_of_process_working_directory(tmp_path):
     import subprocess
     import sys
     copied=tmp_path/'project'/'backend';copied.mkdir(parents=True)
-    for name in ('main.py','conversation.py'):
+    for name in ('main.py','conversation.py','normalizer.py','scenarios.py','intent_classifier.py','entity_extractor.py','risk_detector.py','dialogue_manager.py','response_generator.py'):
         shutil.copy2(Path(main.__file__).parent/name,copied/name)
     script='import sys,json;sys.path.insert(0,sys.argv[1]);from main import DB_PATH,app;from fastapi.testclient import TestClient;print(json.dumps({"db":str(DB_PATH),"calls":TestClient(app).get("/api/calls").json()}))'
     env={k:v for k,v in os.environ.items() if k!='ANSIMON_DB'}
