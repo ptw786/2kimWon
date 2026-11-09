@@ -71,7 +71,7 @@ def run_conversation_scenarios(browser,errors):
     # STT transcript is retained in the input even if server saving fails.
     page.route('**/api/calls/*/turns',fail_turn,times=1)
     page.get_by_role('button',name='말하기',exact=True).click()
-    page.evaluate("window.__recognition.onresult({results:[[{transcript:'잠을 못 잤어'}]]})")
+    page.evaluate("window.__recognition.emitFinal('잠을 못 잤어')")
     expect(page.get_by_role('alert')).to_contain_text('테스트용 답변 저장 오류')
     expect(page.get_by_label('답변 입력')).to_have_value('잠을 못 잤어')
     assert page.evaluate('window.__recognition.aborted')

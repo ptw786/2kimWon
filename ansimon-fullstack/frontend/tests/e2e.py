@@ -264,6 +264,15 @@ def main():
                     run_extra_scenarios(browser,page,errors)
                     from conversation_scenarios import run_conversation_scenarios
                     run_conversation_scenarios(browser,errors)
+                    from speech_input_scenarios import run_speech_input_scenarios,run_native_speech_check
+                    def stop_backend():
+                        nonlocal backend
+                        backend.terminate();backend.wait(timeout=10)
+                    def recover_backend():
+                        nonlocal backend
+                        backend=start_backend()
+                    run_speech_input_scenarios(browser,errors,stop_backend,recover_backend)
+                    run_native_speech_check(browser,errors)
                     assert not errors, errors
                     print('PASS: browser refresh and backend restart retain records; no browser JS errors')
                     browser.close()

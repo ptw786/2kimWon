@@ -1,7 +1,9 @@
 import {useCallback,useEffect,useRef,useState} from 'react'
 import {api,post} from '../api'
+import {SpeechInput} from '../speech/recognition'
+import {SpeechOutput} from '../speech/synthesis'
 
-const initial={phase:'loading',resident:null,questions:[],callId:null,count:0,attempt:0,retryCount:0,pendingAnswer:false,speaking:false,speakingText:'',ttsNotice:'',emergency:false,messages:[],question:'',answer:'',seconds:0,startedAt:null,sound:true,listening:false,busy:true,error:'',result:''}
+const initial={phase:'loading',resident:null,questions:[],callId:null,count:0,attempt:0,retryCount:0,pendingAnswer:false,submitting:false,sttStatus:'idle',sttSupported:null,sttError:'',sttNotice:'',lastTranscript:'',interimTranscript:'',speaking:false,speakingText:'',ttsNotice:'',emergency:false,messages:[],question:'',answer:'',seconds:0,startedAt:null,sound:true,listening:false,busy:true,error:'',result:''}
 const results={completed:'안부 확인 완료',interrupted:'통화 중단',declined:'수신 거절'}
 const validId=id=>/^[1-9]\d*$/.test(id)&&Number.isSafeInteger(Number(id))
 function requestKeys(id){
@@ -16,46 +18,21 @@ function requestKeys(id){
 }
 export function useCall(elderId){
  const [state,setState]=useState(initial)
- const current=useRef(initial),alive=useRef(false),busy=useRef(true),controller=useRef(null),recognition=useRef(null),keys=useRef(null),speechTask=useRef(null),pending=useRef(null),operation=useRef(0)
+ const current=useRef(initial),alive=useRef(false),busy=useRef(true),controller=useRef(null),speechInput=useRef(null),speechOutput=useRef(null),submitRef=useRef(null),keys=useRef(null),pending=useRef(null),operation=useRef(0)
  const patch=useCallback(values=>{
   if(!alive.current)return
   current.current={...current.current,...values};setState(current.current)
  },[])
- const stopSpeech=useCallback((continueSequence=false)=>{
-  speechTask.current?.settle(continueSequence)
-  window.speechSynthesis?.cancel()
- },[])
+ const stopSpeech=useCallback((continueSequence=false)=>speechOutput.current?.stop(continueSequence),[])
  const stopMedia=useCallback((continueSequence=false)=>{
-  if(recognition.current){
-   const rec=recognition.current;recognition.current=null
-   rec.onresult=null;rec.onerror=null;rec.onend=null
-   try{rec.abort()}catch{}
-  }
+  speechInput.current?.stop()
   stopSpeech(continueSequence)
  },[stopSpeech])
- const say=useCallback(text=>{
+ const say=useCallback((text,key)=>{
   if(!alive.current||current.current.phase!=='active')return Promise.resolve(false)
-  if(!text||!current.current.sound)return Promise.resolve(true)
-  if(!window.speechSynthesis){patch({ttsNotice:'음성 출력을 지원하지 않아 화면의 글로 안내합니다.'});return Promise.resolve(true)}
-  stopSpeech()
-  return new Promise(resolve=>{
-   const speech=new SpeechSynthesisUtterance(text)
-   const task={settle:null,timer:null}
-   task.settle=proceed=>{
-    if(speechTask.current!==task)return
-    clearTimeout(task.timer);speech.onend=null;speech.onerror=null
-    speechTask.current=null;patch({speaking:false,speakingText:''});resolve(proceed)
-   }
-   speechTask.current=task
-   speech.lang='ko-KR';speech.rate=.86
-   speech.onend=()=>task.settle(true)
-   speech.onerror=()=>{patch({ttsNotice:'음성을 재생하지 못해 화면의 글로 안내합니다.'});task.settle(true)}
-   // Some browsers never deliver a speech end event when a voice is unavailable.
-   task.timer=setTimeout(()=>{patch({ttsNotice:'음성 응답이 지연되어 화면의 글로 안내합니다.'});task.settle(true);window.speechSynthesis.cancel()},Math.min(60000,Math.max(8000,text.length*450)))
-   patch({speaking:true,speakingText:text})
-   try{window.speechSynthesis.speak(speech)}catch{speech.onerror?.()}
-  })
- },[patch,stopSpeech])
+  return speechOutput.current.speak(text,key)
+ },[])
+ const questionKey=()=>`${current.current.callId}:question:${current.current.count}:${current.current.attempt}`
  const restoreDetail=useCallback(detail=>{
   const dialogue=detail.dialogue_state||{count:detail.turns.length,attempt:0,retry_count:0,question:current.current.questions[detail.turns.length]?.text||''}
   const messages=[]
@@ -79,7 +56,7 @@ export function useCall(elderId){
   const id=++operation.current
   controller.current?.abort();stopMedia();pending.current=null
   const request=new AbortController();controller.current=request
-  busy.current=true;patch({...initial,sound:current.current.sound})
+  busy.current=true;patch({...initial,sound:current.current.sound,sttSupported:speechInput.current?.supported||false})
   if(!validId(elderId)){
    patch({phase:'invalid',error:'어르신 주소가 올바르지 않습니다.',busy:false});busy.current=false;return
   }
@@ -94,15 +71,21 @@ export function useCall(elderId){
    const ongoing=calls.find(call=>call.status==='in_progress')
    if(ongoing){
     const detail=await api(`/calls/${ongoing.id}`,{signal:request.signal})
-    if(!request.signal.aborted){restoreDetail(detail);await say(current.current.question)}
+    if(!request.signal.aborted){restoreDetail(detail);await say(current.current.question,questionKey())}
    }else patch({phase:'incoming'})
   }catch(e){if(!request.signal.aborted)patch({phase:'error',error:e.message})}
-  finally{if(!request.signal.aborted&&operation.current===id){busy.current=false;patch({busy:false})}}
+  finally{if(!request.signal.aborted&&operation.current===id){busy.current=false;patch({busy:false,submitting:false})}}
  },[elderId,patch,restoreDetail,say,stopMedia])
  useEffect(()=>{
-  alive.current=true;load()
-  return()=>{alive.current=false;controller.current?.abort();stopMedia()}
- },[load,stopMedia])
+  alive.current=true
+  speechInput.current=new SpeechInput({host:window,
+   canStart:()=>alive.current&&current.current.phase==='active'&&!busy.current&&!current.current.pendingAnswer&&!current.current.speaking&&current.current.count<5,
+   onState:patch,onFinal:text=>submitRef.current?.(text)})
+  speechOutput.current=new SpeechOutput({host:window,beforeSpeak:()=>speechInput.current?.stop(),
+   onState:patch,onNotice:ttsNotice=>patch({ttsNotice}),enabled:()=>current.current.sound})
+  load()
+  return()=>{alive.current=false;controller.current?.abort();speechInput.current?.dispose();speechOutput.current?.dispose()}
+ },[load,patch])
  useEffect(()=>{
   if(state.phase!=='active')return
   const tick=()=>patch({seconds:Math.max(0,Math.floor((Date.now()-(current.current.startedAt||Date.now()))/1000))})
@@ -116,7 +99,7 @@ export function useCall(elderId){
   const request=controller.current
   try{await task(request.signal)}
   catch(e){if(!request.signal.aborted&&operation.current===id)patch({error:e.message})}
-  finally{if(!request.signal.aborted&&operation.current===id){busy.current=false;patch({busy:false})}}
+  finally{if(!request.signal.aborted&&operation.current===id){busy.current=false;patch({busy:false,submitting:false})}}
  }
  const begin=()=>{
   if(current.current.phase!=='incoming')return
@@ -124,7 +107,7 @@ export function useCall(elderId){
    const call=await post(`/residents/${elderId}/calls`,{},keys.current.start,{signal})
    const detail=await api(`/calls/${call.id}`,{signal})
    if(signal.aborted)return
-   restoreDetail(detail);await say(current.current.question)
+   restoreDetail(detail);await say(current.current.question,questionKey())
   })
  }
  const decline=()=>{
@@ -144,49 +127,40 @@ export function useCall(elderId){
   if(current.current.speaking){operation.current++;stopMedia();busy.current=false}
   return transact(signal=>saveFinish(current.current.count===5?'completed':'interrupted',signal))
  }
- const submit=value=>{
-  const answer=value.trim()
-  if(busy.current||!answer||current.current.phase!=='active'||current.current.count===5)return
+ const submitAnswer=value=>{
+  const answer=typeof value==='string'?value.trim():''
+  if(busy.current||current.current.phase!=='active'||current.current.count===5)return
+  if(!answer)return
+  if(answer.length>500){patch({answer,error:'답변은 500자 이내로 입력해 주세요.'});return}
   const body=pending.current||{answer,index:current.current.count,attempt:current.current.attempt}
   pending.current=body
-  patch({answer:body.answer,pendingAnswer:true})
+  patch({answer:body.answer,pendingAnswer:true,submitting:true,sttError:''})
   return transact(async signal=>{
    const result=await post(`/calls/${current.current.callId}/turns`,body,undefined,{signal})
    if(signal.aborted)return
    pending.current=null
-   patch({answer:'',pendingAnswer:false,count:result.count,attempt:result.next_attempt,
+   patch({answer:'',pendingAnswer:false,submitting:false,count:result.count,attempt:result.next_attempt,
     retryCount:result.needs_retry?result.retry_count:0,
     emergency:current.current.emergency||result.emergency,
     messages:[...current.current.messages,{who:'user',text:body.answer,classification:result.classification},{who:'ai',text:result.reply}]})
    // Speak the follow-up first. Only its completion displays/speaks the next prompt.
-   if(!await say(result.reply)||signal.aborted)return
+   if(!await say(result.reply,`${current.current.callId}:reply:${body.index}:${body.attempt}`)||signal.aborted)return
    if(result.finished){
     const closing='안부 확인을 마쳤습니다. 오늘도 편안한 하루 보내세요.'
     patch({question:'',messages:[...current.current.messages,{who:'ai',text:closing}]})
-    if(await say(closing)&&!signal.aborted)await saveFinish('completed',signal)
+    if(await say(closing,`${current.current.callId}:closing`)&&!signal.aborted)await saveFinish('completed',signal)
    }else{
     patch({question:result.next_question,messages:[...current.current.messages,{who:'ai',text:result.next_question}]})
-    await say(result.next_question)
+    await say(result.next_question,questionKey())
    }
   })
  }
+ submitRef.current=submitAnswer
  const microphone=()=>{
-  if(current.current.listening){recognition.current?.stop();return}
-  if(busy.current||current.current.phase!=='active'||current.current.count===5)return
-  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition
-  if(!Recognition){patch({error:'이 브라우저는 음성 인식을 지원하지 않습니다. 텍스트로 답변해 주세요.'});return}
-  stopMedia()
-  const rec=new Recognition();recognition.current=rec;rec.lang='ko-KR';rec.interimResults=false
-  rec.onresult=e=>{
-   if(!alive.current||recognition.current!==rec)return
-   const text=e.results?.[0]?.[0]?.transcript
-   patch({listening:false});if(text)submit(text)
-  }
-  rec.onerror=e=>{if(alive.current&&recognition.current===rec){patch({listening:false,...(e.error!=='aborted'?{error:'마이크 인식 오류: '+e.error+' · 텍스트 입력을 사용해 주세요.'}:{})})}}
-  rec.onend=()=>{if(alive.current&&recognition.current===rec){recognition.current=null;patch({listening:false})}}
-  try{rec.start();patch({listening:true})}catch{recognition.current=null;patch({error:'마이크를 실행할 수 없습니다. 브라우저 권한을 확인하세요.'})}
+  if(speechInput.current?.active){speechInput.current.stop({manual:true});return}
+  speechInput.current?.start()
  }
  const reset=()=>{if(busy.current)return;clearKeys();load()}
- return {...state,begin,decline,finish,submit,microphone,reset,reload:load,retryAnswer:()=>submit(pending.current?.answer||current.current.answer),
-  setAnswer:answer=>patch({answer}),toggleSound:()=>{patch({sound:!current.current.sound,listening:false});stopMedia(true)}}
+ return {...state,begin,decline,finish,submitAnswer,microphone,reset,reload:load,retryAnswer:()=>submitAnswer(pending.current?.answer||current.current.answer),
+  setAnswer:answer=>{if(busy.current||current.current.pendingAnswer)return;speechInput.current?.stop();patch({answer})},toggleSound:()=>{patch({sound:!current.current.sound,listening:false});stopMedia(true)}}
 }
