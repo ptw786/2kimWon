@@ -133,6 +133,23 @@ def dialogue_state(c, call_id):
 
 @app.get('/api/health')
 def health():
+    # Process liveness alone is not readiness: a missing/wrong DB would make
+    # dashboard and call writes fail even though the original health was 200.
+    if not DB_PATH.is_file():
+        logger.error('Health check: database file missing at %s', DB_PATH)
+        raise HTTPException(503, '데이터베이스 파일을 찾을 수 없습니다. ANSIMON_DB 경로와 기존 DB 보존 상태를 확인하세요.')
+    try:
+        with db() as c:
+            for query in (
+                'SELECT id,name,age,neighborhood,call_time FROM residents LIMIT 0',
+                'SELECT id,resident_id,started_at,ended_at,status,summary,request_key FROM calls LIMIT 0',
+                'SELECT id,call_id,topic,question,answer,classification,reply,emergency,created_at FROM turns LIMIT 0',
+                'SELECT id,call_id,question_index,attempt,request_key,question,answer,classification,reply,emergency,result_json,created_at FROM turn_attempts LIMIT 0',
+            ):
+                c.execute(query)
+    except sqlite3.Error as exc:
+        logger.error('Health check: database not ready at %s: %s', DB_PATH, exc, exc_info=True)
+        raise HTTPException(503, '데이터베이스에 연결하거나 필요한 테이블을 확인하지 못했습니다. 백엔드 로그·DB 경로·권한을 확인하세요.') from exc
     return {'ok': True, 'mode': 'local-rule-based'}
 
 @app.get('/api/questions')

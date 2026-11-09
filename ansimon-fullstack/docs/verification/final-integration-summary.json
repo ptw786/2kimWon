@@ -1,0 +1,194 @@
+{
+  "date_kst": "2026-11-09",
+  "base_commit": "983ed4bdd16474fdf74bddcccb3e960b4cbbabc2",
+  "environment": {
+    "os": "Linux",
+    "python": "3.12.14",
+    "node": "24.22.1",
+    "fastapi": "0.162.2",
+    "pydantic": "2.14.3",
+    "sqlite": "3.53.1"
+  },
+  "baseline": {
+    "pytest": 70,
+    "frontend_unit": 28,
+    "browser_groups": 25,
+    "build": "passed"
+  },
+  "reproduced_before_fix": {
+    "health_readiness_failures": 2,
+    "request_deadline_failures": 2
+  },
+  "final": {
+    "pytest_passed": 76,
+    "frontend_unit_passed": 34,
+    "browser_groups_passed": 29,
+    "build": "passed",
+    "remaining_automated_failures": 0
+  },
+  "http_500_audit": {
+    "injected": 4,
+    "unexpected": 0
+  },
+  "sqlite_audit": {
+    "integrity": "ok",
+    "foreign_key_violations": 0,
+    "duplicate_turns": 0,
+    "duplicate_attempts": 0,
+    "calls": 18,
+    "statuses": {
+      "completed": 7,
+      "declined": 1,
+      "interrupted": 10,
+      "in_progress": 0
+    },
+    "turns": 42,
+    "attempts": 44
+  },
+  "native_speech": {
+    "recognition": true,
+    "synthesis": true,
+    "koreanVoices": 0,
+    "audioInputs": 0,
+    "events": [],
+    "koKR": "ko-KR",
+    "sttMessage": "마이크를 연결하고 있습니다.",
+    "ttsMessage": "음성을 재생하지 못해 화면의 글로 안내합니다."
+  },
+  "unverified": [
+    "실마이크 한국어 인식",
+    "실장치 권한 거부",
+    "한국어 TTS·벨소리 청감",
+    "Windows PowerShell 직접 실행",
+    "사용자 PC의 실제 DB·권한"
+  ],
+  "required_checks": [
+    {
+      "number": 1,
+      "name": "FastAPI 실행",
+      "result": "통과",
+      "evidence": "실제 Uvicorn 실행·health 200 및 DB 준비 검사"
+    },
+    {
+      "number": 2,
+      "name": "React 실행",
+      "result": "통과",
+      "evidence": "실제 Vite 5173 HTTP·React 페이지 렌더"
+    },
+    {
+      "number": 3,
+      "name": "대시보드",
+      "result": "통과",
+      "evidence": "현황·날짜·통계·오류 재시도"
+    },
+    {
+      "number": 4,
+      "name": "어르신 목록",
+      "result": "통과",
+      "evidence": "실제 residents API 및 4개 초기 샘플 행"
+    },
+    {
+      "number": 5,
+      "name": "전화 수신 화면",
+      "result": "통과",
+      "evidence": "/call/:elderId 라우팅·직접 접근"
+    },
+    {
+      "number": 6,
+      "name": "벨소리 시작/종료",
+      "result": "자동 검증 통과 · 실장치 음성 범위는 미검증",
+      "evidence": "native Web Audio 노드 실행·중단·close, 청감은 미검증"
+    },
+    {
+      "number": 7,
+      "name": "전화 수신",
+      "result": "통과",
+      "evidence": "실제 start API·진행 중 통화 ID, 연속 클릭 단일 저장"
+    },
+    {
+      "number": 8,
+      "name": "TTS 질문",
+      "result": "자동 검증 통과 · 실장치 음성 범위는 미검증",
+      "evidence": "한국어 TTS 호출·순서·완료 이벤트 주입 검증, 실제 한국어 청감 미검증"
+    },
+    {
+      "number": 9,
+      "name": "텍스트 제출",
+      "result": "통과",
+      "evidence": "버튼·Enter·IME·빈 입력·중복 방지·저장"
+    },
+    {
+      "number": 10,
+      "name": "답변 판정",
+      "result": "통과",
+      "evidence": "질문별 분류·후속 응답 및 API/DB 일치"
+    },
+    {
+      "number": 11,
+      "name": "다음 질문",
+      "result": "통과",
+      "evidence": "서버 저장 및 후속 TTS 완료 후 진행"
+    },
+    {
+      "number": 12,
+      "name": "5문항 완료",
+      "result": "통과",
+      "evidence": "정상·확인 불가 재질문 후 완료·멱등 finish"
+    },
+    {
+      "number": 13,
+      "name": "SQLite 저장",
+      "result": "통과",
+      "evidence": "실제 DB 행을 읽기 전용 직접 검사"
+    },
+    {
+      "number": 14,
+      "name": "기록 페이지",
+      "result": "통과",
+      "evidence": "목록·상세·요약·상태 조회"
+    },
+    {
+      "number": 15,
+      "name": "새로고침 유지",
+      "result": "통과",
+      "evidence": "브라우저 reload·백엔드 재시작·다른 cwd의 DB 보존"
+    },
+    {
+      "number": 16,
+      "name": "거절 기록",
+      "result": "통과",
+      "evidence": "declined 행·요약·종료 시각·답변 없음"
+    },
+    {
+      "number": 17,
+      "name": "중단 기록",
+      "result": "통과",
+      "evidence": "interrupted 상태·기존 답변·요약 보존"
+    },
+    {
+      "number": 18,
+      "name": "잘못된 elderId",
+      "result": "통과",
+      "evidence": "문자·0·음수·소수·없는 ID 처리"
+    },
+    {
+      "number": 19,
+      "name": "서버 종료 오류",
+      "result": "통과",
+      "evidence": "실제 Uvicorn 종료 후 502·원문/순번 유지"
+    },
+    {
+      "number": 20,
+      "name": "복구 재시도",
+      "result": "통과",
+      "evidence": "실제 서버 재시작·응답 유실/시간 초과 후 중복 없는 재시도"
+    }
+  ],
+  "validated_source_sha256": {
+    "backend/main.py": "d0228c0fd0376419c4a37e7b12de58d011e52bb39791c898c8fa846409fe5249",
+    "backend/conversation.py": "00bb4e7c703364452d4273046e2bba14664160398cbb9deec254919e9a9fb997",
+    "frontend/src/api.js": "ba45ba3e4ad8fa9659845d1ba15100e82fca3fb8988605c975eaa0577bf2eb7f",
+    "frontend/src/hooks/useCall.js": "76524c4bd3b9f92cf573a505ef0372f137c318ed8074b9b714caf4aceea32876"
+  },
+  "database_policy": "기존 사용자 DB 삭제 없음; 모든 실행 검증은 임시 DB; SQLite 직접 감사는 읽기 전용"
+}

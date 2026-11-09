@@ -1,0 +1,54 @@
+✖ fetch deadline yields an actionable timeout instead of waiting forever (152.918756ms)
+✖ response-body deadline also protects a POST already committed by the server (150.978766ms)
+✔ caller cancellation stays cancellation, not a misleading connection failure (1.709739ms)
+✔ POST preserves exact payload and idempotency key (1.6295ms)
+✔ HTTP 500 is never converted into a successful fake response (0.324726ms)
+✔ non-JSON success and structured 422 validation errors are explained (0.586374ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 4
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 376.573793
+
+✖ failing tests:
+
+test at tests/api.test.js:9:1
+✖ fetch deadline yields an actionable timeout instead of waiting forever (152.918756ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /요청 시간이 초과/. Input:
+  
+  'STILL_PENDING_WITHOUT_TIMEOUT'
+  
+      at file:///workspace/work/ansimon/ansimon-fullstack/frontend/tests/api.test.js:11:10
+      at async withFetch (file:///workspace/work/ansimon/ansimon-fullstack/frontend/tests/api.test.js:5:94)
+      at async TestContext.<anonymous> (file:///workspace/work/ansimon/ansimon-fullstack/frontend/tests/api.test.js:10:2)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'STILL_PENDING_WITHOUT_TIMEOUT',
+    expected: /요청 시간이 초과/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/api.test.js:14:1
+✖ response-body deadline also protects a POST already committed by the server (150.978766ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /요청 시간이 초과/. Input:
+  
+  'STILL_PENDING_WITHOUT_TIMEOUT'
+  
+      at file:///workspace/work/ansimon/ansimon-fullstack/frontend/tests/api.test.js:16:10
+      at async withFetch (file:///workspace/work/ansimon/ansimon-fullstack/frontend/tests/api.test.js:5:94)
+      at async TestContext.<anonymous> (file:///workspace/work/ansimon/ansimon-fullstack/frontend/tests/api.test.js:15:2)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'STILL_PENDING_WITHOUT_TIMEOUT',
+    expected: /요청 시간이 초과/,
+    operator: 'match',
+    diff: 'simple'
+  }

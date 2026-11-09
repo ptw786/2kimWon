@@ -12,7 +12,10 @@ import urllib.request
 from playwright.sync_api import sync_playwright, expect
 
 ROOT = Path(__file__).resolve().parents[2]
-PYTHON = os.environ.get('ANSIMON_PYTHON', str(ROOT / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')))
+# Support the documented backend/.venv and the existing root .venv layout.
+_python_tail=Path('Scripts/python.exe' if os.name=='nt' else 'bin/python')
+_candidates=[ROOT/'backend'/'.venv'/_python_tail,ROOT/'.venv'/_python_tail]
+PYTHON=os.environ.get('ANSIMON_PYTHON') or next((str(path) for path in _candidates if path.is_file()),sys.executable)
 URL = 'http://127.0.0.1:5173'
 
 
@@ -179,6 +182,18 @@ def main():
                 wait_server(URL, frontend)
                 with sync_playwright() as p:
                     browser = p.chromium.launch(headless=True,args=['--autoplay-policy=document-user-activation-required'])
+                    http500=[]
+                    original_new_page=browser.new_page
+                    def observed_page(*args,**kwargs):
+                        created=original_new_page(*args,**kwargs)
+                        def observe(response):
+                            if response.status!=500:return
+                            try:message=response.json().get('detail','')
+                            except Exception:message='non-JSON HTTP 500'
+                            http500.append({'url':response.url,'detail':message,'injected':isinstance(message,str) and message.startswith('테스트용')})
+                        created.on('response',observe)
+                        return created
+                    browser.new_page=observed_page
                     page = browser.new_page(viewport={'width':1440,'height':1000})
                     page.add_init_script(path=str(ROOT/'frontend/tests/audio_probe.js'))
                     errors=[]
@@ -273,6 +288,13 @@ def main():
                         backend=start_backend()
                     run_speech_input_scenarios(browser,errors,stop_backend,recover_backend)
                     run_native_speech_check(browser,errors)
+                    from final_scenarios import run_timeout_recovery,audit_sqlite
+                    run_timeout_recovery(browser,errors)
+                    audit_sqlite(Path(env['ANSIMON_DB']))
+                    assert len(http500)==4,http500
+                    assert all(record['injected'] for record in http500),http500
+                    print('HTTP_500_AUDIT: '+json.dumps({'injected':len(http500),'unexpected':0},ensure_ascii=False))
+                    print('PASS: every browser HTTP 500 is an explicit injected fault; no unexpected normal-flow HTTP 500')
                     assert not errors, errors
                     print('PASS: browser refresh and backend restart retain records; no browser JS errors')
                     browser.close()

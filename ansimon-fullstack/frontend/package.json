@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test tests/speech.test.js"
+    "test": "node --test tests/speech.test.js tests/api.test.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.0",

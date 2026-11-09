@@ -205,7 +205,7 @@ flowchart TB
 | STT 권한 거부/무음/미지원/네트워크 오류 | 한국어 안내 후 텍스트 대체. 사용자는 마이크 재시작도 가능. 확정 결과만 공통 submitAnswer로 전달. |
 | TTS 끄기/미지원/재생 오류/완료 이벤트 지연 | 텍스트 안내로 진행. TTS 발화 전 STT를 중단하고, 같은 대화 단계의 중복 발화를 막음. |
 | 빈 값·500자 초과·한국어 조합 중 Enter | 프론트엔드에서 제출 방지. 백엔드도 빈 값·길이·순번을 검증하며 잘못된 요청을 성공으로 바꾸지 않음. |
-| 답변 연결 실패/저장 실패/응답 유실 | 현재 화면에 전송 원문·순번 보존. 동일 요청 재시도. 서버에서 이미 커밋됐다면 기존 결과 반환. 저장 여부 불명인 입력은 편집을 잠금. |
+| 답변 연결 실패/저장 실패/응답 유실/시간 초과 | 현재 화면에 전송 원문·순번 보존. 요청·응답 본문은 15초 제한 후 동일 요청 재시도. 서버에서 이미 커밋됐다면 기존 결과 반환. 저장 여부 불명인 입력은 편집을 잠금. |
 | 409 충돌 | 자동 성공 처리하지 않음. 동일 요청으로도 해결되지 않는 다른 답변/순번 충돌은 화면에 계속 표시됨. 화면을 나갔다 같은 통화에 재진입하면 서버 상태를 복원. |
 | 저장 중 종료 버튼 | 중복 동작을 막기 위해 API 처리 중 잠금. TTS 중에는 종료 가능하며 발화를 취소함. |
 | 5문항 종료 | 마지막 후속 응답·종료 인사 TTS 후 completed 종료 요청. 실패하면 ‘완료 저장’으로 재시도. |
@@ -234,7 +234,7 @@ flowchart TB
 |---|---|
 | 수신/거절·종료 화면 | [CallPage.jsx](../frontend/src/pages/CallPage.jsx), [IncomingCall.jsx](../frontend/src/components/IncomingCall.jsx), [CallControls.jsx](../frontend/src/components/CallControls.jsx) |
 | 벨소리·해제 | [useRingtone.js](../frontend/src/hooks/useRingtone.js) — useRingtone |
-| 시작·복원·답변 전송·종료 요청 | [useCall.js](../frontend/src/hooks/useCall.js) — load, begin, decline, submitAnswer, finish, saveFinish |
+| 시작·복원·답변 전송·종료 요청 | [useCall.js](../frontend/src/hooks/useCall.js) — load, begin, decline, submitAnswer, finish, saveFinish. [api.js](../frontend/src/api.js) — HTTP 오류·시간 제한 |
 | 질문·후속 응답 TTS | [synthesis.js](../frontend/src/speech/synthesis.js) — SpeechOutput.speak/stop/dispose |
 | STT·실패 대체 | [recognition.js](../frontend/src/speech/recognition.js) — SpeechInput.start/stop/dispose |
 | 텍스트·현재 질문·인식 표시 | [TextAnswerInput.jsx](../frontend/src/components/TextAnswerInput.jsx), [ConversationPanel.jsx](../frontend/src/components/ConversationPanel.jsx), [SpeechInputStatus.jsx](../frontend/src/components/SpeechInputStatus.jsx) |

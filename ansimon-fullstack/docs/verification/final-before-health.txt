@@ -1,0 +1,52 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+________ test_health_rejects_missing_or_uninitialized_database[missing] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-7/test_health_rejects_missing_or0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f809e119130>
+invalid_db = 'missing'
+
+    @pytest.mark.parametrize('invalid_db',['missing','empty'])
+    def test_health_rejects_missing_or_uninitialized_database(tmp_path,monkeypatch,invalid_db):
+        path=tmp_path/'unavailable.db'
+        if invalid_db=='empty':
+            with sqlite3.connect(path) as conn:conn.execute('CREATE TABLE unrelated(id INTEGER)')
+        before=path.read_bytes() if path.exists() else None
+        monkeypatch.setattr(main,'DB_PATH',path)
+        response=TestClient(main.app,raise_server_exceptions=False).get('/api/health')
+>       assert response.status_code==503,response.text
+E       AssertionError: {"ok":true,"mode":"local-rule-based"}
+E       assert 200 == 503
+E        +  where 200 = <Response [200 OK]>.status_code
+
+backend/tests/test_final_integration.py:15: AssertionError
+_________ test_health_rejects_missing_or_uninitialized_database[empty] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-7/test_health_rejects_missing_or1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f809e0eb020>
+invalid_db = 'empty'
+
+    @pytest.mark.parametrize('invalid_db',['missing','empty'])
+    def test_health_rejects_missing_or_uninitialized_database(tmp_path,monkeypatch,invalid_db):
+        path=tmp_path/'unavailable.db'
+        if invalid_db=='empty':
+            with sqlite3.connect(path) as conn:conn.execute('CREATE TABLE unrelated(id INTEGER)')
+        before=path.read_bytes() if path.exists() else None
+        monkeypatch.setattr(main,'DB_PATH',path)
+        response=TestClient(main.app,raise_server_exceptions=False).get('/api/health')
+>       assert response.status_code==503,response.text
+E       AssertionError: {"ok":true,"mode":"local-rule-based"}
+E       assert 200 == 503
+E        +  where 200 = <Response [200 OK]>.status_code
+
+backend/tests/test_final_integration.py:15: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /workspace/work/ansimon/ansimon-fullstack/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED backend/tests/test_final_integration.py::test_health_rejects_missing_or_uninitialized_database[missing]
+FAILED backend/tests/test_final_integration.py::test_health_rejects_missing_or_uninitialized_database[empty]
+2 failed, 1 warning in 0.12s
