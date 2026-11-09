@@ -1,0 +1,43 @@
+{
+  "date_kst": "2026-11-09",
+  "mermaid_version": "11.17.2",
+  "renderer": "Mermaid parse + render in Chromium via Playwright",
+  "diagrams": [
+    {
+      "file": "docs/conversation-flow.svg",
+      "diagram_type": "flowchart-v2",
+      "parse": "passed",
+      "render": "passed",
+      "nodes": 35,
+      "viewBox": [
+        0.0,
+        -3.0,
+        2638.87158203125,
+        4367.166015625
+      ],
+      "xml": "passed",
+      "foreignObject": false,
+      "source_sha256": "c47831d8786952264ccc1fc95241dfec352e67ffd15505821250c8a3f9a9c746"
+    },
+    {
+      "file": "docs/conversation-flow-storage.svg",
+      "diagram_type": "flowchart-v2",
+      "parse": "passed",
+      "render": "passed",
+      "nodes": 23,
+      "viewBox": [
+        0.0,
+        -3.0,
+        2272.36181640625,
+        3294.50390625
+      ],
+      "xml": "passed",
+      "foreignObject": false,
+      "source_sha256": "b76da075765f7e23b5d20e30c0904448f2fc007e33f16212e6fb8d4d1680774a"
+    }
+  ],
+  "relative_links_checked": 25,
+  "application_code_changed": false,
+  "required_stages_mapped": 19,
+  "scope_check": "Only README and docs changed; application source unchanged"
+}
