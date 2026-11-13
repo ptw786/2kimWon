@@ -19,8 +19,20 @@ def migrate(c):
         c.execute('DROP TABLE IF EXISTS care_schedules')
         c.execute('CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)')
         c.execute("INSERT OR IGNORE INTO schema_migrations(name) VALUES('remove_reservations_v1')")
+        c.execute('CREATE TABLE IF NOT EXISTS call_reviews (call_id INTEGER PRIMARY KEY REFERENCES calls(id), payload_json TEXT NOT NULL)')
+        from legacy_priority import assessment_for
+        import json
+        for row in c.execute('SELECT * FROM calls').fetchall():
+            if not c.execute('SELECT 1 FROM call_reviews WHERE call_id=?',(row['id'],)).fetchone():
+                c.execute('INSERT INTO call_reviews VALUES(?,?)',(row['id'],json.dumps({**assessment_for(c,row),'version':'legacy-v1'},ensure_ascii=False)))
         c.execute('RELEASE remove_reservations')
     except Exception:
         c.execute('ROLLBACK TO remove_reservations')
+        c.execute('CREATE TABLE IF NOT EXISTS call_reviews (call_id INTEGER PRIMARY KEY REFERENCES calls(id), payload_json TEXT NOT NULL)')
+        from legacy_priority import assessment_for
+        import json
+        for row in c.execute('SELECT * FROM calls').fetchall():
+            if not c.execute('SELECT 1 FROM call_reviews WHERE call_id=?',(row['id'],)).fetchone():
+                c.execute('INSERT INTO call_reviews VALUES(?,?)',(row['id'],json.dumps({**assessment_for(c,row),'version':'legacy-v1'},ensure_ascii=False)))
         c.execute('RELEASE remove_reservations')
         raise

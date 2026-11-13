@@ -1,0 +1,58 @@
+
+> ansimon-frontend@1.0.0 test
+> node --test tests/speech.test.js tests/api.test.js tests/drafts.test.js
+
+✔ fetch deadline yields an actionable timeout instead of waiting forever (22.489931ms)
+✔ response-body deadline also protects a POST already committed by the server (20.373297ms)
+✔ caller cancellation stays cancellation, not a misleading connection failure (1.205466ms)
+✔ POST preserves exact payload and idempotency key (6.424373ms)
+✔ HTTP 500 is never converted into a successful fake response (1.076144ms)
+✔ non-JSON success and structured 422 validation errors are explained (1.931304ms)
+✔ draft restores only to its own call and exact question/attempt (1.820977ms)
+✔ unconfirmed submission restores exact retry body (1.014478ms)
+✔ committed answer with lost response is not resubmitted on refresh (0.369942ms)
+✔ different answer from another tab is preserved separately, never sent to the next question (0.208219ms)
+✔ same basic question with a different retry attempt also isolates old drafts (0.344805ms)
+✔ blocked storage never breaks answer submission (0.455202ms)
+✔ ending/discarding clears drafts without affecting another call (0.269184ms)
+✔ Korean options and synchronous duplicate-start lock cover the pre-onstart window (1.941603ms)
+✔ interim text is shown; final is delivered once and late callbacks cannot resubmit (1.289804ms)
+✔ manual stop discards post-stop final results and permits a fresh session (0.421488ms)
+✔ recognition error not-allowed releases the mic and provides a text fallback (0.377657ms)
+✔ recognition error service-not-allowed releases the mic and provides a text fallback (0.271959ms)
+✔ recognition error audio-capture releases the mic and provides a text fallback (0.368069ms)
+✔ recognition error no-speech releases the mic and provides a text fallback (0.210865ms)
+✔ recognition error network releases the mic and provides a text fallback (0.160821ms)
+✔ recognition error aborted releases the mic and provides a text fallback (0.34732ms)
+✔ recognition error language-not-supported releases the mic and provides a text fallback (0.445243ms)
+✔ recognition error other releases the mic and provides a text fallback (0.361968ms)
+✔ webkitSpeechRecognition fallback works (1.461655ms)
+✔ unsupported API leaves text input available with an actionable message (0.184656ms)
+✔ insecure context does not start a microphone (0.22953ms)
+✔ synchronous permission failure cleans up and names the denied permission (0.216876ms)
+✔ no-result end and recognition deadline do not leave listening active (0.43813ms)
+✔ call/TTS guards prevent recognition from starting (0.212988ms)
+✔ dispose removes callbacks and prevents later state writes (0.192581ms)
+✔ TTS stops recognition first, selects Korean and settles only after end (1.066595ms)
+✔ same stage cannot speak twice, either while pending or after completion (0.193051ms)
+✔ an intentional reask may repeat the same sentence with a new stage (0.166792ms)
+✔ speech errors allow text fallback without hanging the conversation (0.412812ms)
+✔ stop/call end cancels output and invalidates late end events (0.207929ms)
+✔ mute releases the waiting sequence and prevents subsequent audio (0.20839ms)
+✔ TTS timeout cleans its timer and gives a text fallback (0.313557ms)
+✔ missing or throwing synthesis cannot block text answers (0.30474ms)
+✔ dispose cancels speech without later state updates (0.378157ms)
+✔ multiple final chunks are joined into one readable answer, empty finals do not submit (0.250298ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 331.386097
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

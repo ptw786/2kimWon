@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, ConfigDict
 from fastapi.responses import JSONResponse
 from schema_migrations import migrate
-from priority import assessment_for
+from priority import assessment_for, save_review, sort_key
 from integration import register, imported_rows
 from dialogue_manager import transition
 from conversation import QUESTIONS, LABELS, CLASS_LABELS, MAX_REASKS, assess, summary_for
@@ -196,6 +196,7 @@ def start_call(resident_id: int, body: StartInput | None = None, request_key: st
         if ongoing:
             raise HTTPException(409, '이미 진행 중인 통화가 있습니다. 해당 통화를 먼저 종료해 주세요.')
         cur = c.execute("INSERT INTO calls(resident_id,started_at,status,request_key) VALUES(?,?,'in_progress',?)", (resident_id, now(), request_key))
+        save_review(c,cur.lastrowid,{})
         return {'id': cur.lastrowid, 'resident_id': resident_id, 'status':'in_progress', 'question':QUESTIONS[0][1], 'topic':QUESTIONS[0][0]}
 
 @app.post('/api/residents/{resident_id}/decline', status_code=201)
@@ -211,6 +212,7 @@ def decline_call(resident_id: int, body: StartInput | None = None, request_key: 
             raise HTTPException(404, '어르신을 찾을 수 없습니다.')
         current = now()
         cur = c.execute("INSERT INTO calls(resident_id,started_at,ended_at,status,summary,request_key) VALUES(?,?,?,'declined',?,?)", (resident_id,current,current,'수신 거절',request_key))
+        save_review(c,cur.lastrowid,{})
         return {'id':cur.lastrowid,'status':'declined'}
 
 @app.post('/api/calls/{call_id}/turns', status_code=201)
@@ -246,7 +248,10 @@ def add_turn(call_id: int, body: TurnInput, request_key: str | None = Header(def
                 state['facts']={t['topic']:{'classification':t['classification'],'evidence':t['answer']} for t in previous if t['classification'] in ('positive','negative','neutral')}
                 state['completed']=[t['topic'] for t in previous]
                 state['unconfirmed']=[t['topic'] for t in previous if t['classification'] not in ('positive','negative','neutral')]
+            review=c.execute('SELECT payload_json FROM call_reviews WHERE call_id=?',(call_id,)).fetchone()
+            if review and json.loads(review[0]).get('version')=='review-v2':state['review_version']='review-v2'
             state, analysis = transition(state, answer, body.source)
+            if state.get('review_version')=='review-v2':save_review(c,call_id,state)
             result = {**analysis, 'count':state['count'], 'question_index':index, 'attempt':attempt,
                       'classification_label':CLASS_LABELS[analysis['classification']],
                       'needs_retry':state['index']==index, 'retry_count':state['checks'],
@@ -278,7 +283,35 @@ def add_turn(call_id: int, body: TurnInput, request_key: str | None = Header(def
         if not needs_retry:
             c.execute('INSERT INTO turns(call_id,topic,question,answer,classification,reply,emergency,created_at) VALUES(?,?,?,?,?,?,?,?)',
                       (call_id,topic,question,answer,assessment.classification,reply,int(assessment.emergency),now()))
+        review=c.execute('SELECT payload_json FROM call_reviews WHERE call_id=?',(call_id,)).fetchone()
+        if review and json.loads(review[0]).get('version')=='review-v2':
+            from review import degree
+            facts={t['topic']:{'classification':t['classification'],'evidence':t['answer'],'score':degree(t['answer']) if t['classification']=='negative' else 0 if t['classification'] in ('positive','neutral') else None,'reason':'degree' if t['classification']=='negative' else 'interpretation'} for t in fetch_turns(c,call_id)}
+            save_review(c,call_id,{'review_items':facts,'emergency_state':'confirmed' if assessment.emergency else 'none','safety_guidance_provided':bool(assessment.emergency)})
         return result
+
+class InputEvent(BaseModel):
+    source: Literal['stt_error','silence']
+    message: str = Field(max_length=500)
+    index: int = Field(ge=0,lt=5)
+    attempt: int = Field(ge=0,le=10000)
+
+@app.post('/api/calls/{call_id}/input-events')
+def input_event(call_id:int,body:InputEvent):
+    with db(write=True) as c:
+        call=fetch_call(c,call_id);state=dialogue_state(c,call_id)
+        if call['status']!='in_progress' or (state['index'],state['attempt'])!=(body.index,body.attempt):
+            raise HTTPException(409,'입력 오류가 발생한 질문이 이미 변경되었습니다.')
+        review=c.execute('SELECT payload_json FROM call_reviews WHERE call_id=?',(call_id,)).fetchone()
+        if not review or json.loads(review[0]).get('version')!='review-v2':return {'ok':True}
+        topic=QUESTIONS[state['index']][0]
+        state.setdefault('review_items',{})
+        if topic not in state['review_items']:
+            state['review_items'][topic]={'classification':'unknown','score':None,'reason':'stt_error' if body.source=='stt_error' else 'unanswered','evidence':''}
+        c.execute('INSERT INTO hybrid_state VALUES(?,?) ON CONFLICT(call_id) DO UPDATE SET state_json=excluded.state_json',(call_id,json.dumps(state,ensure_ascii=False)))
+        c.execute('INSERT INTO hybrid_events(call_id,analysis_json,created_at) VALUES(?,?,?)',(call_id,json.dumps({'source':body.source,'message':body.message,'question_index':body.index,'attempt':body.attempt},ensure_ascii=False),now()))
+        save_review(c,call_id,state)
+        return {'ok':True}
 
 @app.post('/api/calls/{call_id}/finish')
 def finish_call(call_id: int, body: FinishInput):
@@ -300,6 +333,10 @@ def finish_call(call_id: int, body: FinishInput):
             if missing: summary+=' / 확인되지 않음: '+', '.join(missing)
             if state.get('safety_paused'):summary+=' / 위험 표현: 직접 119 연락 안내, 자동 신고 없음'
         c.execute('UPDATE calls SET ended_at=?,status=?,summary=? WHERE id=?',(now(),body.status,summary,call_id))
+        review=c.execute('SELECT payload_json FROM call_reviews WHERE call_id=?',(call_id,)).fetchone()
+        if review and json.loads(review[0]).get('version')=='legacy-v1':
+            from legacy_priority import assessment_for as old_assessment
+            c.execute('UPDATE call_reviews SET payload_json=? WHERE call_id=?',(json.dumps({**old_assessment(c,fetch_call(c,call_id)),'version':'legacy-v1'},ensure_ascii=False),call_id))
         return {'id':call_id,'status':body.status,'summary':summary,'answered':len(turns)}
 
 def enrich(c,row):
@@ -315,7 +352,7 @@ def calls(limit: int = 100, resident_id: int | None = None, sort: Literal['lates
             rows = c.execute('''SELECT calls.*,residents.name as resident_name FROM calls JOIN residents ON residents.id=calls.resident_id WHERE resident_id=? ORDER BY calls.id DESC''',(resident_id,)).fetchall()
         result=[enrich(c,dict(row)) for row in rows]
         if resident_id is None:result+=imported_rows(c)
-        result.sort(key=lambda r:(r['assessment']['score'] if r['assessment']['score'] is not None else -1, datetime.fromisoformat(r['started_at']).timestamp()) if sort=='priority' else datetime.fromisoformat(r['started_at']).timestamp(),reverse=True)
+        result.sort(key=lambda r:(*sort_key(r),datetime.fromisoformat(r['started_at']).timestamp()) if sort=='priority' else datetime.fromisoformat(r['started_at']).timestamp(),reverse=True)
         return result[:limit]
 
 @app.get('/api/calls/{call_id}')

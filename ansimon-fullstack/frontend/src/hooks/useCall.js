@@ -83,7 +83,7 @@ export function useCall(elderId){
   alive.current=true
   speechInput.current=new SpeechInput({host:window,
    canStart:()=>alive.current&&current.current.phase==='active'&&!busy.current&&!current.current.pendingAnswer&&!current.current.speaking&&current.current.count<5,
-   onState:patch,onFinal:text=>submitRef.current?.(text,'stt')})
+   onState:values=>{patch(values);const s=current.current;if(values.sttError&&s.phase==='active'&&s.count<5)post(`/calls/${s.callId}/input-events`,{source:'stt_error',message:values.sttError,index:s.count,attempt:s.attempt},undefined,{signal:controller.current?.signal}).catch(()=>{})},onFinal:text=>submitRef.current?.(text,'stt')})
   speechOutput.current=new SpeechOutput({host:window,beforeSpeak:()=>speechInput.current?.stop(),
    onState:patch,onNotice:ttsNotice=>patch({ttsNotice}),enabled:()=>current.current.sound})
   load()
@@ -148,7 +148,10 @@ export function useCall(elderId){
    let result
    try{result=await post(`/calls/${current.current.callId}/turns`,body,undefined,{signal})}
    catch(error){
-    if(error.status!==409)throw error
+    if(error.status!==409){
+     if(/119|구급차|응급차|숨.{0,4}못|가슴.{0,6}심하/.test(body.answer)){const guidance='긴급한 상황이면 지금 직접 119에 연락하거나 가까운 분에게 도움을 요청해 주세요. 안심온은 실제 신고를 하지 않습니다.';patch({ttsNotice:guidance});await say(guidance,`${current.current.callId}:safety-fallback:${body.index}:${body.attempt}`)}
+     throw error
+    }
     const detail=await api(`/calls/${current.current.callId}`,{signal})
     if(signal.aborted)return
     restoreDetail(detail)

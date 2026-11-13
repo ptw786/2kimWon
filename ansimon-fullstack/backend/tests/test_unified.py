@@ -17,6 +17,8 @@ def answer(c,cid,index,text):
  return r.json()
 def complete(c,texts):
  cid=c.post('/api/residents/1/calls').json()['id']
+ # Replay a pre-upgrade ongoing call to verify historical scoring compatibility.
+ with main.db(write=True) as conn:conn.execute('UPDATE call_reviews SET payload_json=? WHERE call_id=?',(json.dumps({'version':'legacy-v1'}),cid))
  for i,t in enumerate(texts):answer(c,cid,i,t)
  assert c.post(f'/api/calls/{cid}/finish',json={'status':'completed'}).status_code==200
  return cid
@@ -54,12 +56,12 @@ def test_unified_risk_rules(text,urgent):
  assert detect(text)['urgent']==urgent
 
 
-def test_urgent_saved_as_attempt_still_scores_100():
+def test_urgent_saved_as_attempt_has_separate_emergency_state():
  c=client();cid=c.post('/api/residents/1/calls').json()['id']
  answer(c,cid,0,'119 불러줘')
  assert c.post(f'/api/calls/{cid}/finish',json={'status':'interrupted'}).status_code==200
  d=c.get(f'/api/calls/{cid}').json()
- assert d['turns']==[] and d['assessment']['score']==100
+ assert d['turns']==[] and d['assessment']['emergency_state']=='confirmed' and d['assessment']['score'] is None
 
 
 def create_legacy(path):

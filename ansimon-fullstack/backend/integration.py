@@ -7,7 +7,7 @@ def imported_view(payload):
     status={'수신 거절':'declined','안부 확인 완료':'completed','통화 중단':'interrupted'}.get(payload['status'],'interrupted')
     return {'id':'legacy:'+payload['id'],'resident_id':None,'resident_name':payload.get('recipient') or '이전 일반 시연',
             'started_at':payload['date'],'ended_at':payload['date'],'status':status,'summary':payload['summary'],
-            'source':'taewon','assessment':payload['assessment'],'scheduled_at':payload.get('scheduled_at')}
+            'source':'taewon','assessment':{**payload['assessment'],'version':'legacy-v1'},'scheduled_at':payload.get('scheduled_at')}
 
 
 def imported_rows(c):
