@@ -22,7 +22,7 @@
 
 ## 검증
 
-- pytest 196 통과, 기존 Starlette/httpx 경고 1개.
+- pytest 197 통과, 기존 Starlette/httpx 경고 1개.
 - 프론트엔드 Node 41 통과, Vite 빌드 통과.
 - 실제 FastAPI/Vite/Chromium의 새 시나리오 통과: 5항목 0점, 일시 불편 1점, 4/5 부분 확인, 119 possible/구급차 confirmed의 안내·진행 중지·중단 후 조회, 결과 상태 유지.
 - 의도적 HTTP 500 저장 실패를 주입해 원문 보존·재시도·저장을 확인했다. 해당 오류를 정상 성공으로 숨기지 않았다.

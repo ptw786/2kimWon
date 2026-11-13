@@ -66,3 +66,7 @@ def test_legacy_snapshot_and_cross_version_sort():
 def test_request_denial_does_not_mask_other_danger(text,urgent):
  from risk_detector import detect
  assert detect(text)['urgent']==urgent
+
+def test_health_checks_new_review_storage():
+ with main.db(write=True) as db:db.execute('DROP TABLE call_reviews')
+ assert TestClient(main.app).get('/api/health').status_code==503

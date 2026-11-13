@@ -158,6 +158,7 @@ def health():
     try:
         with db() as c:
             for query in (
+                'SELECT call_id,payload_json FROM call_reviews LIMIT 0',
                 'SELECT origin_key,payload_json FROM imported_records LIMIT 0',
                 'SELECT call_id,state_json FROM hybrid_state LIMIT 0',
                 'SELECT call_id,analysis_json,created_at FROM hybrid_events LIMIT 0',
