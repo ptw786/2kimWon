@@ -1,0 +1,76 @@
+# 안심온 판정 규칙 원본 (docs/판정규칙.md 와 같은 값)
+# 값을 바꾸면 문서도 같이 고치고 version 을 올린다.
+version: r2.1
+
+# 단계 라벨 (키는 r2 그대로, 라벨만 팀 용어로 — r2.1)
+grade_labels:
+  urgent: 즉시 확인
+  today: 우선 확인
+  watch: 추가 확인
+  ok: 특이 표현 없음
+
+# A 오늘 통화: 항목마다
+item_points:
+  caution: 5
+  risk: 10
+
+# B 최근 추세: 같은 항목이 주의 이상으로 연속된 날 수
+trend:
+  window_days: 7
+  two_days: 5
+  three_plus_days: 10
+  cap: 30
+
+# C 연락 상태
+contact:
+  missed_once: 10
+  missed_consecutive: 20
+  interrupted: 5
+  declined: 5
+  cap: 20
+
+# 단계 기준 (위에서부터 먼저 맞는 것)
+grades:
+  today:
+    min_score: 40
+    min_risk_items: 2
+  watch:
+    min_score: 15
+    min_unknown_items: 2
+
+# 통화 흐름
+dialogue:
+  max_reasks: 2
+  max_repeats: 3
+
+# 통화 상태 시간 기준
+timeouts:
+  ring_seconds: 30
+  idle_minutes: 10
+
+scheduler:
+  window_hours: 2
+  max_attempts_per_day: 2
+  retry_after_minutes: 10
+
+# 어려움 유형 (점수와 별개 — 복지서비스 연계의 입력, 판정규칙.md §8)
+need_labels:
+  meal_difficulty: 식사 어려움
+  sleep_problem: 수면 문제
+  help_request: 도움 요청
+  loneliness: 외로움
+
+# 식사 재질문 (제안서 3.나.2): 식사를 못 했다는데 이유가 없으면 한 번만 묻는다
+meal_followup:
+  question: 아직 식사 전이신가요, 아니면 식사하기 어려운 이유가 있으신가요?
+  options: [아직 식사 전이에요, 먹을 게 없어서 못 먹었어요, 혼자 차려 먹기 힘들어요]
+
+# 복지서비스 연계 (F11): 어려움 유형 → 서비스 이름·요약에서 찾을 낱말 (태그는 품질이 낮아 쓰지 않는다)
+welfare:
+  max_services: 3
+  exclude_names: [노인맞춤돌봄]      # 어르신들이 이미 받고 있는 서비스
+  keywords:
+    meal_difficulty: [급식, 도시락, 반찬, 식사, 경로식당, 밑반찬, 농식품, 먹거리]
+    sleep_problem: [정신건강, 우울, 마음건강, 심리]
+    help_request: [긴급돌봄, 응급안전, 돌봄, 방문]
+    loneliness: [말벗, 고독, 고립, 사회관계, 안부, 방문]

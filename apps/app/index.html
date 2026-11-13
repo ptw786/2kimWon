@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko" data-text-scale="large">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#B8326A">
+<meta name="description" content="안심온 — 매일 같은 시간에 안부를 여쭙는 돌봄전화">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="안심온">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap">
+<title>안심온</title>
+<script>
+  // 첫 화면이 그려지기 전에 글자 크기를 맞춘다(깜빡임 방지).
+  try { var s = JSON.parse(localStorage.getItem('ansimon.app.v2') || '{}'); if (s.textScale) document.documentElement.dataset.textScale = s.textScale } catch (e) {}
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/app/main.tsx"></script>
+</body>
+</html>

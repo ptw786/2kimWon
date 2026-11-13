@@ -1,0 +1,12 @@
+# 로컬 DB (시드는 처음 실행할 때 자동으로 만들어짐)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite3
+# 파이썬
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/

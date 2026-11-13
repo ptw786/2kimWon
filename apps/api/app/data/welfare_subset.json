@@ -1,0 +1,410 @@
+{
+ "source": "한국사회보장정보원 지자체복지서비스(data.go.kr 15108347) · 중앙부처복지서비스(data.go.kr 15090532)",
+ "data_as_of": "2026-11-13",
+ "selection": "어르신 대상 + 어려움 유형 낱말 일치 (app/data/README.md)",
+ "services": [
+  {
+   "id": "WLF00002209",
+   "name": "저소득 어르신 무료급식 지원 사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "서대문구",
+   "org": "서울특별시 서대문구 복지문화체육국 어르신복지과",
+   "summary": "가정형편이 어렵거나 부득이한 사정으로 식사를 거를 우려가 있는 노인들에게 무료로 식사를 제공하여 노인들의 건강증진을 도모",
+   "target": "o 결식 우려가 있는 만 60세 이상 저소득 어르신 지원 - 경로식당 : 만 60세 이상, - 도시락 및 밑반찬 배달 : 만 65세 이상※ 수혜자 선정기준- 1순위 : 생계급여수급자 기준 부적합으로 탈락된 생활이 어려운 독거어르신으로서 실제 부양가족이 없는 자- 2순위 : 기초생활수급 어르신(기준중위소득 48%이하)- 3순위 : 실제 부양가족이 없는 차상위 어르신(기준중위소득 50%이하)- 4순위 : 기타 구청장이 인정하는 어르신",
+   "criteria": "결식우려 저소득 노인",
+   "content": "- 경로식당 : 주6회 경로식당 이용- 식사배달서비스 : 주7회 가정으로 점식식사 배달(주말은 대체식으로 제공)- 밑반찬배달 : 주2회 가정으로 밑반찬 배달",
+   "apply": "동주민센터에 신청",
+   "apply_method": "방문",
+   "contact": "서대문구청 어르신복지과 02-330-1903",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00002209&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "meal_difficulty"
+   ]
+  },
+  {
+   "id": "WLF00005663",
+   "name": "고독사 예방 밑반찬 지원사업 기운찬",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "강북구",
+   "org": "서울특별시 강북구 복지생활국 복지정책과",
+   "summary": "안부확인을 거부하는 고독사 위험 1인가구를 대상으로 주 1회 밑반찬 지원과 연계한 안부확인을 실시하여 고독사 위험가구의 일상생활 회복 지원 및 지역사회 돌봄 기능 강화",
+   "target": "- 고독사 위험 중장년 1인가구(만40~64세, 중위소득 100% 이내)- 안부확인 거부하는 고립·은둔 가구- 동장이 판단하여 지원이 필요하다고 인정되는 자",
+   "criteria": "① 고독사 위험군 - 만 40~64세 이하의 1인가구로 중위소득 100% 이내의 자 중, - 고독사 위험 체크리스트 분류자 ※ 복지대상(기초생활수급자 등)외 에는 건보료 중위소득 기준 확인 - 제외대상: 방문형 서비스(밑반찬, 도시락, 돌봄SOS 일시재가·식사지원, 경로식당, 가사지원, 장애인활동보조, 노인장기요양보험제도 등)등 유사 공적 돌봄서비스를 이용받는 대상② 안부확인 거부하는 고립·은둔가구③ 동장이 판단하여 지원이 필요하다고 인정되는 자",
+   "content": "주 1회 밑반찬 제공",
+   "apply": "직접 지원(별도 신청사항 없음)",
+   "apply_method": null,
+   "contact": "강북구청 복지정책과 02-901-2494",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005663&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "meal_difficulty",
+    "help_request",
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00001004",
+   "name": "저소득 독거 어르신 안부확인(음료배달)",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "광진구",
+   "org": "서울특별시 광진구 복지국 어르신복지과",
+   "summary": "저소득 홀로사는 어르신에게 야쿠르트 배달을 실시함으로써, 어르신의 건강 · 생활 안전을 확인하고 위급상황 발생 시 신속히 대처",
+   "target": "만60세이상 저소득 홀몸 어르신",
+   "criteria": "만60세이상 저소득 홀몸 어르신",
+   "content": "매일 야쿠르트 배달을 실시하여 어르신의 건강 · 생활 안전 등 안부확인과 위급상황 발생 시 신속히 대처",
+   "apply": "본인 신청 및 동주민센터에서 돌봄사각지대 어르신발굴",
+   "apply_method": "방문",
+   "contact": "광진구청 어르신복지과 및 관할지동주민센터 02-450-7788",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00001004&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00000664",
+   "name": "노인맞춤돌봄지원 강화 사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "은평구",
+   "org": "서울특별시 은평구 돌봄복지국 통합돌봄과",
+   "summary": "1) 사업목적 - 지속적인 관심과 돌봄이 필요한 어르신에게 주기적인 안부확인 및 건강·정서지원을 실시하여 어르신의 사회적 안전망을 강화하고 고독사 방지 등 정서적으로 안정된 노후생활을 영위할 수 있도록 하고자 함 2) 지원대상 - 저소득 노인맞춤돌봄 대상자 3) 수행기관 - 1권역 : 은평어르신돌봄통합지원센터(구산, 녹번, 응암1~3, 역촌, 신사1~2, 증산, 수색동) - 2권역 : 시립은평노인종합복지관(대조, 불광1~2, 갈현1~2, 진관동) 4) 지원 내용 -건강지원 : 분기별 김치 지원 -정서지원 : 어르신 생신 케이크 방문 지원 -재난지원 : 냉·난방 대비 물품 등 지원 -주 거 : 주거환경 개선, 해충방제 및 낙상방지 등 지원 -돌봄로봇 : 돌봄로봇 관리비 지원",
+   "target": "저소득 노인맞춤돌봄 대상",
+   "criteria": "저소득 가구중 65세 이상 노인맞춤돌봄 대상",
+   "content": "지원 내용-건강지원 : 분기별 김치 지원-정서지원 : 어르신 생신 케이크 방문 지원-재난지원 : 냉·난방 대비 물품 등 지원-주 거 : 주거환경 개선, 해충방제 및 낙상방지 등 지원-돌봄로봇 : 돌봄로봇 관리비 지원",
+   "apply": "직접 지원(별도 신청사항 없음)",
+   "apply_method": null,
+   "contact": null,
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000664&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "help_request",
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00000698",
+   "name": "건강음료비 지원",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "양천구",
+   "org": "서울특별시 양천구 주민복지국 복지정책과",
+   "summary": "복지사각지대 1인 가구(법정저소득 1인가구 포함) 대상으로 주3회 건강음료 배달을 통한 정기적 안부 확인으로 고독사를 방지하고 취약계층 보호를 위한 사회 안전망 강화",
+   "target": "복지사각지대 1인 가구(법정저소득 1인가구 포함)",
+   "criteria": "복지사각지대 1인 가구(법정저소득 1인가구 포함) 중 기존 안부확인 서비스를 받고 있지 않는 분",
+   "content": "지원품명 : 멀티비타(120ml), 프리미엄 라이트(100ml)지원기준 : 1인/주/각 3개",
+   "apply": "동 주민센터 업무 담당자에게 신청",
+   "apply_method": "방문, 전화",
+   "contact": "양천구청 복지정책과 02-2620-4599",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000698&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00001054",
+   "name": "밑반찬 배달사업 지원",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "성북구",
+   "org": "서울특별시 성북구 복지교육국 어르신·장애인복지과",
+   "summary": "○ 65세 이하 재가 장애인의 규칙적인 식생활을 통한 건강유지 및 증진에 기여 ○ 소외된 장애인들에게 밑반찬을 배달하므로 써 사회구성원으로써 동질성 회복 ○ 더불어 함께하는 복지공동체 장애인행복 도시구현",
+   "target": "지원대상 : 성북구 결식우려가 있는 저소득 재가장애인 50명",
+   "criteria": "저소득 장애인",
+   "content": "- 대상자 결원이 발생했을 경우, 상담 후 밑반찬배달 대상자 결정 - 배달일시 : 매주 1회, 1식 지원(3찬 지원) - 운영일 및 급식방법 : 주1회(수요일) 자원봉사자가 대상자의 가정까지 배달",
+   "apply": "- 운영주체 : 구립 성북장애인복지관 - 신청방법 : 전화 혹은 내방",
+   "apply_method": "전화, 방문",
+   "contact": "성북구청 어르신장애인복지과 02-2241-2518",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00001054&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "meal_difficulty"
+   ]
+  },
+  {
+   "id": "WLF00002181",
+   "name": "무의탁.독거노인 요구르트 배달 사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "도봉구",
+   "org": "서울특별시 도봉구 복지가족국 어르신장애인과",
+   "summary": "돌봐드릴 가족이 없는 독거어르신에게 요구르트를 매일 배달하여 홀로 사는 어르신의 안부를 확인하고 고독사를 미연에 방지",
+   "target": "관내 65세 이상 독거 어르신 중 기초생활수급자",
+   "criteria": "만 65세 이상 무의탁 독거노인 중 기초생활수급자",
+   "content": "요구르트 지급",
+   "apply": "관내 기초생활수급자 독거 어르신 중 안전확인이 필요한 경우 동 주민센터에 신청",
+   "apply_method": "방문",
+   "contact": "도봉구 어르신장애인과 02-2091-3059",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00002181&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00004543",
+   "name": "정신건강증진사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "동작구",
+   "org": "서울특별시 동작구 보건소 감염병관리과",
+   "summary": "지역주민,정신질환자 및 가족등을 대상으로 정신건강증진 및 조기발견,상담,재활,사회복귀를 도모하고자 함",
+   "target": "아동, 청소년(만18세 이하)청년(만19세~ 34세)중장년(35세~64세)노년(65세 이상)",
+   "criteria": "세부사업 지원기준별 상이하여 담당자 확인 요망",
+   "content": "아동청소년 정신건강증진을 위한 지원",
+   "apply": "직접신청, 병의원이 보건소로 직접청구",
+   "apply_method": "방문, 우편, 인터넷",
+   "contact": null,
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004543&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "sleep_problem"
+   ]
+  },
+  {
+   "id": "WLF00002419",
+   "name": "독거노인 야쿠르트 지원",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "은평구",
+   "org": "서울특별시 은평구 주민복지국 어르신복지과",
+   "summary": "저소득 가구 중 65세 이상 1인 가구로 실제 홀로 생계을 유지하는 독거노인에게 야쿠르트 1일 1개를 지원하여 정서적 지지와 안부확인서비스를 제공",
+   "target": "1. 지원대상 1) 저소득 독거노인 2. 선정기준 1) 저소득(수급자 및 차상위) 독거 노인 2) 안전확인이 필요한 노인 우선 선정 3) 사업 취지 및 제공내역이 유사한 대상자 중복 불가 - 노인맞춤돌봄서비스 대상자 - 장기요양서비스(방문요양, 방문목욕 등)를 받고 있는 노인 - 우유 지원 대상자",
+   "criteria": "저소득 독거노인중 돌봄서비스 등 유사서비스 중복 수혜자를 제외한 실질적인 사회안전망이 필요한 독거노인",
+   "content": "1. 주3회 프리미엄 라이트(규격 100 ㎖, 단가 600원) 7개씩 지원2. 야쿠르트 배달원이 가정방문하여 안부확인 후 야쿠르트 지원 및 긴급사항 발생 시 동 주민센터 통보",
+   "apply": "대상자 신규 등록 가능 시 신청서 및 개인정보제공동의서 작성 후 제출",
+   "apply_method": "방문",
+   "contact": "거주지 관할 읍면동 주민센터 해당 담당자 전화번호",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00002419&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00005928",
+   "name": "냉(冷)큼 달려갑니다! 쿨한 돌봄, 저소득가정 에어컨 청소 사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "용산구",
+   "org": "서울특별시 용산구 생활지원국 복지정책과",
+   "summary": "매년 기온이 상승함에 따라 폭염으로 인해 취약계층의 생활이 어려워지고 있어, 저소득 가정의 에어컨 청소사업을 실시하여 거동 불편한 저소득 어르신 가구 등을 지원함과 동시에 에너지효율화에 기여하고자 함.",
+   "target": "관내 저소득(국민기초생활수급자 및 차상위계층) 500가구 ○ 만65세 이상 또는 장애가 있는 가구 ○ 자가·임대(전월세 등) 가구(※고시원, 모텔 등 제외)",
+   "criteria": "관내 저소득(국민기초생활수급자 및 차상위계층) 600가구 - 만65세 이상이거나 장애가 있는 가구, 보훈가구 - 자가, 임대(전월세 등) 가구(고시원, 모텔 등 제외)",
+   "content": "에어컨 분해 청소(필요시 가스 충전 및 실외기 청소)",
+   "apply": "동 주민센터 방문하여 개인정보 수집·이용, 제공 동의서 작성 제출(에어컨 유형 및 제조사 등 정보 제공)",
+   "apply_method": "방문",
+   "contact": "용산구 복지정책과 02-2199-7043",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005928&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "help_request"
+   ]
+  },
+  {
+   "id": "WLF00005014",
+   "name": "노인맞춤돌봄서비스 홀몸 어르신 인공지능(AI) 돌봄 서비스 지원",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "종로구",
+   "org": "서울특별시 종로구 복지교육국 어르신복지과",
+   "summary": "홀몸 어르신의 돌봄 강화를 위해 인공지능 기술을 탑재한 돌봄기기를 지원하여 어르신의 정서 생활 지원 및 위급상황 대처를 위함",
+   "target": "노인맞춤돌봄서비스 저소득 홀몸 어르신 대상",
+   "criteria": "노인맞춤돌봄서비스 대상자",
+   "content": "AI돌봄기기 지급(대여)",
+   "apply": "필요 대상자 지원",
+   "apply_method": "방문, 전화",
+   "contact": "종로노인종합복지관 02-742-9500",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005014&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "help_request"
+   ]
+  },
+  {
+   "id": "WLF00005012",
+   "name": "노인맞춤돌봄서비스 IoT사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "종로구",
+   "org": "서울특별시 종로구 복지교육국 어르신복지과",
+   "summary": "홀몸 어르신 돌봄 체계 구축",
+   "target": "취약계층 홀몸 어르신",
+   "criteria": "기초, 차상위, 기초연금 대상 중 돌봄 필요 어르신",
+   "content": "노인돌봄서비스 지원",
+   "apply": "신청저 작성 -> 돌봄 필요여부 결정하여 결정",
+   "apply_method": "방문",
+   "contact": "종로노인종합복지관 02-742-9500",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005012&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "help_request"
+   ]
+  },
+  {
+   "id": "WLF00004588",
+   "name": "저소득 어르신 무료급식사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "마포구",
+   "org": "서울특별시 마포구 복지동행국 어르신동행과",
+   "summary": "가정형편이 어렵거나 부득이한 사정으로 식사를 거를 우려가 있는 소득 어르신들의 기본적 생계를 보장하고, 복지사각지대를 해소하고자 함",
+   "target": "경로식당 : 만60세 이상 가정형편이 어렵거나 부득이한 사정으로 식사를 거를 우려가 있는 노인 식사배달 : 국민기초생활수급자 및 차상위계층 65세 이상 독거노인 중 거동불편으로 경로식당을 이용할 수 없는 자 밑반찬배달 : 국민기초생활수급자 및 차상위계층 65세 이상 독거노인 중 거동불편으로 경로식당을 할 수 없으나 가정에서 직접 조리가 가능한 자",
+   "criteria": "국민기초생활수급자 및 차상위계층 65세 이상 홀몸노인 중 결식우려가 있는 자",
+   "content": "경로식당 : 1식 4,500원/인(주 6회), 특식비 1식4,500원/인(연 7회) 식사배달 : 1식 4,500원/인(연 365일), 특식비 1식4,500원/인(연 7회) 밑반찬배달 : 1식 5,000원/인(주 2회), 특식비 1식4,500원/인(연 7회)",
+   "apply": "복지관에 방문신청 - 복지관에서 대상자방문 조사 - 구청신청 - 구청승인 - 대상자 복지관 이용",
+   "apply_method": "전화, 방문",
+   "contact": "마포구청 어르신동행과 어르신정책팀 02-3153-8857",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004588&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "meal_difficulty"
+   ]
+  },
+  {
+   "id": "WLF00000795",
+   "name": "찾아가는 복지 방문 강화 사업",
+   "source": "지자체복지서비스",
+   "ctpv": "서울특별시",
+   "sgg": "관악구",
+   "org": "서울특별시 관악구 복지가족국 복지정책과",
+   "summary": "방문 상담을 통한 복지대상자의 생활실태 파악 및 욕구조사에 따른 필요 서비스 제공으로 복지 사각지대를 예방하고 사회 안전망을 강화하고자 함.",
+   "target": "기초생활수급자, 독거어르신, 장애인, 한부모가족 등 사회취약계층",
+   "criteria": "방문이 필요한 사회취약계층 등 누구나 대상 선정 가능. 별도 기준 없음.",
+   "content": "- 가정방문 시 가구당 1만 원(이하) 상당의 현물 지원- 생활실태조사 등을 통해 복지제도 안내 및 후원 등 서비스 연계",
+   "apply": null,
+   "apply_method": null,
+   "contact": "관악구청 복지정책과 02-879-5906",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000795&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "help_request",
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00005770",
+   "name": "대전형 지역사회통합돌봄",
+   "source": "지자체복지서비스",
+   "ctpv": "대전광역시",
+   "sgg": null,
+   "org": "대전광역시 복지국 복지정책과",
+   "summary": "돌봄이 필요한 시민 누구나 필요할 때 병원이나 시설이 아닌 자신이 살던 곳에서 돌봄 서비스를 받음으로 건강한 여생을 보낼 수 있도록 지원하는 사업임",
+   "target": null,
+   "criteria": null,
+   "content": null,
+   "apply": null,
+   "apply_method": "방문",
+   "contact": null,
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005770&wlfareInfoReldBztpCd=02",
+   "needs": [
+    "help_request"
+   ]
+  },
+  {
+   "id": "WLF00001093",
+   "name": "독거노인·장애인 응급안전안심서비스",
+   "source": "중앙부처복지서비스",
+   "ctpv": null,
+   "sgg": null,
+   "org": "보건복지부 노인정책과",
+   "summary": "안전의 사각지대에 있는 노인과 장애인이 응급상황을 인지하고 응급상황에 대처할 수 있도록 안전대책을 마련하여 지역사회 예방적 돌봄을 지원합니다.",
+   "target": null,
+   "criteria": null,
+   "content": null,
+   "apply": null,
+   "apply_method": null,
+   "contact": "129",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00001093&wlfareInfoReldBztpCd=01",
+   "needs": [
+    "help_request"
+   ]
+  },
+  {
+   "id": "WLF00003191",
+   "name": "노인맞춤돌봄서비스",
+   "source": "중앙부처복지서비스",
+   "ctpv": null,
+   "sgg": null,
+   "org": "보건복지부 노인정책과",
+   "summary": "일상생활 영위가 어려운 취약노인에게 적절한 돌봄서비스를 제공하여 안정적인 노후생활 보장, 노인의 기능·건강 유지 및 악화 예방을 지원합니다.",
+   "target": null,
+   "criteria": null,
+   "content": null,
+   "apply": null,
+   "apply_method": null,
+   "contact": "129",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00003191&wlfareInfoReldBztpCd=01",
+   "needs": [
+    "help_request"
+   ]
+  },
+  {
+   "id": "WLF00005567",
+   "name": "정신건강 심리상담 바우처사업",
+   "source": "중앙부처복지서비스",
+   "ctpv": null,
+   "sgg": null,
+   "org": "보건복지부 자살예방정책과",
+   "summary": "우울·불안 등 정서적 어려움으로 인해 심리상담이 필요한 국민에게 전문적인 심리상담 서비스를 제공합니다.",
+   "target": null,
+   "criteria": null,
+   "content": null,
+   "apply": null,
+   "apply_method": null,
+   "contact": "129",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005567&wlfareInfoReldBztpCd=01",
+   "needs": [
+    "sleep_problem"
+   ]
+  },
+  {
+   "id": "WLF00005442",
+   "name": "긴급돌봄 지원사업",
+   "source": "중앙부처복지서비스",
+   "ctpv": null,
+   "sgg": null,
+   "org": "보건복지부 사회서비스사업과",
+   "summary": "질병, 부상, 주 돌봄자의 갑작스러운 부재(사망, 입원 등), 재난피해 등 돌봄 공백을 신속히 보완해 국민의 돌봄불안을 해소합니다.",
+   "target": null,
+   "criteria": null,
+   "content": null,
+   "apply": null,
+   "apply_method": null,
+   "contact": "1522-0365",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005442&wlfareInfoReldBztpCd=01",
+   "needs": [
+    "help_request"
+   ]
+  },
+  {
+   "id": "WLF00006237",
+   "name": "안부살핌 우편서비스 사업",
+   "source": "중앙부처복지서비스",
+   "ctpv": null,
+   "sgg": null,
+   "org": "행정안전부 복지자원연계팀",
+   "summary": "1인 가구 증가, 사회적 관계망 약화 등 사회적 고립가구에 대한 선제적 발굴을 통한 신속한 대응과 지원으로 촘촘한 복지안전망을 구축하고자 합니다.",
+   "target": null,
+   "criteria": null,
+   "content": null,
+   "apply": null,
+   "apply_method": null,
+   "contact": "주소지 관할 지자체",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00006237&wlfareInfoReldBztpCd=01",
+   "needs": [
+    "loneliness"
+   ]
+  },
+  {
+   "id": "WLF00003176",
+   "name": "농식품바우처",
+   "source": "중앙부처복지서비스",
+   "ctpv": null,
+   "sgg": null,
+   "org": "농림축산식품부 식생활소비정책과",
+   "summary": "취약계층의 식품 접근성 강화 및 지속가능한 농식품 소비 체계 구축을 위해 국내산 농산물(과일류, 채소류, 흰우유, 신선알류, 육류, 잡곡류, 두부류, 임산물)를 구매할 수 있는 바우처를 지원합니다.",
+   "target": null,
+   "criteria": null,
+   "content": null,
+   "apply": null,
+   "apply_method": null,
+   "contact": "1551-0857",
+   "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00003176&wlfareInfoReldBztpCd=01",
+   "needs": [
+    "meal_difficulty"
+   ]
+  }
+ ]
+}

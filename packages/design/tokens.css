@@ -1,0 +1,73 @@
+/*
+ * 안심온 디자인 토큰 — 웹(생활지원사)과 앱(어르신)이 함께 쓰는 단 하나의 원본.
+ * 색을 바꿀 때는 이 파일만 고친다. 대비값은 scripts/contrast.py로 다시 확인한다.
+ * 대비 주석 형식: CR <값> vs <배경>  (WCAG AA 본문 4.5 이상, 목표 7 이상)
+ */
+:root {
+  /* ── 분홍(주색) ───────────────────────────── */
+  --rose-50:  #FFF0F4;
+  --rose-100: #FFD9E6;
+  --rose-200: #FBB8CF;
+  --rose-300: #F28DB0;
+  --rose-400: #E0608F;
+  --rose-600: #B8326A;   /* 주 버튼 채움 · 흰 글자 CR 5.67 */
+  --rose-700: #962454;   /* 눌림/강조 글자 · CR 7.44 vs --bg */
+  --rose-900: #3A1426;   /* 어르신 통화 화면 바탕 · 흰 글자 CR 16.06 */
+
+  /* ── 버터(보조색, 따뜻함) ──────────────────── */
+  --butter-50:  #FFFBEB;
+  --butter-100: #FFF4CC;  /* ink CR 14.97 */
+  --butter-300: #FFDE7A;
+  --butter-500: #F2B705;  /* 장식 전용 — 글자에 쓰지 않음 */
+
+  /* ── 바탕과 글자 ───────────────────────────── */
+  --bg:           #FFF7F9;
+  --surface:      #FFFFFF;
+  --surface-soft: #FFF0F4;
+  --border:       #F1D3DE;  /* 장식선 */
+  --border-input: #A6788C;  /* 입력칸 테두리 (비텍스트 3:1 이상) */
+  --ink:          #2B1A22;  /* CR 15.64 vs --bg */
+  --ink-subtle:   #6A4A58;  /* CR 7.29 vs --bg */
+
+  /* ── 의미 색 ─────────────────────────────────
+   * 판정 단계는 색만으로 전달하지 않는다: 항상 아이콘 + 글자 라벨을 같이 쓴다.
+   * 빨강은 '긴급'에만 쓴다(분홍 주색과 헷갈리지 않도록 채움 배지 + 경고 아이콘). */
+  --urgent:      #A3161B;  --urgent-bg:  #FDECEC;  --urgent-fill: #C2191F; /* 6.84 / 흰 글자 6.08 */
+  --today:       #8F3F00;  --today-bg:   #FFEEDC;                          /* 6.43 */
+  --watch:       #6E5200;  --watch-bg:   #FFF4CC;                          /* 6.64 */
+  --ok:          #1F6B3D;  --ok-bg:      #E7F5EC;                          /* 5.78 */
+  --missed:      #5A4B52;  --missed-bg:  #F0EAED;                          /* 6.90 */
+  --accept:      #1E7A46;  /* 전화 받기 버튼 · 흰 글자 CR 5.35 */
+
+  /* ── 글꼴 ─────────────────────────────────── */
+  --font: 'Pretendard Variable', Pretendard, 'Noto Sans KR', system-ui, sans-serif;
+
+  /* 웹(생활지원사): 본문 18px 기준 */
+  --web-display: 40px;
+  --web-title:   30px;
+  --web-section: 23px;
+  --web-body:    18px;
+  --web-small:   16px;  /* 이보다 작은 글자는 쓰지 않는다 */
+
+  /* 앱(어르신): 본문 24px 기준 */
+  --app-question: 34px;  /* AI가 지금 묻는 말 */
+  --app-title:    30px;
+  --app-body:     24px;
+  --app-small:    20px;  /* 앱의 최소 글자 크기 */
+
+  /* ── 간격 · 모서리 · 크기 ─────────────────── */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 22px; --radius-pill: 999px;
+  --tap-web: 48px;   /* 웹 최소 터치·클릭 영역 */
+  --tap-app: 72px;   /* 앱 최소 버튼 높이 */
+  --call-button: 112px; /* 받기·끊기 원형 버튼 지름 */
+
+  /* ── 움직임 ───────────────────────────────── */
+  --dur-ui: 200ms;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-ui: 0ms; }
+}
