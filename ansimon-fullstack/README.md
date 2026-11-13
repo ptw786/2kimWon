@@ -1,6 +1,15 @@
-# 안심온 ANSIMON — 실행 및 통합 테스트 안내
+# 안심온 ANSIMON — taewon + minse 통합 웹
 
 React + Vite + Tailwind CSS / FastAPI + SQLite로 만든 **로컬 웹 안부전화 체험 앱**입니다. OpenAI API 키와 유료 대화 API는 필요하지 않습니다. 대화는 규칙 기반이며 실제 전화번호 발신·자동 119 신고·의학적 진단을 수행하지 않습니다.
+
+## 통합 버전 안내
+
+React·FastAPI 기반에 taewon의 **매일 반복 예약, 대기 통화, 항목별 점수와 우선순위**를 통합했습니다. 기존 혼합형 대화·벨소리·STT/TTS·답변별 저장을 유지합니다.
+
+- 예약 화면: http://127.0.0.1:5173/schedules
+- 기록 화면에서 최신순/확인 우선순위순을 선택하고 점수 근거를 볼 수 있습니다.
+- taewon 원본 DB는 자동으로 덮어쓰거나 배포하지 않습니다. 이전 기록을 가져오려면 [통합·DB 가져오기 안내](docs/SOURCE_INTEGRATION.md)를 따르세요.
+- [통합 검증 보고서](docs/INTEGRATION_TEST_REPORT.md)
 
 ## 1. 설치 전 준비와 정확한 폴더 열기
 
@@ -281,3 +290,22 @@ index는 0~4, attempt는 최초 0·재답변 1·2입니다. 같은 순번·같�
 ## C형 혼합형 대화 엔진
 
 [대화 설계·상태·위험 대응·저장·Mermaid 흐름도](docs/conversation-design.md)를 참고하세요. 최신 프론트엔드는 기존 답변 API에 `engine: hybrid`를 전송합니다. 기본 일상 경청 한도는 2회이며 서버 실행 전 PowerShell에서 `$env:ANSIMON_DAILY_LIMIT="2"`로 설정할 수 있습니다. 별도 모델/API 키 설치는 필요하지 않습니다. 기본 실행 명령은 위와 같습니다.
+
+## 통합된 추가 파일
+
+```text
+backend/
+  main.py                 기존 API + 예약 회차 연결 + 점수 응답
+  integration.py          예약 CRUD 및 이전 기록 조회 FastAPI
+  scheduling.py           한국 시간 스케줄러·회차 중복 방지
+  priority.py             확인된 사실 기반 확인 우선순위
+  taewon_rules.py          taewon 원본 가중치와 판정 규칙
+  import_taewon.py         원본 DB 읽기 전용 가져오기·백업
+  tests/test_unified.py    예약·점수·마이그레이션 회귀 검사
+frontend/src/
+  pages/SchedulesPage.jsx
+  components/PriorityAssessment.jsx
+frontend/tests/
+  unified_scenarios.py
+  unified_e2e.py
+```

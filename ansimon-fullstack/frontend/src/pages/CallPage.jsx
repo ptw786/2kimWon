@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+import {Link,useSearchParams} from 'react-router-dom'
 import {CheckCircle2,RefreshCw} from 'lucide-react'
 import {Brand} from '../components/Common'
 import {ErrorNotice,Loading} from '../components/Feedback'
@@ -8,7 +8,8 @@ import ConversationPanel from '../components/ConversationPanel'
 import {useCall} from '../hooks/useCall'
 import {useRingtone} from '../hooks/useRingtone'
 export default function CallPage({elderId}){
- const call=useCall(elderId)
+ const [params]=useSearchParams()
+ const call=useCall(elderId,params.get('queue'))
  const ringtone=useRingtone(call.phase==='incoming'&&!call.busy)
  const accept=()=>{ringtone.stop();call.begin()}
  const decline=()=>{ringtone.stop();call.decline()}

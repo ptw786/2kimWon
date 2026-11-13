@@ -12,6 +12,9 @@ from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from fastapi.responses import JSONResponse
+from scheduling import init_schema, bind_queue, finish_queue
+from priority import assessment_for
+from integration import register, imported_rows
 from dialogue_manager import transition
 from conversation import QUESTIONS, LABELS, CLASS_LABELS, MAX_REASKS, assess, summary_for
 
@@ -20,7 +23,7 @@ DB_PATH = Path(os.getenv('ANSIMON_DB', str(Path(__file__).resolve().parent / 'an
 KST = timezone(timedelta(hours=9), name='Asia/Seoul')
 logger = logging.getLogger('uvicorn.error')
 app = FastAPI(title='안심온 API', version='1.0.0', description='로컬 개발용 규칙 기반 안부 확인 API')
-app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=False, allow_methods=['GET', 'POST'], allow_headers=['Content-Type', 'Idempotency-Key'])
+app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=False, allow_methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type', 'Idempotency-Key'])
 
 @contextmanager
 def db(write=False):
@@ -94,8 +97,10 @@ def init_db():
 
         c.execute('CREATE TABLE IF NOT EXISTS hybrid_state (call_id INTEGER PRIMARY KEY REFERENCES calls(id), state_json TEXT NOT NULL)')
         c.execute('CREATE TABLE IF NOT EXISTS hybrid_events (id INTEGER PRIMARY KEY, call_id INTEGER NOT NULL REFERENCES calls(id), analysis_json TEXT NOT NULL, created_at TEXT NOT NULL)')
+        init_schema(c)
 
 init_db()
+register(app, db)
 
 @app.exception_handler(sqlite3.Error)
 async def database_error(request: Request, exc: sqlite3.Error):
@@ -111,6 +116,9 @@ class TurnInput(BaseModel):
     attempt: int | None = Field(default=None, ge=0, le=10000)
     engine: Literal["legacy", "hybrid"] = "legacy"
     source: Literal["text", "stt", "stt_error", "silence"] = "text"
+
+class StartInput(BaseModel):
+    queue_id: int | None = Field(default=None, gt=0)
 
 class FinishInput(BaseModel):
     status: Literal['completed', 'interrupted']
@@ -150,6 +158,9 @@ def health():
     try:
         with db() as c:
             for query in (
+                'SELECT id,resident_id,next_at FROM care_schedules LIMIT 0',
+                'SELECT id,schedule_id,state,call_id FROM scheduled_calls LIMIT 0',
+                'SELECT origin_key,payload_json FROM imported_records LIMIT 0',
                 'SELECT call_id,state_json FROM hybrid_state LIMIT 0',
                 'SELECT call_id,analysis_json,created_at FROM hybrid_events LIMIT 0',
                 'SELECT id,name,age,neighborhood,call_time FROM residents LIMIT 0',
@@ -173,11 +184,14 @@ def residents():
         return [dict(r) for r in c.execute('SELECT * FROM residents ORDER BY id')]
 
 @app.post('/api/residents/{resident_id}/calls', status_code=201)
-def start_call(resident_id: int, request_key: str | None = Header(default=None, alias='Idempotency-Key', max_length=128)):
+def start_call(resident_id: int, body: StartInput | None = None, request_key: str | None = Header(default=None, alias='Idempotency-Key', max_length=128)):
     with db(write=True) as c:
         if request_key:
             existing = c.execute('SELECT * FROM calls WHERE request_key=?', (request_key,)).fetchone()
             if existing:
+                queued=c.execute('SELECT id FROM scheduled_calls WHERE call_id=?',(existing['id'],)).fetchone()
+                if (queued['id'] if queued else None)!=(body.queue_id if body else None):
+                    raise HTTPException(409, '다른 예약에 사용된 중복 방지 키입니다.')
                 if existing['resident_id'] != resident_id or existing['status'] == 'declined':
                     raise HTTPException(409, '다른 요청에 사용된 중복 방지 키입니다.')
                 return {'id':existing['id'], 'resident_id':resident_id, 'status':existing['status'], 'question':QUESTIONS[0][1], 'topic':QUESTIONS[0][0]}
@@ -187,14 +201,18 @@ def start_call(resident_id: int, request_key: str | None = Header(default=None, 
         if ongoing:
             raise HTTPException(409, '이미 진행 중인 통화가 있습니다. 해당 통화를 먼저 종료해 주세요.')
         cur = c.execute("INSERT INTO calls(resident_id,started_at,status,request_key) VALUES(?,?,'in_progress',?)", (resident_id, now(), request_key))
+        bind_queue(c,body.queue_id if body else None,resident_id,cur.lastrowid)
         return {'id': cur.lastrowid, 'resident_id': resident_id, 'status':'in_progress', 'question':QUESTIONS[0][1], 'topic':QUESTIONS[0][0]}
 
 @app.post('/api/residents/{resident_id}/decline', status_code=201)
-def decline_call(resident_id: int, request_key: str | None = Header(default=None, alias='Idempotency-Key', max_length=128)):
+def decline_call(resident_id: int, body: StartInput | None = None, request_key: str | None = Header(default=None, alias='Idempotency-Key', max_length=128)):
     with db(write=True) as c:
         if request_key:
             existing = c.execute('SELECT * FROM calls WHERE request_key=?', (request_key,)).fetchone()
             if existing:
+                queued=c.execute('SELECT id FROM scheduled_calls WHERE call_id=?',(existing['id'],)).fetchone()
+                if (queued['id'] if queued else None)!=(body.queue_id if body else None):
+                    raise HTTPException(409, '다른 예약에 사용된 중복 방지 키입니다.')
                 if existing['resident_id'] != resident_id or existing['status'] != 'declined':
                     raise HTTPException(409, '다른 요청에 사용된 중복 방지 키입니다.')
                 return {'id':existing['id'], 'status':'declined'}
@@ -202,6 +220,7 @@ def decline_call(resident_id: int, request_key: str | None = Header(default=None
             raise HTTPException(404, '어르신을 찾을 수 없습니다.')
         current = now()
         cur = c.execute("INSERT INTO calls(resident_id,started_at,ended_at,status,summary,request_key) VALUES(?,?,?,'declined',?,?)", (resident_id,current,current,'수신 거절',request_key))
+        bind_queue(c,body.queue_id if body else None,resident_id,cur.lastrowid,completed=True)
         return {'id':cur.lastrowid,'status':'declined'}
 
 @app.post('/api/calls/{call_id}/turns', status_code=201)
@@ -290,30 +309,41 @@ def finish_call(call_id: int, body: FinishInput):
             if missing: summary+=' / 확인되지 않음: '+', '.join(missing)
             if state.get('safety_paused'):summary+=' / 위험 표현: 직접 119 연락 안내, 자동 신고 없음'
         c.execute('UPDATE calls SET ended_at=?,status=?,summary=? WHERE id=?',(now(),body.status,summary,call_id))
+        finish_queue(c,call_id)
         return {'id':call_id,'status':body.status,'summary':summary,'answered':len(turns)}
 
+def enrich(c,row):
+    queued=c.execute('SELECT id,scheduled_at,recipient FROM scheduled_calls WHERE call_id=?',(row['id'],)).fetchone()
+    return {**row,'assessment':assessment_for(c,row),'source':'minse',
+            'queue_id':queued['id'] if queued else None,
+            'scheduled_at':queued['scheduled_at'] if queued else None,
+            'recipient':queued['recipient'] if queued else None}
+
 @app.get('/api/calls')
-def calls(limit: int = 100, resident_id: int | None = None):
+def calls(limit: int = 100, resident_id: int | None = None, sort: Literal['latest','priority'] = 'latest'):
     limit = min(max(limit,1),500)
     with db() as c:
         if resident_id is None:
-            rows = c.execute('''SELECT calls.*,residents.name as resident_name FROM calls JOIN residents ON residents.id=calls.resident_id ORDER BY calls.id DESC LIMIT ?''',(limit,)).fetchall()
+            rows = c.execute('''SELECT calls.*,residents.name as resident_name FROM calls JOIN residents ON residents.id=calls.resident_id ORDER BY calls.id DESC''').fetchall()
         else:
-            rows = c.execute('''SELECT calls.*,residents.name as resident_name FROM calls JOIN residents ON residents.id=calls.resident_id WHERE resident_id=? ORDER BY calls.id DESC LIMIT ?''',(resident_id,limit)).fetchall()
-        return [dict(row) for row in rows]
+            rows = c.execute('''SELECT calls.*,residents.name as resident_name FROM calls JOIN residents ON residents.id=calls.resident_id WHERE resident_id=? ORDER BY calls.id DESC''',(resident_id,)).fetchall()
+        result=[enrich(c,dict(row)) for row in rows]
+        if resident_id is None:result+=imported_rows(c)
+        result.sort(key=lambda r:(r['assessment']['score'] if r['assessment']['score'] is not None else -1, datetime.fromisoformat(r['started_at']).timestamp()) if sort=='priority' else datetime.fromisoformat(r['started_at']).timestamp(),reverse=True)
+        return result[:limit]
 
 @app.get('/api/calls/{call_id}')
 def call_detail(call_id: int):
     with db() as c:
         row = fetch_call(c, call_id)
-        return {**dict(row),'turns':fetch_turns(c,call_id), 'attempts':fetch_attempts(c,call_id), 'dialogue_state':dialogue_state(c,call_id), 'analysis_events':[json.loads(r[0]) for r in c.execute('SELECT analysis_json FROM hybrid_events WHERE call_id=? ORDER BY id',(call_id,))]}
+        return {**enrich(c,dict(row)),'turns':fetch_turns(c,call_id), 'attempts':fetch_attempts(c,call_id), 'dialogue_state':dialogue_state(c,call_id), 'analysis_events':[json.loads(r[0]) for r in c.execute('SELECT analysis_json FROM hybrid_events WHERE call_id=? ORDER BY id',(call_id,))]}
 
 @app.get('/api/dashboard')
 def dashboard():
     today = datetime.now(KST).date().isoformat()
     with db() as c:
         residents_data = [dict(row) for row in c.execute('SELECT * FROM residents ORDER BY id')]
-        recent = [dict(row) for row in c.execute('SELECT * FROM calls ORDER BY id DESC')]
+        recent = [enrich(c,dict(row)) for row in c.execute('SELECT * FROM calls ORDER BY id DESC')]
     latest = {}
     for call in recent:
         date = datetime.fromisoformat(call['started_at']).astimezone(KST).date().isoformat()
@@ -324,6 +354,7 @@ def dashboard():
         r['status'] = last['status'] if last else 'pending'
         r['last_summary'] = last['summary'] if last else ''
         r['last_call_id'] = last['id'] if last else None
+        r['assessment'] = last['assessment'] if last else None
     return {'date':today,'total':len(residents_data), 'completed':sum(r['status']=='completed' for r in residents_data),
             'pending':sum(r['status']=='pending' for r in residents_data),
             'interrupted':sum(r['status']=='interrupted' for r in residents_data),

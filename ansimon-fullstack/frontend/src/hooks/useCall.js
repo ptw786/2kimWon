@@ -16,7 +16,7 @@ function requestKeys(id){
  try{sessionStorage.setItem(storageKey,JSON.stringify(keys))}catch{}
  return keys
 }
-export function useCall(elderId){
+export function useCall(elderId,queueId=null){
  const [state,setState]=useState(initial)
  const current=useRef(initial),alive=useRef(false),busy=useRef(true),controller=useRef(null),speechInput=useRef(null),speechOutput=useRef(null),submitRef=useRef(null),keys=useRef(null),pending=useRef(null),operation=useRef(0)
  const patch=useCallback(values=>{
@@ -60,7 +60,8 @@ export function useCall(elderId){
   if(!validId(elderId)){
    patch({phase:'invalid',error:'어르신 주소가 올바르지 않습니다.',busy:false});busy.current=false;return
   }
-  keys.current=requestKeys(elderId)
+  if(queueId!==null&&!validId(queueId)){patch({phase:'invalid',error:'예약 통화 주소가 올바르지 않습니다.',busy:false});busy.current=false;return}
+  keys.current=requestKeys(queueId===null?elderId:`${elderId}:queue:${queueId}`)
   try{
    const [residents,questions,calls]=await Promise.all([
     api('/residents',{signal:request.signal}),api('/questions',{signal:request.signal}),api(`/calls?resident_id=${elderId}&limit=500`,{signal:request.signal})])
@@ -75,7 +76,7 @@ export function useCall(elderId){
    }else patch({phase:'incoming'})
   }catch(e){if(!request.signal.aborted)patch({phase:'error',error:e.message})}
   finally{if(!request.signal.aborted&&operation.current===id){busy.current=false;patch({busy:false,submitting:false})}}
- },[elderId,patch,restoreDetail,say,stopMedia])
+ },[elderId,queueId,patch,restoreDetail,say,stopMedia])
  useEffect(()=>{
   alive.current=true
   speechInput.current=new SpeechInput({host:window,
@@ -91,7 +92,7 @@ export function useCall(elderId){
   const tick=()=>patch({seconds:Math.max(0,Math.floor((Date.now()-(current.current.startedAt||Date.now()))/1000))})
   tick();const interval=setInterval(tick,1000);return()=>clearInterval(interval)
  },[state.phase,patch])
- const clearKeys=()=>{try{sessionStorage.removeItem(`ansimon:incoming:${elderId}`)}catch{}}
+ const clearKeys=()=>{try{sessionStorage.removeItem(`ansimon:incoming:${queueId===null?elderId:`${elderId}:queue:${queueId}`}`)}catch{}}
  const transact=async task=>{
   if(busy.current||!alive.current)return
   const id=++operation.current
@@ -104,7 +105,7 @@ export function useCall(elderId){
  const begin=()=>{
   if(current.current.phase!=='incoming')return
   return transact(async signal=>{
-   const call=await post(`/residents/${elderId}/calls`,{},keys.current.start,{signal})
+   const call=await post(`/residents/${elderId}/calls`,queueId===null?{}:{queue_id:Number(queueId)},keys.current.start,{signal})
    const detail=await api(`/calls/${call.id}`,{signal})
    if(signal.aborted)return
    restoreDetail(detail);await say(current.current.question,questionKey())
@@ -113,7 +114,7 @@ export function useCall(elderId){
  const decline=()=>{
   if(current.current.phase!=='incoming')return
   return transact(async signal=>{
-   await post(`/residents/${elderId}/decline`,{},keys.current.decline,{signal})
+   await post(`/residents/${elderId}/decline`,queueId===null?{}:{queue_id:Number(queueId)},keys.current.decline,{signal})
    if(!signal.aborted){patch({phase:'ended',result:results.declined});clearKeys()}
   })
  }
@@ -163,7 +164,7 @@ export function useCall(elderId){
   if(speechInput.current?.active){speechInput.current.stop({manual:true});return}
   speechInput.current?.start()
  }
- const reset=()=>{if(busy.current)return;clearKeys();load()}
+ const reset=()=>{if(busy.current)return;clearKeys();if(queueId!==null){window.location.assign(`/call/${elderId}`);return}load()}
  return {...state,begin,decline,finish,submitAnswer,microphone,reset,reload:load,retryAnswer:()=>submitAnswer(pending.current?.answer||current.current.answer),
   setAnswer:answer=>{if(busy.current||current.current.pendingAnswer)return;speechInput.current?.stop();patch({answer})},toggleSound:()=>{patch({sound:!current.current.sound,listening:false});stopMedia(true)}}
 }

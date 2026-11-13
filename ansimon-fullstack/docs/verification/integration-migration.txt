@@ -1,0 +1,17 @@
+{
+  "source_counts": {
+    "schedules": 1,
+    "queue": 1,
+    "records": 5,
+    "elder_care_statistics": 17,
+    "elderly_single_household_statistics": 257,
+    "statistics_source_metadata": 1
+  },
+  "dry_run": false,
+  "imported_records": 5,
+  "archive_rows": 282,
+  "records_visible": 5,
+  "source_unchanged": true,
+  "integrity": "ok",
+  "duplicate_import": false
+}

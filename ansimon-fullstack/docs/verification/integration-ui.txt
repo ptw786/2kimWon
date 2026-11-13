@@ -1,0 +1,2 @@
+PASS: unified React schedule validation/retry/duplicate guard, edit, queued accept/reload/five answers, priority detail and sorting
+PASS: second scheduled occurrence decline, schedule removal preserves completed calls, legacy record detail/reload and dashboard priorities
