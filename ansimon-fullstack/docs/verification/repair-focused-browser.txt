@@ -1,0 +1,4 @@
+PASS: typed draft survives reload; failed submission restores retry controls; short 어/좋아 complete and persist without duplicate answers
+PASS: real 409 answer conflict reloads authoritative state, preserves old text separately and allows the next question
+PASS: a draft for a stale question never becomes an automatic answer to a newer question after refresh
+PASS: real clarification history, non-invented sleep quality and negative mood are saved; reservation routes/tables/menu are removed

@@ -7,21 +7,11 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 import main
-from scheduling import next_run, enqueue, stamp, KST
 from import_taewon import import_database
 from taewon_rules import assess as legacy_assess
 
 
 def client():return TestClient(main.app)
-def schedule(c,rid=1,at='10:00'):
- r=c.post('/api/schedules',json={'resident_id':rid,'call_time':at});assert r.status_code==201,r.text
- return r.json()['id']
-def due(sid):
- now=datetime.now(timezone.utc)
- with main.db(write=True) as conn:
-  conn.execute('UPDATE care_schedules SET next_at=? WHERE id=?',(stamp(now-timedelta(days=4)),sid))
-  enqueue(conn,now)
- with main.db() as conn:return conn.execute("SELECT id FROM scheduled_calls WHERE schedule_id=? AND state='pending'",(sid,)).fetchone()[0]
 def answer(c,cid,index,text):
  r=c.post(f'/api/calls/{cid}/turns',json={'engine':'hybrid','answer':text,'index':index,'attempt':0});assert r.status_code==201,r.text
  return r.json()
@@ -31,71 +21,14 @@ def complete(c,texts):
  assert c.post(f'/api/calls/{cid}/finish',json={'status':'completed'}).status_code==200
  return cid
 
-@pytest.mark.parametrize('invalid',['25:00','1:00','12:60','','-1:00','12:00:00'])
-def test_time_validation(invalid):
- assert client().post('/api/schedules',json={'resident_id':1,'call_time':invalid}).status_code==422
 
 
-def test_schedule_crud_duplicates_cors_and_preservation():
- c=client();sid=schedule(c)
- assert c.post('/api/schedules',json={'resident_id':1,'call_time':'10:00'}).status_code==409
- assert c.post('/api/schedules',json={'resident_id':999,'call_time':'10:00'}).status_code==404
- assert c.post('/api/schedules',json={'resident_id':1,'call_time':'11:00','recipient':'   '}).status_code==422
- qid=due(sid)
- r=c.options(f'/api/schedules/{sid}',headers={'Origin':'http://localhost:5173','Access-Control-Request-Method':'PUT'})
- assert r.status_code==200 and 'PUT' in r.headers['access-control-allow-methods']
- assert c.put(f'/api/schedules/{sid}',json={'resident_id':2,'call_time':'12:00'}).status_code==200
- with main.db() as conn:assert conn.execute('SELECT state FROM scheduled_calls WHERE id=?',(qid,)).fetchone()[0]=='canceled'
- assert c.delete(f'/api/schedules/{sid}').status_code==200
- assert c.get('/api/schedules').json()['schedules']==[]
- assert c.put(f'/api/schedules/{sid}',json={'resident_id':1,'call_time':'11:00'}).status_code==404
 
 
-def test_due_concurrency_latest_catchup_and_next_day():
- c=client();sid=schedule(c)
- with main.db(write=True) as conn:conn.execute('UPDATE care_schedules SET next_at=? WHERE id=?',('2000-01-01T01:00:00+00:00',sid))
- now=datetime(2026,11,13,3,0,tzinfo=timezone.utc)
- def tick(_):
-  with main.db(write=True) as conn:enqueue(conn,now)
- with ThreadPoolExecutor(max_workers=5) as pool:list(pool.map(tick,range(10)))
- with main.db() as conn:
-  assert conn.execute('SELECT COUNT(*) FROM scheduled_calls').fetchone()[0]==1
-  assert conn.execute('SELECT scheduled_at FROM scheduled_calls').fetchone()[0]=='2026-11-13T01:00:00+00:00'
-  assert conn.execute('SELECT next_at FROM care_schedules').fetchone()[0]=='2026-11-14T01:00:00+00:00'
- assert next_run(datetime(2026,11,13,0,59,tzinfo=timezone.utc),'10:00').date().isoformat()=='2026-11-13'
- assert next_run(datetime(2026,11,13,1,0,tzinfo=timezone.utc),'10:00').date().isoformat()=='2026-11-14'
 
 
-def test_scheduled_call_atomic_claim_retry_resume_and_finish():
- c=client();sid=schedule(c);qid=due(sid)
- bad=c.post('/api/residents/2/calls',json={'queue_id':qid})
- assert bad.status_code==409 and c.get('/api/calls').json()==[]
- headers={'Idempotency-Key':'scheduled-call'}
- r=c.post('/api/residents/1/calls',json={'queue_id':qid},headers=headers);assert r.status_code==201
- cid=r.json()['id']
- assert c.post('/api/residents/1/calls',json={'queue_id':qid},headers=headers).json()['id']==cid
- assert c.post('/api/residents/1/calls',json={},headers=headers).status_code==409
- assert c.get(f'/api/calls/{cid}').json()['queue_id']==qid
- assert c.delete(f'/api/schedules/{sid}').status_code==409
- assert c.post('/api/residents/1/decline',json={'queue_id':qid}).status_code==409
- answer(c,cid,0,'응')
- main.init_db()
- assert c.get(f'/api/calls/{cid}').json()['dialogue_state']['count']==1
- assert c.post(f'/api/calls/{cid}/finish',json={'status':'interrupted'}).status_code==200
- assert c.post(f'/api/calls/{cid}/finish',json={'status':'interrupted'}).status_code==200
- assert c.get('/api/schedules').json()['pending']==[]
- assert c.post('/api/residents/1/calls',json={'queue_id':qid}).status_code==409
- assert c.delete(f'/api/schedules/{sid}').status_code==200
- assert c.get(f'/api/calls/{cid}').json()['status']=='interrupted'
 
 
-def test_decline_concurrency_no_duplicate_occurrence():
- c=client();qid=due(schedule(c))
- def decline(_):return client().post('/api/residents/1/decline',json={'queue_id':qid}).status_code
- with ThreadPoolExecutor(max_workers=4) as pool:statuses=list(pool.map(decline,range(4)))
- assert statuses.count(201)==1 and statuses.count(409)==3
- assert len(c.get('/api/calls').json())==1
- assert c.get('/api/calls').json()[0]['assessment']['score']==20
 
 @pytest.mark.parametrize('texts,score',[
  (['괜찮아요','밥 못 먹었어','잠을 못 잤어','약은 챙겼어요','기분 좋아'],20),
@@ -152,10 +85,9 @@ def test_migration_readonly_idempotent_unmapped_and_conflict(tmp_path):
  imported=next(r for r in records if r['source']=='taewon')
  d=c.get('/api/imported-records/'+imported['id'][7:]).json();assert d['summary']=='이전 기록'
  assert c.get(f'/api/calls/{native}').json()['status']=='declined'
- sch=c.get('/api/schedules').json()['schedules'][0]
- assert sch['resident_id'] is None
- assert c.put(f"/api/schedules/{sch['id']}",json={'resident_id':2,'recipient':sch['recipient'],'call_time':sch['call_time']}).status_code==200
- assert c.get('/api/schedules').json()['pending'][0]['resident_id']==2
+ assert c.get('/api/schedules').status_code==404
+ with main.db() as conn:
+  assert not conn.execute("SELECT 1 FROM sqlite_master WHERE name IN ('care_schedules','scheduled_calls')").fetchall()
  with sqlite3.connect(src) as conn:conn.execute("UPDATE records SET summary='변경된 기록'")
  with pytest.raises(ValueError):import_database(src,target)
  assert c.get('/api/imported-records/'+imported['id'][7:]).json()['summary']=='이전 기록'
@@ -168,17 +100,6 @@ def test_migration_invalid_or_same_paths(tmp_path):
  with pytest.raises(ValueError):import_database(tmp_path/'missing',main.DB_PATH)
 
 
-def test_real_lifespan_worker_enqueue():
- # Actual scheduler task starts/stops with ASGI lifespan; no orphan thread.
- with TestClient(main.app) as c:
-  sid=schedule(c)
-  with main.db(write=True) as conn:conn.execute('UPDATE care_schedules SET next_at=? WHERE id=?',('2000-01-01T01:00:00+00:00',sid))
-  deadline=time.monotonic()+4
-  while time.monotonic()<deadline:
-   with main.db() as conn:count=conn.execute('SELECT COUNT(*) FROM scheduled_calls').fetchone()[0]
-   if count:break
-   time.sleep(.05)
-  assert count==1
 
 @pytest.mark.parametrize('topic,text,category',[
  ('condition','어제 피곤했어','unknown'),('medicine','딸이 약 먹었어','unknown'),

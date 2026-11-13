@@ -32,7 +32,7 @@ def test_safety(text,urgent):
 
 def test_api_persistence_retry_finish():
  c=TestClient(main.app);cid=c.post('/api/residents/1/calls').json()['id']
- for i,a in enumerate(['응','밥 먹었어','잘 잤어','먹는 약 없어','기분 좋아']):
+ for i,a in enumerate(['안 아파','밥 먹었어','잘 잤어','먹는 약 없어','기분 좋아']):
   body={'answer':a,'index':i,'attempt':0,'engine':'hybrid','source':'text'}
   r=c.post(f'/api/calls/{cid}/turns',json=body);assert r.status_code==201,r.text
   assert c.post(f'/api/calls/{cid}/turns',json=body).json()==r.json()

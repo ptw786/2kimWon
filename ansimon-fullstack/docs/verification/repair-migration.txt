@@ -1,0 +1,15 @@
+{
+  "counts_before": {
+    "calls": 0,
+    "imported_records": 5,
+    "legacy_archive": 282
+  },
+  "counts_after": {
+    "calls": 0,
+    "imported_records": 5,
+    "legacy_archive": 282
+  },
+  "reservation_tables_removed": true,
+  "source_unchanged": true,
+  "integrity": "ok"
+}

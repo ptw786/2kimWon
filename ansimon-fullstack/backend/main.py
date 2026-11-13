@@ -10,9 +10,9 @@ from pathlib import Path
 from typing import Literal
 from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from fastapi.responses import JSONResponse
-from scheduling import init_schema, bind_queue, finish_queue
+from schema_migrations import migrate
 from priority import assessment_for
 from integration import register, imported_rows
 from dialogue_manager import transition
@@ -23,7 +23,7 @@ DB_PATH = Path(os.getenv('ANSIMON_DB', str(Path(__file__).resolve().parent / 'an
 KST = timezone(timedelta(hours=9), name='Asia/Seoul')
 logger = logging.getLogger('uvicorn.error')
 app = FastAPI(title='안심온 API', version='1.0.0', description='로컬 개발용 규칙 기반 안부 확인 API')
-app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=False, allow_methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type', 'Idempotency-Key'])
+app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=False, allow_methods=['GET', 'POST'], allow_headers=['Content-Type', 'Idempotency-Key'])
 
 @contextmanager
 def db(write=False):
@@ -97,7 +97,7 @@ def init_db():
 
         c.execute('CREATE TABLE IF NOT EXISTS hybrid_state (call_id INTEGER PRIMARY KEY REFERENCES calls(id), state_json TEXT NOT NULL)')
         c.execute('CREATE TABLE IF NOT EXISTS hybrid_events (id INTEGER PRIMARY KEY, call_id INTEGER NOT NULL REFERENCES calls(id), analysis_json TEXT NOT NULL, created_at TEXT NOT NULL)')
-        init_schema(c)
+        migrate(c)
 
 init_db()
 register(app, db)
@@ -118,7 +118,7 @@ class TurnInput(BaseModel):
     source: Literal["text", "stt", "stt_error", "silence"] = "text"
 
 class StartInput(BaseModel):
-    queue_id: int | None = Field(default=None, gt=0)
+    model_config = ConfigDict(extra='forbid')
 
 class FinishInput(BaseModel):
     status: Literal['completed', 'interrupted']
@@ -158,13 +158,11 @@ def health():
     try:
         with db() as c:
             for query in (
-                'SELECT id,resident_id,next_at FROM care_schedules LIMIT 0',
-                'SELECT id,schedule_id,state,call_id FROM scheduled_calls LIMIT 0',
                 'SELECT origin_key,payload_json FROM imported_records LIMIT 0',
                 'SELECT call_id,state_json FROM hybrid_state LIMIT 0',
                 'SELECT call_id,analysis_json,created_at FROM hybrid_events LIMIT 0',
                 'SELECT id,name,age,neighborhood,call_time FROM residents LIMIT 0',
-                'SELECT id,resident_id,started_at,ended_at,status,summary,request_key FROM calls LIMIT 0',
+                'SELECT id,resident_id,started_at,ended_at,status,summary,request_key,recipient,scheduled_at FROM calls LIMIT 0',
                 'SELECT id,call_id,topic,question,answer,classification,reply,emergency,created_at FROM turns LIMIT 0',
                 'SELECT id,call_id,question_index,attempt,request_key,question,answer,classification,reply,emergency,result_json,created_at FROM turn_attempts LIMIT 0',
             ):
@@ -189,9 +187,6 @@ def start_call(resident_id: int, body: StartInput | None = None, request_key: st
         if request_key:
             existing = c.execute('SELECT * FROM calls WHERE request_key=?', (request_key,)).fetchone()
             if existing:
-                queued=c.execute('SELECT id FROM scheduled_calls WHERE call_id=?',(existing['id'],)).fetchone()
-                if (queued['id'] if queued else None)!=(body.queue_id if body else None):
-                    raise HTTPException(409, '다른 예약에 사용된 중복 방지 키입니다.')
                 if existing['resident_id'] != resident_id or existing['status'] == 'declined':
                     raise HTTPException(409, '다른 요청에 사용된 중복 방지 키입니다.')
                 return {'id':existing['id'], 'resident_id':resident_id, 'status':existing['status'], 'question':QUESTIONS[0][1], 'topic':QUESTIONS[0][0]}
@@ -201,7 +196,6 @@ def start_call(resident_id: int, body: StartInput | None = None, request_key: st
         if ongoing:
             raise HTTPException(409, '이미 진행 중인 통화가 있습니다. 해당 통화를 먼저 종료해 주세요.')
         cur = c.execute("INSERT INTO calls(resident_id,started_at,status,request_key) VALUES(?,?,'in_progress',?)", (resident_id, now(), request_key))
-        bind_queue(c,body.queue_id if body else None,resident_id,cur.lastrowid)
         return {'id': cur.lastrowid, 'resident_id': resident_id, 'status':'in_progress', 'question':QUESTIONS[0][1], 'topic':QUESTIONS[0][0]}
 
 @app.post('/api/residents/{resident_id}/decline', status_code=201)
@@ -210,9 +204,6 @@ def decline_call(resident_id: int, body: StartInput | None = None, request_key: 
         if request_key:
             existing = c.execute('SELECT * FROM calls WHERE request_key=?', (request_key,)).fetchone()
             if existing:
-                queued=c.execute('SELECT id FROM scheduled_calls WHERE call_id=?',(existing['id'],)).fetchone()
-                if (queued['id'] if queued else None)!=(body.queue_id if body else None):
-                    raise HTTPException(409, '다른 예약에 사용된 중복 방지 키입니다.')
                 if existing['resident_id'] != resident_id or existing['status'] != 'declined':
                     raise HTTPException(409, '다른 요청에 사용된 중복 방지 키입니다.')
                 return {'id':existing['id'], 'status':'declined'}
@@ -220,7 +211,6 @@ def decline_call(resident_id: int, body: StartInput | None = None, request_key: 
             raise HTTPException(404, '어르신을 찾을 수 없습니다.')
         current = now()
         cur = c.execute("INSERT INTO calls(resident_id,started_at,ended_at,status,summary,request_key) VALUES(?,?,?,'declined',?,?)", (resident_id,current,current,'수신 거절',request_key))
-        bind_queue(c,body.queue_id if body else None,resident_id,cur.lastrowid,completed=True)
         return {'id':cur.lastrowid,'status':'declined'}
 
 @app.post('/api/calls/{call_id}/turns', status_code=201)
@@ -249,6 +239,7 @@ def add_turn(call_id: int, body: TurnInput, request_key: str | None = Header(def
         if index >= len(QUESTIONS):
             raise HTTPException(409, '모든 질문이 완료되었습니다.')
         topic, question = QUESTIONS[index]
+        question = state.get('question') or state.get('last_ai') or question
         if body.engine == 'hybrid' or c.execute('SELECT 1 FROM hybrid_state WHERE call_id=?',(call_id,)).fetchone():
             if 'facts' not in state:
                 previous=fetch_turns(c,call_id)
@@ -309,15 +300,10 @@ def finish_call(call_id: int, body: FinishInput):
             if missing: summary+=' / 확인되지 않음: '+', '.join(missing)
             if state.get('safety_paused'):summary+=' / 위험 표현: 직접 119 연락 안내, 자동 신고 없음'
         c.execute('UPDATE calls SET ended_at=?,status=?,summary=? WHERE id=?',(now(),body.status,summary,call_id))
-        finish_queue(c,call_id)
         return {'id':call_id,'status':body.status,'summary':summary,'answered':len(turns)}
 
 def enrich(c,row):
-    queued=c.execute('SELECT id,scheduled_at,recipient FROM scheduled_calls WHERE call_id=?',(row['id'],)).fetchone()
-    return {**row,'assessment':assessment_for(c,row),'source':'minse',
-            'queue_id':queued['id'] if queued else None,
-            'scheduled_at':queued['scheduled_at'] if queued else None,
-            'recipient':queued['recipient'] if queued else None}
+    return {**row,'assessment':assessment_for(c,row),'source':'minse'}
 
 @app.get('/api/calls')
 def calls(limit: int = 100, resident_id: int | None = None, sort: Literal['latest','priority'] = 'latest'):

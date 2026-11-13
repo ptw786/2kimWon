@@ -1,7 +1,8 @@
 """Pure transition interface: replace analyze/respond adapters for a future local model."""
 import os
 from conversation import QUESTIONS
-from scenarios import CLARIFY
+from scenarios import CLARIFY, YES, NO, binary_question
+from normalizer import normalize
 from entity_extractor import extract
 from intent_classifier import classify
 from risk_detector import detect
@@ -13,8 +14,10 @@ def daily_limit():
 
 def transition(previous, answer, source='text'):
     s={**previous}; index=s.get('index',0);topic=QUESTIONS[index][0]
-    facts,uncertain=extract(answer,topic);risk=detect(answer)
-    if s.get('question')=='그 이야기를 조금 더 들려주시겠어요?' and answer.strip() in ('응','네','예','아니','아니요'):
+    previous_question=s.get('question',QUESTIONS[index][1])
+    short=normalize(answer).strip('.!?。')
+    facts,uncertain=extract(answer,topic,allow_confirmation=binary_question(previous_question,topic));risk=detect(answer)
+    if s.get('question')=='그 이야기를 조금 더 들려주시겠어요?' and short in YES|NO:
         facts={}
     intents=classify(answer,facts,uncertain,risk,source)
     s.setdefault('facts',{});s.setdefault('checks',0);s.setdefault('daily_count',0)
@@ -23,9 +26,9 @@ def transition(previous, answer, source='text'):
     if risk['historical'] or risk['negated']:
         # Do not store quoted/negated emergency words as current health facts.
         if risk['evidence']: facts={}
-    if s.get('risk_pending') and answer.strip() in ('응','네','예','맞아'):
+    if s.get('risk_pending') and short in YES:
         risk['urgent']=True; facts={}
-    elif s.get('risk_pending') and (answer.strip() in ('아니','아니요','아뇨') or '지금은 괜찮' in answer):
+    elif s.get('risk_pending') and (short in NO or '지금은 괜찮' in answer):
         facts={};s['risk_pending']=False
     action='clarify'
     if risk['urgent']: action='safety_pause';s['safety_paused']=True

@@ -1,4 +1,4 @@
-import {Link,useSearchParams} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {CheckCircle2,RefreshCw} from 'lucide-react'
 import {Brand} from '../components/Common'
 import {ErrorNotice,Loading} from '../components/Feedback'
@@ -8,14 +8,15 @@ import ConversationPanel from '../components/ConversationPanel'
 import {useCall} from '../hooks/useCall'
 import {useRingtone} from '../hooks/useRingtone'
 export default function CallPage({elderId}){
- const [params]=useSearchParams()
- const call=useCall(elderId,params.get('queue'))
+ const call=useCall(elderId)
  const ringtone=useRingtone(call.phase==='incoming'&&!call.busy)
  const accept=()=>{ringtone.stop();call.begin()}
  const decline=()=>{ringtone.stop();call.decline()}
  return <div className="elder-call"><header className="call-header"><Brand/><nav aria-label="전화 화면 메뉴"><Link to="/">관리 화면</Link><Link to="/records">통화 기록</Link></nav></header>
  <main className="call-content"><Loading loading={call.phase==='loading'}/><ErrorNotice error={call.error} retry={call.pendingAnswer?call.retryAnswer:call.phase==='active'&&call.count===5?call.finish:call.phase==='error'||call.phase==='incoming'?call.reload:undefined} busy={call.busy}/>
  {call.emergency&&<div className="emergency-notice" role="alert">긴급한 도움이 필요할 수 있습니다. 지금 직접 119에 연락하거나 가까운 분에게 도움을 요청해 주세요. 안심온은 실제 119 신고를 하지 않습니다.</div>}
+ {call.draftNotice&&<p role="status">{call.draftNotice}</p>}
+ {call.recoveredDraft&&<section className="panel recovered-draft" aria-label="이전 질문의 미전송 답변"><h2>이전 질문에 작성하던 답변</h2><p>{call.recoveredDraft.question}</p><blockquote>{call.recoveredDraft.answer}</blockquote><p>현재 질문에 자동으로 전송하지 않습니다.</p><button onClick={call.discardRecovered}>보관한 답변 지우기</button></section>}
  {call.ttsNotice&&<p className="tts-notice" role="status">{call.ttsNotice}</p>}
  {call.phase==='invalid'&&<section className="route-message"><h1>어르신 정보를 확인해 주세요</h1><Link to="/">어르신 목록으로 이동</Link></section>}
  {call.phase==='incoming'&&<IncomingCall resident={call.resident} busy={call.busy} ringtone={ringtone} onAccept={accept} onDecline={decline}/>}

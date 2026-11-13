@@ -1,0 +1,37 @@
+PASS: actual stopped-backend proxy returns 502 with explanation
+PASS: backend startup, resident list and real retry requests
+PASS: independent resident loading during injected dashboard 500
+PASS: elder route, real Web Audio ringtone and accept cleanup
+PASS: start, answers, in-call reload recovery, committed finish retry, saved summary/detail
+PASS: malformed and missing elder IDs and unknown route
+PASS: injected autoplay restriction with native audio, manual enable, cadence/re-render singleton, quiet volume, large mobile controls, decline/reset/navigation cleanup
+PASS: rapid double accept creates one call; answer and interrupted finish persist
+PASS: navigation aborts pending API work; records URL reload persists completed/declined/interrupted calls
+PASS: call loading API 500 retry and lost start response recovery without duplicate calls
+PASS: unsupported Web Audio gives explanation without blocking receive controls
+PASS: real saved classification; follow-up TTS completes before next question is displayed or spoken
+PASS: text/STT server errors preserve answers; safe retry, contextual replies, final TTS then finish, factual summary and record labels
+PASS: two persisted reasks, response-loss retry does not duplicate, reload keeps retry count, third unknown finalizes, summary excludes gibberish
+PASS: urgent text displays and queues direct 119 guidance; saved records never claim dispatch
+PASS: interrupt during follow-up speech retains committed answer and cancels next-question sequence
+PASS: speech error falls back to text without blocking answers or call termination
+PASS: hybrid daily limit, reload state, explicit health answer, multiple facts, safety pause and persisted interrupted records
+PASS: simulated mic denial gives Korean guidance; text-only five-question completion, record detail and URL refresh persist
+PASS: STT unsupported browser simulation still completes every question by text
+PASS: simulated webkit STT errors/start failure, starting lock, interim display, manual stop, typed-draft protection and one final submission
+PASS: simulated TTS blocks STT/input, cancels mic, does not repeat on renders, supports mute/unmute and safe mid-speech call end
+PASS: call end aborts an active microphone and discards late results
+PASS: IME/blank/duplicate submit guard and loading; real backend outage preserves input; server recovery safely retries and refreshed records persist
+NATIVE_BROWSER_OBSERVATION: {"recognition": true, "synthesis": true, "koreanVoices": 0, "audioInputs": 0, "events": [], "koKR": "ko-KR", "sttMessage": "마이크를 연결하고 있습니다.", "ttsMessage": "음성을 재생하지 못해 화면의 글로 안내합니다."}
+PASS: native Chromium API attempt leaves text fallback usable; actual text-only five answers, completed records and refresh
+PASS: typed draft survives reload; failed submission restores retry controls; short 어/좋아 complete and persist without duplicate answers
+PASS: real 409 answer conflict reloads authoritative state, preserves old text separately and allows the next question
+PASS: a draft for a stale question never becomes an automatic answer to a newer question after refresh
+PASS: real clarification history, non-invented sleep quality and negative mood are saved; reservation routes/tables/menu are removed
+PASS: real committed answer with stalled response times out, preserves draft and retries without duplicate SQLite rows
+PASS: new call after ending resets question, draft, count, messages and errors while preserving previous records
+SQLITE_AUDIT: {"integrity": "ok", "foreign_key_violations": 0, "duplicate_turns": 0, "duplicate_attempts": 0, "calls": 23, "statuses": {"completed": 9, "declined": 1, "interrupted": 13, "in_progress": 0}, "turns": 56, "attempts": 63}
+PASS: direct read-only SQLite audit verifies every completed/declined/interrupted record and zero duplicate/orphan rows
+HTTP_500_AUDIT: {"injected": 4, "unexpected": 0}
+PASS: every browser HTTP 500 is an explicit injected fault; no unexpected normal-flow HTTP 500
+PASS: browser refresh and backend restart retain records; no browser JS errors

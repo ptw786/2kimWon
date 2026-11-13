@@ -1,5 +1,7 @@
 # 안심온 taewon/minse 통합 검증
 
+> 이전 버전의 검증 이력입니다. 예약 제거 및 대화·초안 복구 이후의 현재 결과는 [CALL_REPAIR_REPORT.md](CALL_REPAIR_REPORT.md)를 참고하세요.
+
 검증일: 2026-11-13 (한국 시간). 기준 커밋과 기능 대응은 [통합 설계](SOURCE_INTEGRATION.md)를 참고한다.
 
 ## 최종 결과

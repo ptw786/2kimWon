@@ -12,7 +12,7 @@ def run_hybrid_scenarios(browser,errors):
  expect(page.locator('.phone-current')).to_contain_text('조금 더 들려')
  answer(page,'오늘 손자가 상을 받았어')
  expect(page.locator('.phone-current')).to_contain_text('오늘 몸은')
- answer(page,'응')
+ answer(page,'안 아파')
  expect(page.locator('.step-indicator')).to_have_text('1 / 5')
  answer(page,'밥은 먹었고 약도 먹었는데 잠을 못 잤어')
  expect(page.locator('.step-indicator')).to_have_text('2 / 5')
@@ -28,4 +28,4 @@ def run_hybrid_scenarios(browser,errors):
  expect(page.locator('.phone-ended')).to_contain_text('통화 중단')
  assert detail(page,4)['analysis_events'][-1]['action']=='safety_pause'
  page.close()
- print('PASS: hybrid daily limit, reload state, contextual yes, multiple facts, safety pause and persisted interrupted records')
+ print('PASS: hybrid daily limit, reload state, explicit health answer, multiple facts, safety pause and persisted interrupted records')

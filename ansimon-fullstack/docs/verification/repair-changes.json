@@ -1,0 +1,186 @@
+[
+  {
+    "path": "README.md",
+    "status": "modified"
+  },
+  {
+    "path": "backend/dialogue_manager.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/entity_extractor.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/import_taewon.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/integration.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/main.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/response_generator.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/scenarios.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/scheduling.py",
+    "status": "deleted"
+  },
+  {
+    "path": "backend/schema_migrations.py",
+    "status": "added"
+  },
+  {
+    "path": "backend/tests/test_call_repairs.py",
+    "status": "added"
+  },
+  {
+    "path": "backend/tests/test_hybrid.py",
+    "status": "modified"
+  },
+  {
+    "path": "backend/tests/test_unified.py",
+    "status": "modified"
+  },
+  {
+    "path": "docs/CALL_REPAIR_REPORT.md",
+    "status": "added"
+  },
+  {
+    "path": "docs/FINAL_INTEGRATION_REPORT.md",
+    "status": "modified"
+  },
+  {
+    "path": "docs/HYBRID_TEST_REPORT.md",
+    "status": "modified"
+  },
+  {
+    "path": "docs/INTEGRATION_TEST_REPORT.md",
+    "status": "modified"
+  },
+  {
+    "path": "docs/SOURCE_INTEGRATION.md",
+    "status": "modified"
+  },
+  {
+    "path": "docs/conversation-design.md",
+    "status": "modified"
+  },
+  {
+    "path": "docs/conversation-design.svg",
+    "status": "modified"
+  },
+  {
+    "path": "docs/conversation-flow.md",
+    "status": "modified"
+  },
+  {
+    "path": "docs/source-integration.svg",
+    "status": "modified"
+  },
+  {
+    "path": "docs/verification/repair-backend.txt",
+    "status": "added"
+  },
+  {
+    "path": "docs/verification/repair-browser.txt",
+    "status": "added"
+  },
+  {
+    "path": "docs/verification/repair-build.txt",
+    "status": "added"
+  },
+  {
+    "path": "docs/verification/repair-focused-browser.txt",
+    "status": "added"
+  },
+  {
+    "path": "docs/verification/repair-frontend.txt",
+    "status": "added"
+  },
+  {
+    "path": "docs/verification/repair-migration.txt",
+    "status": "added"
+  },
+  {
+    "path": "frontend/package.json",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/src/App.jsx",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/src/api.js",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/src/components/Sidebar.jsx",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/src/drafts.js",
+    "status": "added"
+  },
+  {
+    "path": "frontend/src/hooks/useCall.js",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/src/pages/CallPage.jsx",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/src/pages/DashboardPage.jsx",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/src/pages/SchedulesPage.jsx",
+    "status": "deleted"
+  },
+  {
+    "path": "frontend/src/styles.css",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/tests/drafts.test.js",
+    "status": "added"
+  },
+  {
+    "path": "frontend/tests/e2e.py",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/tests/hybrid_scenarios.py",
+    "status": "modified"
+  },
+  {
+    "path": "frontend/tests/repair_e2e.py",
+    "status": "added"
+  },
+  {
+    "path": "frontend/tests/repair_scenarios.py",
+    "status": "added"
+  },
+  {
+    "path": "frontend/tests/unified_e2e.py",
+    "status": "deleted"
+  },
+  {
+    "path": "frontend/tests/unified_scenarios.py",
+    "status": "deleted"
+  },
+  {
+    "path": "docs/verification/repair-changes.json",
+    "status": "added"
+  }
+]

@@ -22,7 +22,7 @@ def import_database(source_path,target_path,dry_run=False):
         src.row_factory=sqlite3.Row
         if src.execute('PRAGMA integrity_check').fetchone()[0]!='ok':raise ValueError('원본 DB 무결성 검사 실패')
         names=[r[0] for r in src.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")]
-        if not {'schedules','queue','records'}<=set(names):raise ValueError('taewon DB 형식이 아닙니다.')
+        if 'records' not in names:raise ValueError('taewon DB 형식이 아닙니다.')
         rows={name:[payload(r) for r in src.execute('SELECT * FROM "'+name.replace('"','""')+'"')] for name in names}
         result={'source_counts':{k:len(v) for k,v in rows.items()},'dry_run':dry_run}
         if dry_run:return result
@@ -34,7 +34,6 @@ def import_database(source_path,target_path,dry_run=False):
     main.DB_PATH=target_path
     # Import-time initialization covered the chosen target; repeat calls still snapshot it.
     main.init_db()
-    from scheduling import stamp
     with main.db(write=True) as c:
         for name,records in rows.items():
             for index,r in enumerate(records):
@@ -49,20 +48,7 @@ def import_database(source_path,target_path,dry_run=False):
             old=c.execute('SELECT payload_json FROM imported_records WHERE origin_key=?',(key,)).fetchone()
             if old and old[0]!=raw:raise ValueError('같은 ID의 이전 기록이 변경되었습니다. 자동 덮어쓰기를 중단합니다.')
             c.execute('INSERT OR IGNORE INTO imported_records VALUES(?,?,?)',(key,raw,main.now()))
-        for schedule in rows['schedules']:
-            import re
-            if not re.fullmatch(r'(?:[01][0-9]|2[0-3]):[0-5][0-9]',schedule['call_time']):raise ValueError('잘못된 이전 예약 시간')
-            resident=c.execute('SELECT id FROM residents WHERE name=?',(schedule['recipient'],)).fetchall()
-            rid=resident[0][0] if len(resident)==1 else None
-            key='taewon:schedule:'+str(schedule['id'])
-            c.execute('INSERT OR IGNORE INTO care_schedules(resident_id,recipient,call_time,next_at,origin_key) VALUES(?,?,?,?,?)',
-                      (rid,schedule['recipient'],schedule['call_time'],stamp(datetime.fromisoformat(schedule['next_at'])),key))
-            sid=c.execute('SELECT id FROM care_schedules WHERE origin_key=?',(key,)).fetchone()
-            if not sid:raise ValueError('기존 예약과 충돌합니다. 대상과 시각을 확인하세요.')
-            for q in rows['queue']:
-                if q['schedule_id']!=schedule['id']:continue
-                c.execute('INSERT OR IGNORE INTO scheduled_calls(schedule_id,scheduled_at,recipient,resident_id,state,origin_key) VALUES(?,?,?,?,?,?)',
-                          (sid[0],stamp(datetime.fromisoformat(q['scheduled_at'])),schedule['recipient'],rid,'completed' if q['completed'] else 'pending','taewon:queue:'+str(q['id'])))
+        result['reservations_not_restored']=len(rows.get('schedules',[]))+len(rows.get('queue',[]))
         result['imported_records']=c.execute('SELECT COUNT(*) FROM imported_records').fetchone()[0]
         result['archive_rows']=c.execute('SELECT COUNT(*) FROM legacy_archive').fetchone()[0]
     return result

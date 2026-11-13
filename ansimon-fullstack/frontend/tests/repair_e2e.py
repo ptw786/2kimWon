@@ -1,4 +1,4 @@
-"""Fast standalone runner for unified scheduling UI; uses an isolated database."""
+"""Fast standalone runner for repair call UI; uses an isolated database."""
 import os
 from pathlib import Path
 import socket
@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 from playwright.sync_api import sync_playwright
 from e2e import ROOT,PYTHON,URL,wait_server
-from unified_scenarios import run_unified_scenarios
+from repair_scenarios import run_repair_scenarios
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
   except OSError:continue
   raise RuntimeError(f'Port {port} is occupied; stop your app before testing.')
  with tempfile.TemporaryDirectory() as tmp:
-  env={**os.environ,'ANSIMON_DB':str(Path(tmp)/'unified.db')}
+  env={**os.environ,'ANSIMON_DB':str(Path(tmp)/'repair.db')}
   with open(Path(tmp)/'servers.log','w+') as log:
    processes=[]
    try:
@@ -26,7 +26,7 @@ def main():
     with sync_playwright() as p:
      browser=p.chromium.launch(headless=True,args=['--autoplay-policy=document-user-activation-required'])
      errors=[]
-     run_unified_scenarios(browser,errors,Path(env['ANSIMON_DB']))
+     run_repair_scenarios(browser,errors,Path(env['ANSIMON_DB']))
      assert not errors,errors
      browser.close()
    except Exception:

@@ -290,8 +290,8 @@ def main():
                         backend=start_backend()
                     run_speech_input_scenarios(browser,errors,stop_backend,recover_backend)
                     run_native_speech_check(browser,errors)
-                    from unified_scenarios import run_unified_scenarios
-                    run_unified_scenarios(browser,errors,Path(env['ANSIMON_DB']))
+                    from repair_scenarios import run_repair_scenarios
+                    run_repair_scenarios(browser,errors,Path(env['ANSIMON_DB']))
                     from final_scenarios import run_timeout_recovery,audit_sqlite
                     run_timeout_recovery(browser,errors)
                     audit_sqlite(Path(env['ANSIMON_DB']))

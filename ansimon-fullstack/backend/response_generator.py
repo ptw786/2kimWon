@@ -12,5 +12,6 @@ def generate(topic, action, intents, facts, checks):
     if 'ai_question' in intents:return '저는 안심온 돌봄전화예요. 어르신의 오늘 안부를 여쭙고 있어요.'
     if 'help_request' in intents:return '도움이 필요하시군요. 가까운 분이나 담당 생활지원사에게 직접 도움을 요청해 주세요.'
     if topic in facts:
+        if facts[topic].get('quality')=='unconfirmed':return '잠은 주무셨군요. 말씀해 주신 내용으로 기록할게요.'
         return REPLIES[topic][facts[topic]['classification']]
     return '말씀하신 내용을 지금 상황으로 확정하기는 어려워요.' if checks==1 else '제가 조금 천천히 여쭤볼게요.'
