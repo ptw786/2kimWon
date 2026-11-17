@@ -1,0 +1,29 @@
+# 도구 상태
+.omc/
+**/.omc/
+.fablize/
+# 의존성·빌드
+node_modules/
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+# 데이터·비밀
+*.db
+*.db-journal
+*.db.backup-*
+.env
+.env.local
+# 기타
+.DS_Store
+
+# 확인용 스크린샷 (재생성 가능, 용량 큼)
+apps/*/screenshots/
+# 제안서·서식 원본은 공개 저장소에 올리지 않는다
+*.hwp
+*.hwpx
+
+# 공공데이터 인증키 (공유 스냅샷 JSON은 재현 가능한 시연을 위해 버전 관리)
+공공데이터포털 api 키.txt
+**/public_data_cache.tmp

@@ -1,0 +1,2164 @@
+{
+  "version": 1,
+  "region_aliases": {
+    "전남광주통합특별시 광주광역시": "광주광역시",
+    "전남광주통합특별시 광주광역시 동구": "광주광역시 동구",
+    "전남광주통합특별시 동구": "광주광역시 동구",
+    "전남광주통합특별시 광주광역시 서구": "광주광역시 서구",
+    "전남광주통합특별시 서구": "광주광역시 서구",
+    "전남광주통합특별시 광주광역시 남구": "광주광역시 남구",
+    "전남광주통합특별시 남구": "광주광역시 남구",
+    "전남광주통합특별시 광주광역시 북구": "광주광역시 북구",
+    "전남광주통합특별시 북구": "광주광역시 북구",
+    "전남광주통합특별시 광주광역시 광산구": "광주광역시 광산구",
+    "전남광주통합특별시 광산구": "광주광역시 광산구",
+    "전남광주통합특별시 전라남도": "전라남도",
+    "전남광주통합특별시 전라남도 목포시": "전라남도 목포시",
+    "전남광주통합특별시 목포시": "전라남도 목포시",
+    "전남광주통합특별시 전라남도 여수시": "전라남도 여수시",
+    "전남광주통합특별시 여수시": "전라남도 여수시",
+    "전남광주통합특별시 전라남도 순천시": "전라남도 순천시",
+    "전남광주통합특별시 순천시": "전라남도 순천시",
+    "전남광주통합특별시 전라남도 나주시": "전라남도 나주시",
+    "전남광주통합특별시 나주시": "전라남도 나주시",
+    "전남광주통합특별시 전라남도 광양시": "전라남도 광양시",
+    "전남광주통합특별시 광양시": "전라남도 광양시",
+    "전남광주통합특별시 전라남도 담양군": "전라남도 담양군",
+    "전남광주통합특별시 담양군": "전라남도 담양군",
+    "전남광주통합특별시 전라남도 곡성군": "전라남도 곡성군",
+    "전남광주통합특별시 곡성군": "전라남도 곡성군",
+    "전남광주통합특별시 전라남도 구례군": "전라남도 구례군",
+    "전남광주통합특별시 구례군": "전라남도 구례군",
+    "전남광주통합특별시 전라남도 고흥군": "전라남도 고흥군",
+    "전남광주통합특별시 고흥군": "전라남도 고흥군",
+    "전남광주통합특별시 전라남도 보성군": "전라남도 보성군",
+    "전남광주통합특별시 보성군": "전라남도 보성군",
+    "전남광주통합특별시 전라남도 화순군": "전라남도 화순군",
+    "전남광주통합특별시 화순군": "전라남도 화순군",
+    "전남광주통합특별시 전라남도 장흥군": "전라남도 장흥군",
+    "전남광주통합특별시 장흥군": "전라남도 장흥군",
+    "전남광주통합특별시 전라남도 강진군": "전라남도 강진군",
+    "전남광주통합특별시 강진군": "전라남도 강진군",
+    "전남광주통합특별시 전라남도 해남군": "전라남도 해남군",
+    "전남광주통합특별시 해남군": "전라남도 해남군",
+    "전남광주통합특별시 전라남도 영암군": "전라남도 영암군",
+    "전남광주통합특별시 영암군": "전라남도 영암군",
+    "전남광주통합특별시 전라남도 무안군": "전라남도 무안군",
+    "전남광주통합특별시 무안군": "전라남도 무안군",
+    "전남광주통합특별시 전라남도 함평군": "전라남도 함평군",
+    "전남광주통합특별시 함평군": "전라남도 함평군",
+    "전남광주통합특별시 전라남도 영광군": "전라남도 영광군",
+    "전남광주통합특별시 영광군": "전라남도 영광군",
+    "전남광주통합특별시 전라남도 장성군": "전라남도 장성군",
+    "전남광주통합특별시 장성군": "전라남도 장성군",
+    "전남광주통합특별시 전라남도 완도군": "전라남도 완도군",
+    "전남광주통합특별시 완도군": "전라남도 완도군",
+    "전남광주통합특별시 전라남도 진도군": "전라남도 진도군",
+    "전남광주통합특별시 진도군": "전라남도 진도군",
+    "전남광주통합특별시 전라남도 신안군": "전라남도 신안군",
+    "전남광주통합특별시 신안군": "전라남도 신안군"
+  },
+  "region_basis": "동봉 KOSIS 지역 계층 및 원문 담당기관. 행정구역 개편의 법적 유효성을 인증하는 자료가 아님. 모호한 범위는 추천 보류.",
+  "services": {
+    "WLF00002209": {
+      "source_sha256": "3b9bc982ef1035944018cfa93f681c82f8e1868321b17635eff2667c832bd5f3",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "서울특별시 서대문구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005663": {
+      "source_sha256": "42280a138708570b8cc7b2b646d0d4a0442c8a7517f9551ab25332baff734ec2",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "서울특별시 강북구",
+      "min_age": 40,
+      "max_age": 64,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요.",
+        "중장년(40~64세) 대상 우선. 그 외 대상은 담당 기관 별도 확인이 필요해요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001004": {
+      "source_sha256": "141e9493103a34851666e9c2bcb3f12426b30e451f053c7ff7f2334b318be1ca",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "서울특별시 광진구",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000664": {
+      "source_sha256": "6a5d9d646f565b507ab702bba9a56efdf39fd817eac794d1c77773b1d57876ec",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "서울특별시 은평구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000698": {
+      "source_sha256": "a48bcfd1b2abc4dcd2432634560a6ef699d337070616d5832a62cf5ee208e2b2",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "서울특별시 양천구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001054": {
+      "source_sha256": "0d8cc1a37b4baa1b1e15fcdd139bc97288cda786a29be04004dc08b3ef2cda2c",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "서울특별시 성북구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002181": {
+      "source_sha256": "8714ee80ee6a1706e270b9580ea963dac76ee7fc668c2a8948c6ded2d1eb7af4",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "서울특별시 도봉구",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "현재 생활 어려움 4종에 직접 제공되는 지원으로 확인되지 않음",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004543": {
+      "source_sha256": "9ba097bb786040192a68e5ac462b2889e2855576cf5f358db39a5fed2be5fd18",
+      "decision": "include",
+      "needs": [
+        "sleep_problem"
+      ],
+      "match_region": "서울특별시 동작구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002419": {
+      "source_sha256": "ca80e5ca2b03230522a4125e4b5abcfe02cb38a08687ba20bfe0d7e147d3e9b8",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "서울특별시 은평구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005928": {
+      "source_sha256": "5631e490560184ea7f6e89b35cc9b77f3f9d8b686afd22904e064e17b406dc7c",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "서울특별시 용산구",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005014": {
+      "source_sha256": "7b36a16e9c579c3aea9e868dca54114ca1c5c815c1198840291d1139542abf32",
+      "decision": "include",
+      "needs": [
+        "help_request",
+        "loneliness"
+      ],
+      "match_region": "서울특별시 종로구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005012": {
+      "source_sha256": "aec69f753ddc56ec01334fcb25e7e1fd359b1add4b9deb9db5f14a39a8649b3a",
+      "decision": "include",
+      "needs": [
+        "help_request",
+        "loneliness"
+      ],
+      "match_region": "서울특별시 종로구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004588": {
+      "source_sha256": "f5de551a3410a7354f821703f0223063ec7ce0d30a33bd7e04553e6fd6a1ef20",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "서울특별시 마포구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000795": {
+      "source_sha256": "6c896ae3330abd6cfe64225fe4367c6aa55d95189f9dca7a6135ccf1e368b9f9",
+      "decision": "include",
+      "needs": [
+        "help_request",
+        "loneliness"
+      ],
+      "match_region": "서울특별시 관악구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005770": {
+      "source_sha256": "abed775212d8b1255c39316754e9bf302c1f4384546a49b2abdfa80e9efcefb8",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "대전광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001093": {
+      "source_sha256": "1a74682e4110e33e0576e91dbc156b9babf23f4e31e5b4b71447d80e39403928",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003191": {
+      "source_sha256": "b7c5be36fb452777f897e1fcd563b9e31d5d9a245c830136e4293a7b9da4df92",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "본 사업 이용 대상의 기존 노인맞춤돌봄서비스 중복 안내 제외",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005567": {
+      "source_sha256": "d893a9fa3d351a5eaf55a2133db33f5e0f91558b2dd72a6d73a4b9e5bddfa36e",
+      "decision": "include",
+      "needs": [
+        "sleep_problem"
+      ],
+      "match_region": "",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005442": {
+      "source_sha256": "e0a30cdcfc6dd7eb96a68de9214b95401a1b0690877fc0b1240c811a5e52ce87",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006237": {
+      "source_sha256": "8194b84349ad44f0b31599a1806352db0cfe580464571e739e323bd93a93cd1c",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003176": {
+      "source_sha256": "809ce9320a7b6ddb0f0fc8fdd4a9e2ea2ac32b039603b70232f9a3aa1bb4bc56",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002572": {
+      "source_sha256": "301e50a6f28f7a03110339d62e1fe3bbe33c147874beb587d616f3bf990c1f45",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "세종특별자치시",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004834": {
+      "source_sha256": "c5c4869b23ddd9467fdfeed7031441d431ebc1ed5104910f7e40f9433a657c0c",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "세종특별자치시",
+      "min_age": 75,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "장례·사망 후 지원은 외로움 해소 서비스가 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000203": {
+      "source_sha256": "3cfc1fb272826d67a1b4fe8596efc03ebb1a86b8fe4cea0e16ea1d4c10af23a5",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "전라남도 장성군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "자원봉사자 상해치료비이며 수면 지원이 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005857": {
+      "source_sha256": "88d59d60ff96cb725b3cd1ab8372481db95135ff7d744a5640e613294e933982",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty",
+        "help_request"
+      ],
+      "match_region": "부산광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004594": {
+      "source_sha256": "7239c5da20d37bb7d8669136c8527843f3f4971040e7ad61f6d9e06c18d67b7f",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 밀양시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006787": {
+      "source_sha256": "d8ad6a62c84f0097443fcdfcb73571003510c3f41eb07f6efed2d26925d8da8d",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "대구광역시 중구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006783": {
+      "source_sha256": "34f13f8d3215a63e119ceb9cf20e62a662f739f835c10ca2c99e62a7f8c68ecf",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "대구광역시 서구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002884": {
+      "source_sha256": "c75cdf0125d7ed7f8a458ecfae9f4868b081809106e3a85a9d2cdab1834951d3",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경상남도 사천시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "수혜자가 돌봄 종사자임",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000510": {
+      "source_sha256": "265eac5a8a4d01e641065be57015ceebab4d5838e5aa94746ca21ae8db869e03",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "충청북도 제천시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000209": {
+      "source_sha256": "4af141e05b76a63df2d89ea793176cad362246049eadf6b87f831d2fcbc182c5",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 함안군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006754": {
+      "source_sha256": "0b2467a2b1140f0aff9c5c49ca23fa52d7d5da0d2a9ff92e36d53393a3dc7e08",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "경기도 광명시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001257": {
+      "source_sha256": "f7fe03cba1c3bf0dd4e46126f95cb79dff35d10c84604a93152578934e2e2356",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "광주광역시 동구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002352": {
+      "source_sha256": "62f8ed1c89886d6a7c39b45914440c1796d2899dd62d598649a59bfb4931a2bd",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "전북특별자치도 군산시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004322": {
+      "source_sha256": "2f4d34e3eef6646ad337d13adaad62e0baaee898265900e7448a531421a55edf",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 창녕군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003464": {
+      "source_sha256": "3ee0686bbfd7da11d8a51d45022e1b54579212c7e5c95949f3e0139a2356c42a",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "강원특별자치도 태백시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "가정폭력·성폭력 대상 긴급구호로 일반 식사지원과 구분 필요",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005272": {
+      "source_sha256": "657eee1b0b6a82f350985cd0ef4ab982c896dd2751f554fa8d267f430df67916",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "경상남도 함양군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003518": {
+      "source_sha256": "6e6be52a35808fd28df3350302787ba72c79fd8cff5cf6b9d6f389c51e070289",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 평창군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002292": {
+      "source_sha256": "45fd3be403e44bec048f0af3a41f3a4944002b646021071edec8d3818f449014",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "경상북도 김천시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006230": {
+      "source_sha256": "25ee94c4e0bdf7565f5a4948078d1a5bf782deb3cfbc5d591eb7fe7bc4776841",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "전북특별자치도 장수군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005912": {
+      "source_sha256": "4a22ad9200f051b9748b4693eae60ab473f286d7055f25313a755d78954a0285",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "경기도 동두천시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005438": {
+      "source_sha256": "a0fa60e16c882591cc21a49eb197665ee6b704dfa76d1e5931f27e58746cfe58",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "전라남도 강진군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "수혜자가 장기요양기관 종사자임",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000383": {
+      "source_sha256": "b101771c8989eb9627affd85b49c7e3d4e5bbf6f9cf4dab6b3853d60c3525e82",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 화천군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001863": {
+      "source_sha256": "20931e2c0876735cd4af0055b9f4d2b5cfbc0157de69fa0836939d4b675e50d3",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "전라남도 장성군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "수혜자가 돌봄 수행인력임",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003493": {
+      "source_sha256": "f8c9b68a5318e4da5d7b8b9b46e232c10afd91860d1c0590ec71ef1c606b85bf",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "강원특별자치도 양구군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "결혼이민자 모국방문 지원으로 생활 어려움 4종과 직접 관련 없음",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002028": {
+      "source_sha256": "9af2f9735d997242369a707679807c987738a7cb06ff3523512a6be3552d0094",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 양양군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003375": {
+      "source_sha256": "dda8700277f8410432bb8576c222b16d2dba3ea99ccabdcdb90351fbe1d4ace7",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 속초시",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004471": {
+      "source_sha256": "99bb2a2dd347f1fa31a46ef0c2552c7a1aa792598e75f6d10a3957709921995b",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 속초시",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003803": {
+      "source_sha256": "e6b35234eef545a6555b33e1a0df36af76808b698e99ea4decff4d24bbde762a",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 화천군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006088": {
+      "source_sha256": "8690871f23ae624b102ca94260a459f853ff3659bfc5731d569872b02b4abb0a",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "전라남도 화순군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003843": {
+      "source_sha256": "5472b81ebbdeedf00e9bd2b8b050ebd99913959088cb4fd762d4e958a37d9533",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "충청북도 옥천군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003495": {
+      "source_sha256": "e0b7fba90f56c8269f92d6a71e1f2817a708a4abcbede5ac442359136fd4f0e2",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 평창군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004489": {
+      "source_sha256": "de04b57ea434815de26624a185b8efc937a540d1aec65219930e1a57302270a6",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "부산광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004601": {
+      "source_sha256": "c69f16cdb7ab34b8ffa817b2c233901f280a374c3c2bd2a867dcb261a261b399",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "광주광역시 남구",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006032": {
+      "source_sha256": "a3eaf3f8d35f5ab83f2a438edf3a01a60acb7090f2840312333f736778d4ec9b",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 산청군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005470": {
+      "source_sha256": "48ca46019aa3b126be81552cd64699e8b8efe2a75350a774cf50fa9c347b30fc",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도 철원군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004043": {
+      "source_sha256": "b53497db95bf96bc1fb9ac883fee746b58f5a7777e80d71b3f08d2b60e43c9df",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 고성군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000212": {
+      "source_sha256": "feaee5790bd9df11cec9a26f93e9168b669fcb297951ee3af6735a0bf58a4236",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 사천시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004595": {
+      "source_sha256": "343f8782ed8c76a0dd43e71917bc0c9c8b66b70484ec89ba309ecd17d12f5ced",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 밀양시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000144": {
+      "source_sha256": "e6b1ae88f5bfe1d75e2adcc8c68384f0c6f6b4d2c310edf9ee9608bb5ae50d4c",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경상남도",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "특정 역사적 피해자 자격이 필요한 생활안정지원",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006104": {
+      "source_sha256": "61d5de7a24eaf3b4e056fa321e13f53bf7cc2d9043c61391f0fd30b996872eb0",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "강원특별자치도 영월군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "다자녀·맞벌이 가정 놀이돌봄으로 노인 대상 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005257": {
+      "source_sha256": "e109927205e7bbc8d7978ef6b3b0501b52d59a27ce58b8bb8d3b67ffd955999a",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "전북특별자치도 전주시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000205": {
+      "source_sha256": "4ce97d1d76d5bf36612696facc68dbc12c3c7671105cc42460c14ae6616d9c01",
+      "decision": "include",
+      "needs": [
+        "help_request",
+        "loneliness"
+      ],
+      "match_region": "전라남도 장성군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005481": {
+      "source_sha256": "ade9c7f11a1e2206e2dde24ae36b5651ade96c714d91e61b155cc1bc3a3acad3",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경상북도 영천시",
+      "min_age": 70,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "보청기 지원은 수면·외로움의 직접 지원이 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002156": {
+      "source_sha256": "7f6a0a867ceb7a912a5744d6bec2d6c5ec0c2043bdd4caaae7def80d5547c511",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "전북특별자치도 남원시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005505": {
+      "source_sha256": "cd46f05a1d62fe485ade3551ed61edd11d5103582c8147b34de466ff6dadef52",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000806": {
+      "source_sha256": "dd7aa9525c3852522df1c95bf6836842fe2ffc829a0200d17e81738f37266c94",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경기도 시흥시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004462": {
+      "source_sha256": "f4453fc8fe3a307a14b0e1ea50e5c1556d6e2c01d29fd96be3adc720143a0382",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "충청남도 부여군",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002287": {
+      "source_sha256": "81ede24b51f81ac5bbd1cf145e94b5cecd51ac217a19a45973b75d7ad43ed615",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "전남광주통합특별시",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "광주·전남을 합친 원본 지역에서 사업 적용 범위를 확정할 수 없어 보류",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003550": {
+      "source_sha256": "fbb6fe47f2f263e76534e879b2b927a9747d08175da46f4a28a4a8d639d03ab6",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 태백시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004394": {
+      "source_sha256": "8f61f2b1149ce48a08cd7f3bb19ac49bac29cbc1d65cfaddb6642ab194a1186b",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 김해시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003463": {
+      "source_sha256": "8b492bffaa1cf5c791ebdbd9e9cf40edd4b4cfa265e9997b63b85c16cb526da7",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도 태백시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005594": {
+      "source_sha256": "babf800fc3ce16875da2d9aa2174129e9e508d847731a7a92d277789fa88ebe7",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "경상남도 고성군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000592": {
+      "source_sha256": "1a1c2ddb6b6a11f89242b3113c907eea16b069ef3a8ed117c3b01dd326ee6311",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "전북특별자치도 고창군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002068": {
+      "source_sha256": "f5526d78472183aa7e5e51d6a40bdcfee35aee9dd4dbc3387a727b25fe7bc651",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "전북특별자치도 고창군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "도시락 사업 유류대 지원으로 수혜 주체·직접 신청 경로 확인 필요",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005179": {
+      "source_sha256": "07b27bf9593688032004fbfeb667397d0da28dab222b0947b65a62f23ec91b09",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경기도 과천시",
+      "min_age": 75,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "사회활동 장려금은 외로움 해소 서비스가 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004132": {
+      "source_sha256": "c789342544f606b1d32dcb13c051dca96f949ce2ae99162d9b7df14707d7246e",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "전라남도 담양군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003393": {
+      "source_sha256": "ed30fb51fdf37b2c5e03424ee3f0d1490a1e69c1d16a7c3cd45f14450d97b118",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 고성군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000619": {
+      "source_sha256": "5a0f0fe081e0d393a82bf2e2209123fbb239f3d77824b98e48cf2cc4291d86aa",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 횡성군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006673": {
+      "source_sha256": "78c6f3400e8724447bfd225322852799258c2756c77a804e6bf377101e32920c",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "대구광역시 남구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006672": {
+      "source_sha256": "3849efd189dde5136c7fe68e11b013365bfea95f7b7fb48d80313ed00dc0e006",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "대구광역시 남구",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "주거·일자리 참여사업으로 일반 돌봄 지원이 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006639": {
+      "source_sha256": "3713ead19ea1868df9df7e64142ddd17ca8822b871d495f42671e7806bd6f4d5",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "광주광역시 남구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005620": {
+      "source_sha256": "e5f865ee22ecbd071634d3fe4271cd4e0ce02ac7a3f1a0c01ce10bdeda3301a9",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경기도 안산시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "수혜자가 급식도우미 일자리 참여자임",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005209": {
+      "source_sha256": "b289fbd92666ddb2e56b1a1967844f2024ea1701ba6da43f4a2a379c224e40e1",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "경상북도 구미시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005053": {
+      "source_sha256": "dab014faa987f42d7aa5cda32228e5d13c3c784028f08123dd618e1a6f5fa795",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "전북특별자치도 전주시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001627": {
+      "source_sha256": "3f2313b29b0f375829658bb39174c73c21c834cfb461315aa7422a5fa675e47d",
+      "decision": "include",
+      "needs": [
+        "help_request",
+        "loneliness"
+      ],
+      "match_region": "경기도 화성시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000426": {
+      "source_sha256": "3f6bb5aff2002f596318e91ecc576ed838ef5f3a10bccd3501aada09685f6bc0",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "전라남도 강진군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003295": {
+      "source_sha256": "95ac2c38cb3b9cdc44c227cf5bd44dae26b3ea781356623e6e006b12bfcae5ae",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "충청남도 청양군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "결혼이민자 모국방문 지원",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002085": {
+      "source_sha256": "ecf0da782377f67ec8e690cb6b197d7dbde43809fc9f6bc3db3f7dfd38b31b65",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "대구광역시 달성군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003462": {
+      "source_sha256": "9b6f327a40ce828d9888bd45392cde8d8360a114f0d438e11a3f21265d669b31",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도 태백시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000493": {
+      "source_sha256": "1f40f2d10dfe5927561b2807ccdcb5579cca43fc381fe6d6e67ced56605a227c",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "경상북도 경주시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006116": {
+      "source_sha256": "ff35c5296a7d9ae03730880ad62cb54dd07004be35aae6a039a26fb06b09e842",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "전북특별자치도 임실군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005308": {
+      "source_sha256": "4fa2ad08bd22d32905854c1e9c79b09743e47f6337513798855294b4a79109cf",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도 춘천시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001706": {
+      "source_sha256": "38fbe23a00f9a30141ed1a3849c3cf0b9522c75246420a3e1854921941124cb1",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001249": {
+      "source_sha256": "482f4274d9e74b9713e3cf2be9ce02d5ae3a0773d16c221501de4eb7719fa8d8",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "인천광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002673": {
+      "source_sha256": "6d8749825912d049288a0d98b9cce92c68981c127770042ffda9bbf046dabbc2",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "대구광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "특정 역사적 피해자 자격이 필요한 생활안정지원",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000628": {
+      "source_sha256": "62a856c481eb29163b01e33a6e8c6fdc0996ed0cdc87a882b1c69abc7fac7501",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "충청남도 계룡시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001882": {
+      "source_sha256": "0eddf537f87908185b2fe576775b12254b8dca6674d75cab1eed181e965fea21",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 의령군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003300": {
+      "source_sha256": "66fe3adba509a977e004422e2e9ce0c61eb7e476a28f5c02366f485db6ef086e",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 합천군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005420": {
+      "source_sha256": "8f9d761d74e4e5e70e44ffabe25d566d70202dd4dbb59d8248d2dd61a77b89b9",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경기도 수원시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "만34세 이하 자립위기청년 주거 지원",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000504": {
+      "source_sha256": "5094d402b2771a83bf4650d56e173be2946963a14ab8113597a11b4ea066ab95",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 남해군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005684": {
+      "source_sha256": "992681728cb01fb9ea2170ef284476c9896253e2f38a2cb92e8ab37806956cf2",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경기도 성남시",
+      "min_age": 18,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "문해교육 등록 학습자 교육지원금으로 외로움 직접 지원 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006344": {
+      "source_sha256": "8446ba41b9f3d8ae7880b81d241265aa7603751004c518bf3e2eea2a81342e75",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "전라남도 담양군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001426": {
+      "source_sha256": "f7397e3d0eef43dbc0b593ebd04bb599d1775fea2855cc46378722daed17526d",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "전남광주통합특별시",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "광주·전남을 합친 원본 지역에서 사업 적용 범위를 확정할 수 없어 보류",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004001": {
+      "source_sha256": "40554dfc5ed69d03fb5b2d61348549f2b5ca3211b32123ddd4099ed70349780c",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경기도",
+      "min_age": 60,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002974": {
+      "source_sha256": "848c7ae020e6876e51758c39d1a5984a9edd5f7ba1f761cf042a996c1a503c83",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 홍천군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000656": {
+      "source_sha256": "2e3b1850eed1147d0a2c8989d7f218b52f10c68a0d0effe8dd2dd6e48531907f",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 동해시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002345": {
+      "source_sha256": "3d1f78b9bf553595988098d090c95b3cfbcfd9a7c5455091438ecc6523f193c6",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty",
+        "loneliness"
+      ],
+      "match_region": "전북특별자치도 임실군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000219": {
+      "source_sha256": "7dc680f0a22ad2439491060d4b28e79e7fb85586fd41096f7396e165b5ad520f",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "충청남도 서천군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006393": {
+      "source_sha256": "540603430f37197232d38af1578463074f18c18e673efa83b7226619f20b0fc3",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "전라남도 순천시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005082": {
+      "source_sha256": "0f355387f942717154fb7fe0b0318813a29f5764c4830d296f3e2f756dc7c287",
+      "decision": "include",
+      "needs": [
+        "help_request",
+        "loneliness"
+      ],
+      "match_region": "인천광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004911": {
+      "source_sha256": "7e045547f94a267390d0d24a8c979944c472f4300bdd95ecef446d8e65d4ac3e",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "인천광역시 인천광역시교육청",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "초중고 학생 체험학습비이며 노인·수면 지원 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004743": {
+      "source_sha256": "ea15d77b4e75e12a3bc9c9125610af96f150298da9f178d376608059dfb3a9d7",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "전라남도 함평군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004992": {
+      "source_sha256": "c45da4c1128969ff415b84b5091e9ffb7dc9e949167a2946d15c31627022fbaf",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "경상남도 김해시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003814": {
+      "source_sha256": "ab9f979b26d7e286b371d65641e1c3b28073b2265210e789cc15a2d6c15584cb",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "광주광역시 광산구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "영구임대 공동체 지원은 수면 문제와 직접 관련 확인 안 됨",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000758": {
+      "source_sha256": "195e24a349959461bdfebc56c6fc3341745b0fbffa728d6277dcdffcd06c6a4f",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "대구광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000717": {
+      "source_sha256": "62f46406316f76daf7ed3d2f9087e8cbc3e8e2af9c8c88f11ff2f08f1563a0c5",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "경기도",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "특정 역사적 피해자 자격이 필요한 생활안정지원",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002645": {
+      "source_sha256": "d42d4ff5cd6aaea2bd81224f524e3f20b9ced52be011f2648df331c0ee8b9fe8",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "부산광역시 북구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00001380": {
+      "source_sha256": "34ef831ae52bd106e1cb13ca545b63a0ffc5b0b9f78ed7b9d5843e5bdee788ce",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "인천광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002738": {
+      "source_sha256": "8bcca0701bf20599dd8b9e3c92974e144693b8d2b1e0fbe367997a84afd8986f",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "부산광역시 서구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002703": {
+      "source_sha256": "4649650c1765931c2939184d6dd848f88f0948e721266d24aa6881977c355e1c",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "인천광역시 미추홀구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "행려자·무연고 사망자 지원은 일반 노인 돌봄 후보 아님",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002578": {
+      "source_sha256": "fe711fae3332f56feeaf736adea4a34fc72af650df3560f64c394c61d14fe432",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "대구광역시 중구",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006336": {
+      "source_sha256": "99affc4be2acca44f740b50cfdb18c081d19c7b5b7f54767cf5b63e89a2153f5",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도 정선군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004118": {
+      "source_sha256": "5712c2c4adb54989be68a5f36d406232b1759e45fc14346459554bf95872a2ba",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도 삼척시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000442": {
+      "source_sha256": "d7be1cb429fc0e683f2791779846f078c1deb6d4f026241b757db5b2e733da73",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 인제군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003294": {
+      "source_sha256": "ffbbc15a9d7de04d2e0741dcdca0e1c5bfc76de61f94c5974d2a03dbc218eb98",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 삼척시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00002951": {
+      "source_sha256": "ef33cea6d11474acc77ec51d3ee37c7def5640724c45a7217aa841eca1d6d0a2",
+      "decision": "include",
+      "needs": [
+        "loneliness"
+      ],
+      "match_region": "강원특별자치도 삼척시",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00000414": {
+      "source_sha256": "90304a91708cffeecbd6b1219430e428cec2c244545ae532db521c1f4746b1d4",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "강원특별자치도 양구군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006149": {
+      "source_sha256": "a9b993a18a11e6fc3f2140a216607e5a81d4cc41d6695e7591c5a31225ecd3b3",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "경기도 광명시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00006261": {
+      "source_sha256": "8e8bd37afb44b76169100dcb5c59ca0357237a2dba4e23def3c4e06b4635eaf7",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "경상남도",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003685": {
+      "source_sha256": "3c5018bf9f760f42e108d596ec2671155f5e2e70884a3791e2621eb9ac47acd0",
+      "decision": "exclude",
+      "needs": [],
+      "match_region": "전북특별자치도 완주군",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "결혼이민자 모국방문 지원",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00005736": {
+      "source_sha256": "ce2a65388c10619afd479effd58be671869660925c3cc5b5595a5951f72df1bf",
+      "decision": "include",
+      "needs": [
+        "help_request",
+        "loneliness"
+      ],
+      "match_region": "제주특별자치도",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00004015": {
+      "source_sha256": "3d66a87088ad08b7a6250fc9aca3f9dd13036ded567cab6ef172a64b02247396",
+      "decision": "include",
+      "needs": [
+        "meal_difficulty"
+      ],
+      "match_region": "부산광역시",
+      "min_age": null,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    },
+    "WLF00003388": {
+      "source_sha256": "e0e682d68cae1ae5e1d1e3a8533072af9da9e6cdc8d68fa2d14205db5013ff8a",
+      "decision": "include",
+      "needs": [
+        "help_request"
+      ],
+      "match_region": "강원특별자치도 영월군",
+      "min_age": 65,
+      "max_age": null,
+      "checks": [
+        "소득·가구 형태·거동 상태·중복수혜 등 사업별 조건을 원문과 확인해 주세요."
+      ],
+      "reason": "지원대상·지원내용을 확인한 직접 생활지원 후보. 최종 자격은 기관 확인.",
+      "reviewed_at": "2026-11-17",
+      "reviewer": "Codex 원문 검토 · 기관의 선정·이용자 자격 심사 아님"
+    }
+  }
+}
