@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, friendly } from '../../shared/api.ts'
-import homeNight from '../../shared/assets/home-night.jpg'
 import { koreanTime } from '../../shared/format.ts'
 import { Icon } from '../../shared/Icon.tsx'
 import { useSettings } from '../../shared/settings.tsx'
@@ -60,13 +59,12 @@ export function Home() {
   }
 
   return (
-    <div className="screen lv">
+    <div className="screen light lv">
       <div className="scroll">
         <div className="lv-scene">
-          <img src={homeNight} alt="스탠드 불이 켜진 저녁 거실. 소파와 탁자 위 찻잔 두 개." />
           <div className="lv-head">
             <h1 className="lv-place">
-              <b>{name ? `${name} 어르신 댁` : '어르신 댁'}</b>
+              <b>{name ? `${name} 어르신` : '안심온'}</b>
               <small><i className="lv-dot" aria-hidden="true" />{nowLabel()}</small>
             </h1>
             <button type="button" className="lv-help" onClick={() => setHelpOpen(true)}>

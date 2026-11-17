@@ -5,6 +5,7 @@
  * 글자 크기 5단계: <html data-text-scale>가 rem 기준을 바꾸고, 모든 글자는 max(20px, …)로 최소 크기를 지킨다. */
 @import '../../../../packages/design/tokens.css';
 
+
 html { font-size: 16px; }
 html[data-text-scale='xs'] { font-size: 12.2px; }
 html[data-text-scale='sm'] { font-size: 13.4px; }
@@ -279,12 +280,14 @@ h1, h2, p { margin: 0; }
 .lv > .scroll { display: flex; flex-direction: column; background: var(--bg); }
 .lv-scene { position: relative; flex: 1 0 auto; min-height: 280px; overflow: hidden; background: var(--rose-900);
   display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: calc(12px + env(safe-area-inset-top)) 14px 46px; }
-.lv-scene > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
-.lv-scene::after { content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(rgba(20, 12, 10, .45), transparent 28%, transparent 60%, rgba(20, 12, 10, .35)); }
+.lv-scene {
+  background: var(--surface) url('../shared/assets/home-pearl.jpg') center 45% / cover no-repeat;
+}
+.lv-scene::after { content: none; }
 .lv-head { position: relative; z-index: 6; align-self: stretch; margin-bottom: auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
 .lv-place { display: grid; gap: 2px; background: rgba(255, 252, 250, .94); border-radius: 18px; padding: 10px 14px; box-shadow: 0 4px 14px #1e100a26; }
 .lv-place b { font-size: var(--t-mid); font-weight: 900; line-height: 1.25; white-space: nowrap; }
+.lv-place { background: var(--surface); box-shadow: none; }
 .lv-place small { font-size: var(--t-small); color: var(--ink-subtle); display: flex; align-items: center; gap: 6px; font-weight: 700; }
 .lv-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--butter-500); display: inline-block; }
 .lv-help { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; min-height: 52px; padding: 0 16px; border: 0; border-radius: 999px;
@@ -293,6 +296,8 @@ h1, h2, p { margin: 0; }
 .lv-say { position: relative; z-index: 5; max-width: min(300px, 88%); padding: 12px 16px; border-radius: 20px 20px 20px 6px;
   background: var(--surface); color: var(--ink); font-size: var(--t-small); font-weight: 700; line-height: 1.4; box-shadow: 0 8px 20px #1e100a33; }
 .lv-say small { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: var(--t-small); font-weight: 600; color: var(--ink-subtle); margin-bottom: 2px; }
+.lv-say { max-width: 100%; align-self: stretch; border-radius: var(--radius-lg);
+  padding: var(--space-5); border: 1px solid var(--border); box-shadow: none; }
 .lv-ok { margin-left: auto; display: inline-flex; min-height: 48px; padding: 0 16px; align-items: center; border-radius: 14px;
   border: 2px solid var(--rose-300); background: var(--rose-50); color: var(--rose-700); font-size: var(--t-small); font-weight: 800; }
 /* 장면의 큰 이름표 하나: 오늘 전화 전이면 '지금 전화 받기' 버튼, 끝났으면 누르는 것이 아닌 시간 안내 */
@@ -347,7 +352,7 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .df-icons { display: inline-flex; align-items: center; gap: 5px; }
 .df-icons svg { fill: currentColor; }
 .df-home { position: absolute; z-index: 2; left: 50%; bottom: 8px; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 9px; background: #fff; opacity: .7; pointer-events: none; }
-.df-screen.tone-light .df-status { color: var(--ink); }
+.df-screen.tone-light 
 .df-screen.tone-light .df-home { background: var(--ink); opacity: .35; }
 .df-cap { font-size: 18px; color: var(--ink-subtle); text-align: center; }
 /* 프레임 안 앱(?device=1): 실제 아이폰처럼 상태바·홈 바 자리를 비운다 */
@@ -356,3 +361,9 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; justif
 .in-device .lv-scene { padding-top: 56px; }
 .in-device .dock { padding-bottom: 26px; }
 .in-device .tabbar { margin-bottom: 26px; }
+
+/* 진주빛 홈 배경에 맞춘 카드와 버튼 */
+.lv-help { box-shadow: none; border: 1px solid var(--border); }
+.lv-tag { box-shadow: none; }
+
+
