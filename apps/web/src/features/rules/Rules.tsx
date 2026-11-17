@@ -1,7 +1,7 @@
 // 판정 기준 — docs/판정규칙.md를 표로 보여 준다(문구는 src/strings/rules.ts)
 import { GradeBadge, NeedChip } from '../../shared/ui';
 import { GRADE, NEED } from '../../shared/status';
-import { GRADES, GRADE_NOTES, GRADE_RENAME, GRADE_WHY_R3, HYPOTHESIS, NEEDS, NEEDS_INTRO, NEEDS_NOTES, ITEM_STATES, PRINCIPLES, REASON_EXAMPLE, RULE_VERSION, SAFETY, SAFETY_NOTES, SAFETY_SCRIPT, SCORE, SOURCES, SOURCES_GAP, WHY_V2 } from './strings';
+import { GRADES, GRADE_NOTES, GRADE_RENAME, GRADE_WHY_R3, HYPOTHESIS, NEEDS, NEEDS_INTRO, NEEDS_NOTES, ITEM_STATES, PRINCIPLES, REASON_EXAMPLE, RULE_VERSION, SAFETY, SAFETY_NOTES, SAFETY_SCRIPT, SCORE, SOURCES, SOURCES_GAP } from './strings';
 
 const TOC: [string, string][] = [
   ['rule-1', '원칙'],
@@ -13,7 +13,6 @@ const TOC: [string, string][] = [
   ['rule-7', '이 값들은 가설'],
   ['rule-8', '어려움 유형'],
   ['rule-src', '근거 출처'],
-  ['rule-9', 'v1에서 바꾼 이유'],
 ];
 
 export function RulesPage() {
@@ -22,7 +21,7 @@ export function RulesPage() {
       <div className="read">
         <nav className="toc" aria-label="이 페이지 목차">
           <b>목차</b>
-          <ol>{TOC.map(([id, t], i) => <li key={id}><a href={`#${id}`}><span>{i < 8 ? i + 1 : i === 8 ? 9 : '+'}</span>{t}</a></li>)}</ol>
+          <ol>{TOC.map(([id, t], i) => <li key={id}><a href={`#${id}`}><span>{i + 1}</span>{t}</a></li>)}</ol>
         </nav>
         <div className="read-col">
       <div className="ph">
@@ -121,16 +120,6 @@ export function RulesPage() {
             </table>
           </div>
           <p style={{ marginBottom: 0 }}>{SOURCES_GAP}</p>
-        </section>
-
-        <section id="rule-9">
-          <h2><span className="hn">+</span>이전 규칙(v1)에서 바꾼 이유</h2>
-          <div className="tbl-wrap">
-            <table className="tbl">
-              <thead><tr><th>v1의 문제</th><th>v2에서 바꾼 것</th></tr></thead>
-              <tbody>{WHY_V2.map(([a, b]) => <tr key={a}><td>{a}</td><td>{b}</td></tr>)}</tbody>
-            </table>
-          </div>
         </section>
       </div>
         </div>
