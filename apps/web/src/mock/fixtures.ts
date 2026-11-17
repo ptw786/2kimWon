@@ -106,7 +106,7 @@ export const SCRIPT_GOOD: Script = {
 };
 
 export const SCRIPT_PARK: Script = {
-  body: { text: '어제 화장실에서 넘어졌어. 허리가 아파', status: 'risk', origin: 'llm', quote: '어제 화장실에서 넘어졌어', empathy: '지금 바로 생활지원사님께 알려 드릴게요. 위급하시면 119에 전화하세요.' },
+  body: { text: '어제 화장실에서 넘어졌어. 허리가 아파', status: 'risk', origin: 'llm', quote: '어제 화장실에서 넘어졌어', empathy: '생활지원사님 화면에 바로 알렸어요. 위급하시면 지금 119에 전화하세요.' },
   meal: good('밥은 먹었어'),
   sleep: { text: '허리 때문에 잘 못 잤어', status: 'caution', origin: 'llm', quote: '잘 못 잤어' },
   med: good('약은 먹었어'),

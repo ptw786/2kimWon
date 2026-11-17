@@ -17,7 +17,7 @@
 ├── docs/
 │   ├── harness/          이 문서 묶음 (구조 · 기능 명세 · 규약 · 계획 · AI 분배)
 │   ├── adr/              결정 기록 ADR-NNNN-제목.md
-│   ├── 판정규칙.md        판정 규칙 r2 (사람이 읽는 원본 — 값은 rules.yaml)
+│   ├── 판정규칙.md        판정 규칙 r3 (사람이 읽는 원본 — 값은 rules.yaml, §9 근거 출처)
 │   ├── 디자인.md          디자인 규칙과 패턴 출처
 │   └── 평가/              날짜를 붙인 평가 결과 (.md + .json 쌍)
 ├── scripts/              dev-up.sh(세 서버 실행) · test-all.sh(전체 검사)
@@ -39,7 +39,8 @@
 ```
 apps/api/app/
 ├── main.py            앱 조립, 라우터 등록, 스케줄러·모델 예열 시작
-├── config.py          환경변수 (ANSIMON_DB · OLLAMA_HOST · ANSIMON_MODEL · ANSIMON_LLM · ANSIMON_SCHEDULER · ANSIMON_DEMO)
+├── config.py          환경변수 (ANSIMON_DB · OLLAMA_HOST · ANSIMON_MODEL · ANSIMON_LLM · ANSIMON_SCHEDULER · ANSIMON_DEMO · ANSIMON_STAFF_PIN)
+├── auth.py            생활지원사 PIN 로그인 → 토큰 (staff 라우터 전체에 건다)
 ├── db.py              SQLite 연결·스키마·쓰기 트랜잭션 표시(in_write_tx)
 ├── seed.py            가상 어르신 6명 + 지난 6일 기록 (F0)
 ├── calls.py           통화 진행 오케스트레이션 — 발신·응답·턴·종료·요약·스케줄러 (F1·F3·F6)
@@ -79,9 +80,9 @@ src/
 | 판정규칙.md 표 | domain 함수 | 테스트 |
 |---|---|---|
 | §2 항목별 상태 (양호·주의·위험·미확인) | `keywords.extract(topic, text)` · LLM은 `services/llm.extract` | `test_rules.py` 상태·부정 표현·짧은 대답 |
-| §3 안전 신호 5분류 | `safety.detect(text)` | `test_rules.py` 16가지 |
+| §3 안전 신호 8분류 (+ 결합 규칙·부정 제외) | `safety.detect(text)` | `test_rules.py` · `test_external_review.py` |
 | §4 A 오늘 통화 · B 추세 · C 연락 | `scoring.assess(...)` · `trend_streak` · `contact_reasons` | `test_rules.py` 점수 구성·상한 |
-| §5 단계 | `scoring.assess` → grade | `test_rules.py` 경계값 |
+| §5 단계 (r3: 사실로 단계) | `scoring.grade_of` | `test_rules.py` · `test_external_review.py` |
 | 대화 다음 행동 (다음·반복·다시 묻기·안전·끝) | `dialogue.decide(state, ...)` | `test_regressions.py` |
 | AI 결과와 규칙 결과 합치기 | `dialogue.combine_extractions(...)` | `test_llm_fallback.py` |
 | §7 가설 검증 | — | `test_rules_sensitivity.py` → `docs/평가/` |
@@ -99,7 +100,7 @@ Windows PowerShell 명령과 환경변수는 각 앱 README에 있다. Ollama는
 | 주소 | 화면 |
 |---|---|
 | http://127.0.0.1:5180 | 소개 |
-| http://127.0.0.1:5180/staff | 생활지원사 웹 |
+| http://127.0.0.1:5180/staff | 생활지원사 웹 (PIN 로그인 — API 로그의 ▶ 줄) |
 | http://127.0.0.1:5181/r/KY-01 | 김영자 어르신 앱 |
 | http://127.0.0.1:8010/docs | API 문서 |
 

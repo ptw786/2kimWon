@@ -24,9 +24,9 @@ const ITEMS: { h: string; p: string; proof: Proof[] }[] = [
     proof: [{ label: '모든 화면 아래 고지 · 확인 기록 남기기(생활지원사)' }, { label: '판정 기준 5. 단계', to: '/staff/rules#rule-5' }],
   },
   {
-    h: '로컬 AI만 써요',
-    p: 'AI는 기관 PC의 Ollama(폐쇄망)에서만 돌아요. 대화 내용이 외부 서버로 나가지 않아요. AI가 꺼지면 키워드 규칙으로 끝까지 동작해요.',
-    proof: [{ label: 'apps/api/app/services/llm.py', code: true }, { label: '외부 호출은 이 어댑터 하나뿐이에요' }, { label: '왼쪽 아래 ‘AI 연결’ 상태 카드' }],
+    h: '판단하는 AI는 로컬에서만 돌려요',
+    p: '대답을 판정하고 요약하는 AI는 기관 PC의 Ollama에서만 돌고, 서버가 대화 내용을 외부 AI로 보내지 않아요. 다만 어르신 폰의 음성 인식(말 → 글자)은 브라우저 기능이라, 크롬 등은 음성을 브라우저 회사 서버에서 처리할 수 있어요. 폰이 기기 안 인식을 지원하면 그쪽으로 요청하고, 아니면 앱이 그 사실을 알려 드려요. 버튼·글자로 답하면 음성이 나가지 않아요.',
+    proof: [{ label: 'apps/api/app/services/llm.py — 서버의 외부 호출은 이 어댑터 하나', code: true }, { label: 'apps/app/src/features/call/speech/recognition.ts — processLocally(기기 안 인식) 요청', code: true }, { label: 'MDN: 일부 브라우저는 음성을 웹 서비스로 보내 인식', to: undefined }],
   },
   {
     h: '통화 원문은 기관 서버에만 둬요',

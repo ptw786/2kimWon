@@ -15,10 +15,11 @@ export type Settings = {
   textScale: TextScale
   rate: number // 0.86 천천히 · 1 보통
   autoListen: boolean
+  speechLocal: boolean // 사용자가 '확인하기'를 눌러 이 폰 안 음성 인식이 된다고 확인했을 때만 true
 }
 
 const KEY = 'ansimon.app.v2'
-const DEFAULTS: Settings = { residentId: null, residentName: '', textScale: 'large', rate: 0.86, autoListen: true }
+const DEFAULTS: Settings = { residentId: null, residentName: '', textScale: 'large', rate: 0.86, autoListen: true, speechLocal: false }
 
 function load(): Settings {
   try {
@@ -29,6 +30,7 @@ function load(): Settings {
       textScale: TEXT_SCALES.some((s) => s.key === raw.textScale) ? (raw.textScale as TextScale) : DEFAULTS.textScale,
       rate: raw.rate === 1 ? 1 : 0.86,
       autoListen: raw.autoListen !== false,
+      speechLocal: raw.speechLocal === true,
     }
   } catch {
     return DEFAULTS

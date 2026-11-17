@@ -38,7 +38,7 @@ python -m pytest -p no:cacheprovider
 테스트는 임시 DB · `ANSIMON_LLM=off` · 스케줄러 끔으로 돈다(실제 DB·Ollama를 건드리지 않음).
 `tests/test_rules_sensitivity.py`는 결과를 `docs/평가/<날짜>_rules_sensitivity.md`·`.json`에 쓴다.
 
-처음 실행하면 DB(`apps/api/ansimon.db`)가 만들어지고 **시드 데이터가 자동으로** 들어간다. 시연 중 되돌리기: `POST /api/staff/demo/reset`.
+처음 실행하면 DB(`apps/api/ansimon.db`)가 만들어지고 **시드 데이터가 자동으로** 들어간다. 시연 중 되돌리기: `POST /api/staff/demo/reset` (`ANSIMON_DEMO=1` + 생활지원사 로그인 필요).
 
 ## 환경변수
 
@@ -49,7 +49,8 @@ python -m pytest -p no:cacheprovider
 | `ANSIMON_MODEL` | `ax4-light:q4_K_M` | Ollama 모델 이름 |
 | `OLLAMA_HOST` | (없음) | Ollama 주소. `http://` · `:11434`는 생략 가능 |
 | `ANSIMON_SCHEDULER` | `1` | `0`이면 '정해진 시간에 전화'(20초마다 확인)를 끔 |
-| `ANSIMON_DEMO` | `1` | `0`이면 `POST /staff/demo/reset`이 403 |
+| `ANSIMON_DEMO` | `0` | `1`이면 시연 기능을 켠다: `POST /staff/demo/reset`(데이터 되돌리기)과 `GET /elder/residents`(어르신 고르기 목록). 꺼져 있으면 403. `scripts/dev-up.sh`가 켠다 |
+| `ANSIMON_STAFF_PIN` | (없음) | 생활지원사 웹 비밀번호. 없으면 서버를 켤 때마다 6자리를 만들어 로그에 `▶ 생활지원사 웹 비밀번호(PIN)`로 보여 준다. `off`는 인증을 끔(자동 테스트용 — 실제 정보를 넣을 때 쓰지 않는다) |
 
 ## Ollama 연결
 

@@ -4,7 +4,7 @@ import { api, friendly } from '../../shared/api.ts'
 import { koreanTime } from '../../shared/format.ts'
 import { Icon } from '../../shared/Icon.tsx'
 import { useSettings } from '../../shared/settings.tsx'
-import type { RecordDay } from '../../shared/types.ts'
+import type { HomeData, RecordDay } from '../../shared/types.ts'
 import { ErrorCard, TabBar } from '../../shared/ui.tsx'
 import { useCall } from '../call/index.ts'
 import { useHome } from './useHome.ts'
@@ -13,16 +13,30 @@ import { useHome } from './useHome.ts'
 const toBecause = (label: string) => (/어요$/.test(label) ? label.replace(/어요$/, '다고 하셔서') : `${label} 이야기를 하셔서`)
 
 /** 말풍선: 지난 통화에서 걱정된 말을 이어받는다. 없으면 오늘 전화 시간을 알려 준다. */
-function opener(records: RecordDay[] | null, todayDone: boolean, callTime: string | null) {
+function opener(records: RecordDay[] | null, status: HomeData['today']['status'] | null, callTime: string | null) {
   const when = callTime ? koreanTime(callTime) : '정해진 시간'
-  if (todayDone) return { small: '오늘 통화를 마쳤어요', text: '오늘 이야기 잘 들었어요. 편히 쉬세요.' }
+  if (status === 'completed') return { small: '오늘 통화를 마쳤어요', text: '오늘 이야기 잘 들었어요. 편히 쉬세요.' }
+  if (status === 'interrupted') return { small: '통화가 중간에 끊겼어요', text: '괜찮으시면 지금 다시 이야기해요.' }
+  if (status === 'declined') return { small: '오늘은 전화를 쉬셨어요', text: '이야기하고 싶으시면 아래 버튼을 눌러 주세요.' }
+  if (status === 'missed') return { small: '전화를 못 받으셨어요', text: '괜찮아요. 이야기하고 싶으시면 아래 버튼을 눌러 주세요.' }
   const last = records?.find((r) => r.chips.some((c) => c.tone === 'watch' && !c.label.includes('알렸')))
   const worry = last?.chips.find((c) => c.tone === 'watch' && !c.label.includes('알렸'))
   if (last && worry) {
     const [, m, d] = last.date.split('-').map(Number)
     return { small: `지난 통화 · ${m}월 ${d}일`, text: `지난번에 ${toBecause(worry.label)} 마음이 쓰였어요. 오늘은 어떠세요?` }
   }
+  if (status === 'not_called' && pastCallWindow(callTime)) {
+    return { small: '안심온이 기다리고 있어요', text: '오늘 자동 전화 시간이 지났어요. 이야기하고 싶으시면 눌러 주세요.' }
+  }
   return { small: '안심온이 기다리고 있어요', text: `오늘 하루는 어떠세요? ${when}에 전화드릴게요.` }
+}
+
+/** 서버는 전화 시간부터 2시간 안에서만 자동으로 건다. 그 뒤엔 "~에 전화드릴게요"라고 하지 않는다. */
+function pastCallWindow(callTime: string | null): boolean {
+  const m = /^(\d{1,2}):(\d{2})/.exec(callTime ?? '')
+  if (!m) return false
+  const d = new Date()
+  return d.getHours() * 60 + d.getMinutes() > Number(m[1]) * 60 + Number(m[2]) + 120
 }
 
 function nowLabel() {
@@ -48,8 +62,8 @@ export function Home() {
     return () => { live = false }
   }, [id, home])
 
-  const todayDone = home ? !['not_called', 'ringing', 'in_progress'].includes(home.today.status) : false
-  const say = opener(records, todayDone, home?.call_time ?? null)
+  const todayDone = home?.today.status === 'completed'
+  const say = opener(records, home?.today.status ?? null, home?.call_time ?? null)
 
   const ringMe = async () => {
     setHelpOpen(false)

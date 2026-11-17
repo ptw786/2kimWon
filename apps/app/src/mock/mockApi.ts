@@ -138,7 +138,7 @@ export const mockApi: ElderApi = {
     }
   },
   async ringMe(id) {
-    log(`POST /staff/residents/${id}/call`)
+    log(`POST /elder/${id}/ring`)
     await delay(200)
     resident(id)
     const c = todayCall(id)
@@ -171,6 +171,7 @@ export const mockApi: ElderApi = {
     const seen = c.replies.get(body.client_turn_id)
     if (seen) return seen
     if (c.status !== 'in_progress') throw new ApiError(409, '이미 끝난 전화예요.')
+    if (body.topic && body.topic !== QUESTIONS[c.index].topic) throw new ApiError(412, '질문이 바뀌었어요. 화면을 새로 맞출게요.')
     const text = body.text.trim()
     c.turns.push({ role: 'elder', text, topic: QUESTIONS[c.index].topic, at: nowIso(), source: body.source })
     let r: TurnResult
@@ -184,7 +185,7 @@ export const mockApi: ElderApi = {
     } else if (REPEAT.test(text)) {
       r = result(c, `다시 여쭐게요. ${QUESTIONS[c.index].question}`, null, 'repeat')
     } else if (SAFETY.test(text)) {
-      r = advance(c, '많이 놀라셨겠어요. 생활지원사님께 바로 알려 드릴게요.', true, true)
+      r = advance(c, '많이 놀라셨겠어요. 생활지원사님 화면에 바로 알렸어요. 위급하시면 지금 119에 전화하세요.', true, true)
     } else {
       const negative = NEGATIVE.test(text)
       r = advance(c, negative ? '그러셨군요. 마음이 쓰이네요.' : '다행이에요.', negative)
@@ -204,7 +205,8 @@ export const mockApi: ElderApi = {
     await delay(200)
     const c = getCall(callId)
     const q = QUESTIONS[Math.min(c.index, 4)]
-    return { status: c.status, step: { index: Math.min(c.index + 1, 5), total: 5 }, question: c.status === 'in_progress' ? q.question : null, turns: c.turns }
+    const live = c.status === 'in_progress'
+    return { status: c.status, step: { index: Math.min(c.index + 1, 5), total: 5 }, question: live ? q.question : null, topic: live ? q.topic : null, options: live ? q.options : [], last_ai_text: c.turns.filter((t) => t.role === 'ai').at(-1)?.text ?? null, turns: c.turns }
   },
 }
 

@@ -1,11 +1,12 @@
-// 전화 한 통의 흐름을 맡는다: 벨 확인(2초마다) → 받기 → [읽기(TTS) → 듣기(STT) → 답 보내기] 반복 → 마무리.
+// 전화 한 통의 흐름을 맡는다: 벨 확인(2초마다, 화면이 가려져 있어도 계속 — 그때는 시스템 알림) → 받기 → [읽기(TTS) → 듣기(STT) → 답 보내기] 반복 → 마무리.
 // 원칙: 마이크와 읽기는 절대 동시에 켜지지 않는다. 네트워크가 끊겨도 쓴 답은 지우지 않고 같은 client_turn_id로 다시 보낸다.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { api, ApiError, friendly, newTurnId } from '../../shared/api.ts'
+import { closeRingNotification, showRingNotification } from '../../shared/notify.ts'
 import { useSettings } from '../../shared/settings.tsx'
 import { MIC_UNAVAILABLE, SpeechInput, type RecognitionHost, type SttState } from './speech/recognition.ts'
 import { SpeechOutput, type SynthesisHost } from './speech/synthesis.ts'
-import type { Incoming, TurnRequest, TurnResult, TurnSource } from '../../shared/types.ts'
+import type { CallState, Incoming, TurnRequest, TurnResult, TurnSource } from '../../shared/types.ts'
 
 export type Phase = 'idle' | 'ringing' | 'answering' | 'talk' | 'done'
 export type Voice = 'speaking' | 'starting' | 'listening' | 'idle' | 'sending'
@@ -60,6 +61,15 @@ function unlockSpeech() {
     u.volume = 0
     synth.speak(u)
   } catch { /* 읽기 미지원 → 화면 글로 안내 */ }
+}
+
+/** 진행 중인 통화의 지금 질문(후속 질문·선택지 포함)을 화면용 결과로 만든다. */
+function resumeResult(c: CallState): TurnResult {
+  const q = c.question
+  return {
+    ai_text: q ? `이어서 여쭐게요. ${q}` : '', empathy: null, question: q, topic: c.topic ?? null, options: c.options ?? [],
+    step: c.step ?? { index: 1, total: 5 }, action: 'next', safety: false, finished: false, llm_used: false,
+  }
 }
 
 export function CallProvider({ children }: { children: ReactNode }) {
@@ -190,6 +200,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     interimRef.current = ''
     setHeard(null)
     listenWindow.current = true
+    input.processLocally = settingsRef.current.speechLocal // 설정에서 확인했을 때만 이 폰 안에서 인식
     if (input.start()) armSilence()
     else listenWindow.current = false
   }, [armSilence])
@@ -251,6 +262,24 @@ export function CallProvider({ children }: { children: ReactNode }) {
       if (callIdRef.current !== id) return
       busyRef.current = false
       if (e instanceof ApiError && (e.status === 404 || e.status === 409)) { endLocally(e.message || '이 전화는 이미 끝났어요.'); return }
+      if (e instanceof ApiError && e.status === 412) {
+        // 서버의 현재 질문이 화면과 다르다: 통화는 끊지 않고 지금 질문을 다시 보여 준다.
+        pendingRef.current = null
+        busyRef.current = true
+        api.call(id).then((c) => {
+          if (callIdRef.current !== id) return
+          busyRef.current = false
+          if (c.status !== 'in_progress') { endLocally('이 전화는 이미 끝났어요.'); return }
+          present(resumeResult(c))
+        }).catch((err: unknown) => {
+          if (callIdRef.current !== id) return
+          busyRef.current = false
+          if (err instanceof ApiError && (err.status === 404 || err.status === 409)) { endLocally(err.message || '이 전화는 이미 끝났어요.'); return }
+          setError(friendly(err))
+          setVoice('idle')
+        })
+        return
+      }
       setError(friendly(e))
       setVoice('idle')
     })
@@ -265,7 +294,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     const pending = pendingRef.current
     // 실패했던 답을 그대로 다시 보내면 같은 client_turn_id를 써서 서버가 두 번 저장하지 않게 한다.
     if (pending && pending.text === text && pending.source === source) send(pending)
-    else send({ text, source, client_turn_id: newTurnId() })
+    else send({ text, source, client_turn_id: newTurnId(), topic: resultRef.current?.topic })
   }, [clearSilence, send])
   submitRef.current = submit
 
@@ -291,15 +320,11 @@ export function CallProvider({ children }: { children: ReactNode }) {
     resumingRef.current = true
     api.call(id).then((c) => {
       if (c.status !== 'in_progress' || phaseRef.current === 'talk') return
-      const q = c.question
-      beginTalk(id, {
-        ai_text: q ? `이어서 여쭐게요. ${q}` : '', empathy: null, question: q, topic: null, options: [],
-        step: c.step ?? { index: 1, total: 5 }, action: 'next', safety: false, finished: false, llm_used: false,
-      })
+      beginTalk(id, resumeResult(c))
     }).catch(() => { /* 다음 확인 때 다시 시도 */ }).finally(() => { resumingRef.current = false })
   }, [beginTalk])
 
-  // ── 벨 확인: 화면이 보이고, 통화 중이 아닐 때만 2초마다 ──
+  // ── 벨 확인: 통화 중이 아닐 때 2초마다(화면이 가려지면 브라우저가 느리게 해도 계속) ──
   useEffect(() => {
     if (residentId === null || (phase !== 'idle' && phase !== 'ringing')) return
     let stopped = false, inFlight = false
@@ -312,6 +337,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
           setNotice(null)
           setRingError(null)
           setPhase('ringing')
+          if (document.visibilityState !== 'visible') void showRingNotification()
         } else if (inc.active) resume(inc.active.call_id)
       } else if (p === 'ringing') {
         if (inc.ringing?.call_id === callIdRef.current) return
@@ -324,13 +350,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
       }
     }
     const tick = () => {
-      if (stopped || inFlight || document.visibilityState !== 'visible') return
+      if (stopped || inFlight) return
       inFlight = true
       api.incoming(residentId).then((inc) => { if (!stopped) handle(inc) }).catch(() => {}).finally(() => { inFlight = false })
     }
     tick()
     const timer = window.setInterval(tick, POLL_MS)
-    const onVisible = () => { if (document.visibilityState === 'visible') tick() }
+    const onVisible = () => { if (document.visibilityState === 'visible') { void closeRingNotification(); tick() } }
     document.addEventListener('visibilitychange', onVisible)
     return () => { stopped = true; clearInterval(timer); document.removeEventListener('visibilitychange', onVisible) }
   }, [residentId, phase, kick, resume, setPhase])

@@ -26,7 +26,7 @@ def clause_at(text: str, pos: int) -> str:
     return text[start:].strip() or text.strip()
 
 
-_SEGMENT_SPLIT = re.compile(r'[.!?\n,~…]+|(?<=는데)\s+|(?<=은데)\s+|(?<=지만)\s+|(?<=면서)\s+|(?<=[고서며])\s+')
+_SEGMENT_SPLIT = re.compile(r'[.!?\n,~…]+|(?<=는데)\s+|(?<=은데)\s+|(?<=지만)\s+|(?<=면서)\s+|(?<=[고서며])\s+(?!싶|있|계시|계셔)')
 
 
 def segments(text: str) -> list[str]:

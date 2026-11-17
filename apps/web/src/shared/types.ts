@@ -33,6 +33,8 @@ export type Assessment = {
   safety: { category: string; quote: string }[];
   needs_check: Topic[];
   needs?: Need[]; // v2.1 — 이전 서버는 보내지 않으므로 없을 수 있다
+  grade_basis?: string | null; // v3 — 이 단계인 이유 한 줄
+  provisional?: boolean; // v3 — 통화 중 안전 신호로 미리 만든 판정
   rule_version: string;
 };
 
@@ -88,10 +90,13 @@ export type Resident = {
 };
 
 export type ResidentRow = Resident & {
-  today: { call_id: number | null; status: CallStatus | 'not_called'; status_label: string };
-  assessment: Assessment | null;
-  staff_check: StaffCheck | null;
+  today: { call_id: number | null; status: CallStatus | 'not_called'; status_label: string; calls?: number };
+  assessment: Assessment | null; // 오늘의 대표 판정(가장 심한 통화) — v3
+  assessment_call_id?: number | null;
+  staff_check: StaffCheck | null; // assessment_call_id 통화의 확인 기록만
 };
+
+export type Alert = { id: number; call_id: number; resident_id: number; resident_name: string; code: string; category: string; quote: string; at: string; live: boolean };
 
 export type Day = {
   date: string;
@@ -109,6 +114,6 @@ export type Dashboard = {
 
 export type ResidentDetail = { resident: Resident; week: Day[]; calls: CallSummary[]; welfare?: WelfareMatch[] };
 
-export type Health = { ok: boolean; db: boolean; llm: { mode: 'ollama' | 'rules'; model: string | null; reachable: boolean } };
+export type Health = { ok: boolean; db: boolean; llm: { mode: 'ollama' | 'rules'; model: string | null; reachable: boolean }; auth?: { required: boolean }; demo?: boolean };
 
 export type ResidentInput = { name: string; age: number; region: string; neighborhood: string; call_time: string; memo?: string | null };

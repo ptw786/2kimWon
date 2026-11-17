@@ -31,3 +31,14 @@ self.addEventListener('fetch', (event) => {
     })),
   )
 })
+
+// 벨 알림을 누르면 열려 있는 앱 창을 앞으로 가져오고, 없으면 새로 연다.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      const open = list[0]
+      return open ? open.focus() : self.clients.openWindow('/')
+    }),
+  )
+})

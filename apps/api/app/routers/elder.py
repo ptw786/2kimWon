@@ -21,6 +21,8 @@ CHIPS = {
     'med': ('약 잘 챙기셨어요', '약을 못 챙기셨어요'),
     'mood': ('기분 괜찮으셨어요', '마음이 힘드셨어요'),
 }
+UNKNOWN_CHIP = {'body': '몸 상태는 못 여쭸어요', 'meal': '식사는 못 여쭸어요', 'sleep': '잠은 못 여쭸어요',
+                'med': '약은 못 여쭸어요', 'mood': '기분은 못 여쭸어요'}
 YESTERDAY = {
     'completed': '어제는 통화 잘 하셨어요', 'interrupted': '어제는 통화가 중간에 끊겼어요',
     'missed': '어제는 전화를 못 받으셨어요', 'declined': '어제는 전화를 쉬셨어요',
@@ -31,6 +33,7 @@ class TurnIn(BaseModel):
     text: str = Field(default='', max_length=500)
     source: Literal['stt', 'text', 'option', 'silence']
     client_turn_id: str = Field(min_length=1, max_length=100)
+    topic: Literal['body', 'meal', 'sleep', 'med', 'mood'] | None = None   # 앱이 보고 있던 질문 (다르면 412)
 
 
 def _brief(r) -> dict:
@@ -51,8 +54,18 @@ def _day_calls(conn, rid, day):
 
 
 @router.get('/residents')
-def residents(conn=Depends(get_conn)):
+def residents(request: Request, conn=Depends(get_conn)):
+    """어르신 고르기 목록 — 모든 이름이 보이므로 시연 모드에서만. 실제로는 QR·코드로만 연다."""
+    if not request.app.state.settings.demo:
+        raise HTTPException(403, '어르신 코드나 QR로 열어 주세요.')
     return [_brief(r) for r in conn.execute('SELECT id, code, name FROM residents ORDER BY id')]
+
+
+@router.post('/{rid}/ring', status_code=201)
+def ring_me(rid: int, conn=Depends(get_conn)):
+    """어르신이 '지금 전화 받기'·'안심온과 지금 이야기하기'를 눌렀을 때. 생활지원사 로그인 없이 자기 전화만 건다."""
+    cid = calls.create_call(conn, rid, origin='elder')
+    return {'call_id': cid}
 
 
 @router.get('/by-code/{code}')
@@ -103,6 +116,8 @@ def records(rid: int, conn=Depends(get_conn)):
                     chips.append({'label': CHIPS[t][0], 'tone': 'ok'})
                 elif st in ('caution', 'risk'):
                     chips.append({'label': CHIPS[t][1], 'tone': 'watch'})
+                elif c['status'] in calls.ANSWERED:   # 답을 못 들은 항목 — '모두 괜찮으셨어요'로 보이지 않게
+                    chips.append({'label': UNKNOWN_CHIP[t], 'tone': 'unknown'})
         start = c['started_at'] or c['created_at']
         minutes = None
         if c['started_at'] and c['ended_at']:
@@ -147,7 +162,7 @@ def _summary_job(request: Request, llm, cid: int):
 @router.post('/calls/{cid}/turn')
 def turn(cid: int, body: TurnIn, request: Request, background: BackgroundTasks, conn=Depends(get_conn),
          llm=Depends(get_llm)):
-    result, finished = calls.process_turn(conn, llm, cid, body.text, body.source, body.client_turn_id)
+    result, finished = calls.process_turn(conn, llm, cid, body.text, body.source, body.client_turn_id, body.topic)
     if finished:
         background.add_task(_summary_job, request, llm, cid)
     return result
@@ -163,9 +178,18 @@ def hangup(cid: int, request: Request, background: BackgroundTasks, conn=Depends
 
 @router.get('/calls/{cid}')
 def call_state(cid: int, conn=Depends(get_conn)):
+    """통화 이어 받기용. 마지막으로 보낸 질문을 **그대로** 돌려준다 — 식사 재질문과 그 선택 버튼까지
+    (새로고침하면 기본 질문으로 되돌아가던 문제)."""
     c = calls.get_call(conn, cid)
-    topic = None
+    topic, question, options, last = None, None, [], None
     if c['status'] == 'in_progress':
         topic = dialogue.State(c['step_index']).topic
-    return {'status': c['status'], 'step': calls.call_step(c), 'question': QUESTIONS[topic] if topic else None,
-            'topic': topic, 'options': list(OPTIONS[topic]) if topic else [], 'turns': calls.turns_of(conn, cid)}
+        question, options = (QUESTIONS[topic], list(OPTIONS[topic])) if topic else (None, [])
+        row = conn.execute('SELECT result FROM turns WHERE call_id = ? AND result IS NOT NULL ORDER BY id DESC LIMIT 1',
+                           (cid,)).fetchone()
+        last = json.loads(row['result']) if row else None
+        if last and last.get('topic') == topic and not last.get('finished'):
+            question, options = last.get('question') or question, list(last.get('options') or options)
+    return {'status': c['status'], 'step': calls.call_step(c), 'question': question, 'topic': topic,
+            'options': options, 'last_ai_text': last.get('ai_text') if last else None,
+            'turns': calls.turns_of(conn, cid)}

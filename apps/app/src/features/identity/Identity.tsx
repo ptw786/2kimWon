@@ -11,11 +11,20 @@ export function Picker() {
   const [list, setList] = useState<ResidentRef[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [tries, setTries] = useState(0)
+  const [locked, setLocked] = useState(false)
+  const [code, setCode] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     let live = true
     setError(null)
-    api.residents().then((r) => { if (live) setList(r) }).catch((e) => { if (live) setError(friendly(e)) })
+    setLocked(false)
+    api.residents().then((r) => { if (live) setList(r) }).catch((e) => {
+      if (!live) return
+      // 시연 모드가 아니면 서버가 목록을 주지 않는다(403): 목록 대신 코드·QR 안내를 보여 준다.
+      if (e instanceof ApiError && e.status === 403) setLocked(true)
+      else setError(friendly(e))
+    })
     return () => { live = false }
   }, [tries])
 
@@ -24,9 +33,18 @@ export function Picker() {
       <header className="ahead"><Logo /><span className="tag-demo">시연용</span></header>
       <main className="pad scroll">
         <h1 className="hello serif">어느 어르신<br />폰인가요?</h1>
-        <p className="card-text muted">시연용 화면이에요. 실제로는 생활지원사님이 드린 QR로 열면 바로 정해져요.</p>
+        <p className="card-text muted">{locked
+          ? '어르신 코드나 QR로 열어 주세요. 코드는 생활지원사님이 알려 드려요.'
+          : '시연용 화면이에요. 실제로는 생활지원사님이 드린 QR로 열면 바로 정해져요.'}</p>
+        {locked && (
+          <form className="pick" onSubmit={(e) => { e.preventDefault(); const c = code.trim(); if (c) navigate(`/r/${encodeURIComponent(c)}`) }}>
+            <input className="code-input" value={code} onChange={(e) => setCode(e.target.value)} maxLength={20}
+              placeholder="어르신 코드 (예: KY-01)" aria-label="어르신 코드" autoCapitalize="characters" autoComplete="off" />
+            <button type="submit" className="btn primary tall wide" disabled={!code.trim()}>코드로 열기</button>
+          </form>
+        )}
         {error && <ErrorCard message={error} onRetry={() => setTries((t) => t + 1)} />}
-        {!error && list === null && <p className="card-text muted">불러오고 있어요…</p>}
+        {!error && !locked && list === null && <p className="card-text muted">불러오고 있어요…</p>}
         <div className="pick">
           {list?.map((r) => (
             <button key={r.id} onClick={() => update({ residentId: r.id, residentName: r.name })}>

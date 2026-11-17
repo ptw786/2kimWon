@@ -24,7 +24,7 @@ _FU = rules()['meal_followup']
 FOLLOWUP_QUESTION = _FU['question']
 FOLLOWUP_OPTIONS = list(_FU['options'])
 # '안 먹음' 쪽 표현일 때만 다시 묻는다 ("조금 먹었어"는 묻지 않음)
-_NOT_EATEN = re.compile(r'(못|안)먹|굶|걸렀|거르|걸러|식사(하기)?전|밥(먹기)?전|아니')
+_NOT_EATEN = re.compile(r'(못|안)먹|먹지(를|도)?(못|않)|(식사|밥|끼니)(을|를|도)?(못|안)(했|하)|굶|걸렀|거르|걸러|식사(하기)?전|밥(먹기)?전|아니')
 # 이유를 말했으면 묻지 않는다 ("입맛이 없어서", "속이 안 좋아서" …)
 _REASON = re.compile(r'입맛|밥맛|소화|체했|속(이|가)|아파|아퍼|아프|바빠|바쁘|늦잠|늦게|생각(이)?없|싫|입원|병원|이(가|빨)|틀니|'
                      r'약속|외출|나가|(어|아|워|와|해|여|져|러|라|빠|파|퍼|내|래)서|니까|길래|느라|때문')
@@ -136,7 +136,8 @@ def _without_thanks(text: str | None) -> str | None:
     return ' '.join(kept) or None
 
 
-def compose(decision: Decision, *, empathy: str | None, silence: bool, safety_hit: bool, llm_used: bool) -> dict:
+def compose(decision: Decision, *, empathy: str | None, silence: bool, safety_hit: bool, llm_used: bool,
+            safety_categories: tuple[str, ...] = ()) -> dict:
     """TurnResult (CONTRACT.md) 를 만든다. 질문 원문은 항상 decision.state 에서 나온다."""
     st = decision.state
     if decision.followup:
@@ -154,7 +155,7 @@ def compose(decision: Decision, *, empathy: str | None, silence: bool, safety_hi
         lead = empathy or (Q.SILENCE_PREFIX if silence else Q.REASK_PREFIX)
     elif decision.action == 'safety':
         question = question_for(st)
-        lead = emp = Q.SAFETY_NOTICE
+        lead = emp = Q.SAFETY_NOTICE + (' ' + Q.MIND_NOTICE if '자해·삶의 의지' in safety_categories else '')
     else:  # next | finish
         question = question_for(st)
         emp = Q.SKIP_LINE if decision.mark_unknown else (empathy or Q.GENERIC_EMPATHY)

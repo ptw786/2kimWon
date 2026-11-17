@@ -11,4 +11,5 @@ def health(request: Request, conn=Depends(get_conn)):
     llm = request.app.state.llm
     mode = 'ollama' if llm.mode == 'ollama' else 'rules'
     return {'ok': True, 'db': ok_db,
-            'llm': {'mode': mode, 'model': llm.model if mode == 'ollama' else None, 'reachable': llm.reachable()}}
+            'llm': {'mode': mode, 'model': llm.model if mode == 'ollama' else None, 'reachable': llm.reachable()},
+            'auth': {'required': request.app.state.staff_pin is not None}, 'demo': request.app.state.settings.demo}

@@ -4,12 +4,13 @@ import contextlib
 import logging
 import threading
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from . import calls, db
+from .auth import require_staff, resolve_pin
 from .config import load_settings, resolve_ollama_host
 from .routers import elder, staff, system
 from .services.llm import OllamaClient, RuleOnly
@@ -18,7 +19,7 @@ log = logging.getLogger('ansimon')
 SCHEDULER_SECONDS = 20
 
 _FIELD_KO = {'name': '이름', 'age': '나이', 'region': '지역', 'neighborhood': '동네', 'call_time': '전화 시각', 'memo': '메모',
-             'text': '답변', 'source': '입력 방식', 'client_turn_id': '턴 번호', 'note': '확인 메모'}
+             'text': '답변', 'source': '입력 방식', 'client_turn_id': '턴 번호', 'note': '확인 메모', 'pin': '비밀번호'}
 
 
 def build_llm(settings):
@@ -60,6 +61,12 @@ def create_app() -> FastAPI:
     app = FastAPI(title='안심온 API v2', version='2.0', lifespan=lifespan)
     app.state.settings = settings
     app.state.llm = llm
+    app.state.staff_pin, generated = resolve_pin(settings.staff_pin_env)
+    if app.state.staff_pin is None:
+        log.warning('생활지원사 인증이 꺼져 있어요 (ANSIMON_STAFF_PIN=off). 실제 정보를 넣지 마세요.')
+    elif generated:
+        log.warning('생활지원사 웹 비밀번호(PIN): %s  — 고정하려면 ANSIMON_STAFF_PIN 을 정하세요.', app.state.staff_pin)
+        print(f'\n  ▶ 생활지원사 웹 비밀번호(PIN): {app.state.staff_pin}\n', flush=True)
     app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])
 
     @app.exception_handler(RequestValidationError)
@@ -73,7 +80,8 @@ def create_app() -> FastAPI:
         return JSONResponse({'detail': msg}, status_code=422)
 
     app.include_router(system.router, prefix='/api')
-    app.include_router(staff.router, prefix='/api/staff')
+    app.include_router(staff.public, prefix='/api/staff')
+    app.include_router(staff.router, prefix='/api/staff', dependencies=[Depends(require_staff)])
     app.include_router(elder.router, prefix='/api/elder')
     return app
 

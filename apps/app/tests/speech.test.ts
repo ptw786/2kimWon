@@ -2,7 +2,7 @@
 // 오류 종류(sttErrorCode)와 말하는 속도(rate) 확인을 더했다. 실행: npm test (vitest)
 import { test } from 'vitest'
 import assert from 'node:assert/strict'
-import { SpeechInput, recognitionMessage, MIC_UNAVAILABLE, type RecognitionHost, type SttState } from '../src/features/call/speech/recognition.ts'
+import { SpeechInput, speechPrivacy, recognitionMessage, MIC_UNAVAILABLE, type RecognitionHost, type SttState } from '../src/features/call/speech/recognition.ts'
 import { SpeechOutput, type SynthesisHost, type TtsState } from '../src/features/call/speech/synthesis.ts'
 
 type FakeRec = {
@@ -160,4 +160,34 @@ test('multiple final chunks are joined into one readable answer, empty finals do
   const f = inputFixture(); f.input.start(); emit(f.instances[0], ' ', true); assert.equal(f.answers.length, 0)
   f.instances[0].onresult!({ resultIndex: 0, results: [Object.assign([{ transcript: '안' }], { isFinal: true }), Object.assign([{ transcript: '아파' }], { isFinal: true })] })
   assert.deepEqual(f.answers, ['안 아파'])
+})
+
+test('speechPrivacy maps available() and processLocally is applied only when set', async () => {
+  const withAvailable = (state: string | Error) => {
+    const f = inputFixture()
+    const Rec = f.host.SpeechRecognition as unknown as { available?: unknown }
+    Rec.available = async (o: { langs: string[]; processLocally: boolean }) => {
+      assert.deepEqual(o, { langs: ['ko-KR'], processLocally: true })
+      if (state instanceof Error) throw state
+      return state
+    }
+    return f
+  }
+  const local = withAvailable('available')
+  assert.equal(await speechPrivacy(local.host as unknown as RecognitionHost), 'local')
+  local.input.processLocally = true
+  local.input.start()
+  assert.equal((local.instances[0] as { processLocally?: boolean }).processLocally, true)
+
+  for (const [state, want] of [['downloadable', 'cloud'], ['unavailable', 'cloud']] as const) {
+    const f = withAvailable(state)
+    assert.equal(await speechPrivacy(f.host as unknown as RecognitionHost), want)
+    f.input.start()
+    assert.equal((f.instances[0] as { processLocally?: boolean }).processLocally, undefined)
+  }
+  assert.equal(await speechPrivacy(withAvailable(new Error('x')).host as unknown as RecognitionHost), 'unknown')
+  const plain = inputFixture() // available() 없는 브라우저
+  assert.equal(await speechPrivacy(plain.host as unknown as RecognitionHost), 'unknown')
+  plain.input.start()
+  assert.equal((plain.instances[0] as { processLocally?: boolean }).processLocally, undefined)
 })

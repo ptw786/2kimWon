@@ -16,6 +16,7 @@ class Settings:
     model: str
     scheduler: bool
     demo: bool
+    staff_pin_env: str | None = None
 
 
 def _flag(name: str, default: str) -> bool:
@@ -28,7 +29,8 @@ def load_settings() -> Settings:
         llm_enabled=_flag('ANSIMON_LLM', 'on'),
         model=os.environ.get('ANSIMON_MODEL') or DEFAULT_MODEL,
         scheduler=_flag('ANSIMON_SCHEDULER', '1'),
-        demo=_flag('ANSIMON_DEMO', '1'),
+        demo=_flag('ANSIMON_DEMO', '0'),            # 데이터 되돌리기·어르신 목록은 시연할 때만 켠다 (dev-up.sh 가 켬)
+        staff_pin_env=os.environ.get('ANSIMON_STAFF_PIN'),
     )
 
 

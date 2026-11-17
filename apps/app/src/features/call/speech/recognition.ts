@@ -21,6 +21,8 @@ export interface RecognitionLike {
   continuous: boolean
   interimResults: boolean
   maxAlternatives: number
+  /** Chrome 139+: true면 음성이 기기 밖으로 나가지 않는다. 지원하지 않는 브라우저는 무시한다. */
+  processLocally?: boolean
   onstart: (() => void) | null
   onresult: ((event: RecognitionEvent) => void) | null
   onerror: ((event: { error: string }) => void) | null
@@ -30,9 +32,13 @@ export interface RecognitionLike {
   abort(): void
 }
 
+type RecognitionCtor = (new () => RecognitionLike) & {
+  available?: (options: { langs: string[]; processLocally: boolean }) => Promise<string>
+}
+
 export type RecognitionHost = {
-  SpeechRecognition?: new () => RecognitionLike
-  webkitSpeechRecognition?: new () => RecognitionLike
+  SpeechRecognition?: RecognitionCtor
+  webkitSpeechRecognition?: RecognitionCtor
   isSecureContext?: boolean
   setTimeout: (fn: () => void, ms: number) => number
   clearTimeout: (id: number | null | undefined) => void
@@ -56,6 +62,26 @@ export const recognitionMessage = (code: string): string =>
 /** 다시 눌러도 소용없는 오류: 이때는 마이크 대신 버튼·글자로만 답한다. */
 export const MIC_UNAVAILABLE = new Set(['unsupported', 'insecure', 'not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'])
 
+export type SpeechPrivacy = 'local' | 'cloud' | 'unknown'
+
+export const PRIVACY_LINE: Record<SpeechPrivacy, string> = {
+  local: '음성은 이 폰 안에서만 글자로 바꿔요.',
+  cloud: '음성을 글자로 바꿀 때 브라우저 회사(구글 등) 서버를 거칠 수 있어요. 싫으시면 버튼이나 글자로 답해 주세요.',
+  unknown: '음성을 글자로 바꿀 때 브라우저 회사(구글 등) 서버를 거칠 수 있어요. 싫으시면 버튼이나 글자로 답해 주세요.',
+}
+
+/** 한국어 음성 인식을 이 기기 안에서 할 수 있는지 살핀다. 언어 팩을 내려받지는 않는다(install 호출 안 함). */
+export async function speechPrivacy(host: RecognitionHost): Promise<SpeechPrivacy> {
+  const Recognition = host.SpeechRecognition || host.webkitSpeechRecognition
+  if (!Recognition || typeof Recognition.available !== 'function') return 'unknown'
+  try {
+    const state = await Recognition.available({ langs: ['ko-KR'], processLocally: true })
+    return state === 'available' ? 'local' : 'cloud'
+  } catch {
+    return 'unknown'
+  }
+}
+
 type Session = { rec: RecognitionLike; timer: number | null }
 
 type InputOptions = {
@@ -75,6 +101,8 @@ export class SpeechInput {
   timeout: number
   session: Session | null = null
   disposed = false
+  /** 설정에서 speechPrivacy가 'local'이라고 확인했을 때만 true (CallContext가 듣기 전에 넣는다). */
+  processLocally = false
 
   constructor({ host, canStart, onState, onFinal, timeout = 30000 }: InputOptions) {
     this.host = host
@@ -124,6 +152,7 @@ export class SpeechInput {
       session = current
       this.session = current
       rec.lang = 'ko-KR'; rec.continuous = false; rec.interimResults = true; rec.maxAlternatives = 1
+      if (this.processLocally) rec.processLocally = true
       const live = () => !this.disposed && this.session === current
       // Lock synchronously: a second click before onstart cannot open another mic.
       this.emit({ sttStatus: 'starting', listening: true, interimTranscript: '', lastTranscript: '', sttError: '', sttErrorCode: '', sttNotice: '마이크를 켜고 있어요.' })

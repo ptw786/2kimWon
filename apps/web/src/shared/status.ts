@@ -40,7 +40,7 @@ export const WEEK_CELL: Record<ItemStatus | 'none', { cls: string; mark: string;
   caution: { cls: 'cy', mark: '◐', label: '주의' },
   risk: { cls: 'cr', mark: '▲', label: '위험' },
   unknown: { cls: 'cu', mark: '?', label: '미확인' },
-  none: { cls: 'cn', mark: '', label: '통화 없음·미응답' },
+  none: { cls: 'cn', mark: '–', label: '통화 없음·미응답' },
 };
 
 export const CALL: Record<CallStatus | 'not_called', Meta> = {
@@ -49,8 +49,8 @@ export const CALL: Record<CallStatus | 'not_called', Meta> = {
   completed: { label: '통화 완료', icon: '✓', cls: 'b-o' },
   interrupted: { label: '통화 중단', icon: '◑', cls: 'b-w' },
   missed: { label: '미응답', icon: '○', cls: 'b-m' },
-  declined: { label: '거절', icon: '✕', cls: 'b-m' },
-  not_called: { label: '통화 전', icon: '◌', cls: 'b-m' },
+  declined: { label: '수신 거절', icon: '✕', cls: 'b-m' },
+  not_called: { label: '아직 안 함', icon: '◌', cls: 'b-m' },
 };
 
 export const isLive = (s: CallStatus | 'not_called') => s === 'ringing' || s === 'in_progress';
@@ -62,14 +62,20 @@ export const SOURCE: Record<NonNullable<Turn['source']>, string> = { stt: '음�
 export const ORIGIN_TAG = { llm: { label: 'AI 판정', cls: 't-ai' }, rule: { label: '규칙 판정', cls: 't-rule' } } as const;
 
 /** 대기열 카드에 한 줄로 붙이는 연락 상태 설명 */
-export function contactLine(status: CallStatus | 'not_called', callTime: string): string | null {
+export function contactLine(status: CallStatus | 'not_called', callTime: string, now: Date = new Date()): string | null {
   switch (status) {
     case 'missed':
       return '오늘 전화를 받지 않으셨어요';
     case 'declined':
       return '오늘 전화를 거절하셨어요';
-    case 'not_called':
+    case 'not_called': {
+      // 서버 스케줄러는 정한 시각부터 2시간 안에만 자동으로 건다 (rules.yaml scheduler.window_hours)
+      const [h, m] = callTime.split(':').map(Number);
+      const mins = now.getHours() * 60 + now.getMinutes();
+      if (mins >= h * 60 + m + 120) return `${callTime} 자동 전화 시간이 지났어요 · 직접 걸어 주세요`;
+      if (mins >= h * 60 + m) return `${callTime}부터 자동으로 전화하는 중이에요`;
       return `${callTime}에 전화할 예정이에요`;
+    }
     case 'ringing':
       return '지금 벨이 울리고 있어요';
     case 'in_progress':

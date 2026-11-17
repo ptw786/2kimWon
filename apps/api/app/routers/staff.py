@@ -1,35 +1,51 @@
 """생활지원사 웹용 (/api/staff)."""
 from datetime import timedelta
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StringConstraints
 
 from .. import calls, db
+from ..auth import check_login
 from ..domain.questions import CALL_STATUS_LABELS, TOPICS
 from ..seed import region_for, seed
 from ..services import welfare
 from .deps import get_conn
 
-router = APIRouter(tags=['staff'])
+router = APIRouter(tags=['staff'])          # main.py 에서 require_staff 를 건다
+public = APIRouter(tags=['staff'])          # 로그인 전에 부를 수 있는 것
+
+
+class LoginIn(BaseModel):
+    pin: str = Field(min_length=1, max_length=40)
+
+
+@public.post('/login')
+def login(body: LoginIn, request: Request):
+    return {'token': check_login(request, body.pin), 'required': request.app.state.staff_pin is not None}
 
 GRADE_ORDER = {'urgent': 0, 'today': 1, 'watch': 2, 'ok': 3}
 CALL_TIME = r'^([01]\d|2[0-3]):[0-5]\d$'
 
 
+def _text(n: int):   # 앞뒤 공백을 지운 뒤 길이를 본다 ('   ' 이름이 빈 이름으로 저장되지 않게)
+    return Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=n)]
+
+
 class ResidentIn(BaseModel):
-    name: str = Field(min_length=1, max_length=20)
+    name: _text(20)
     age: int = Field(ge=0, le=130)
     region: str | None = Field(default=None, max_length=40)   # 없으면 동네 이름으로 채움 ('중구 은행동' → '대전광역시 중구')
-    neighborhood: str = Field(min_length=1, max_length=40)
+    neighborhood: _text(40)
     call_time: str = Field(pattern=CALL_TIME)
     memo: str | None = Field(default=None, max_length=300)
 
 
 class ResidentPatch(BaseModel):
-    name: str | None = Field(default=None, min_length=1, max_length=20)
+    name: _text(20) | None = None
     age: int | None = Field(default=None, ge=0, le=130)
-    region: str | None = Field(default=None, min_length=1, max_length=40)
-    neighborhood: str | None = Field(default=None, min_length=1, max_length=40)
+    region: _text(40) | None = None
+    neighborhood: _text(40) | None = None
     call_time: str | None = Field(default=None, pattern=CALL_TIME)
     memo: str | None = Field(default=None, max_length=300)
 
@@ -44,11 +60,19 @@ def _calls_of_day(conn, rid: int, day: str):
                         (rid, day)).fetchall()
 
 
-def _last_assessment(day_calls):
-    for c in day_calls:
-        if c['status'] in calls.FINISHED and c['assessment']:
-            return calls.assessment_out(c['assessment'])
-    return None
+def _representative(day_calls):
+    """그날을 대표하는 (통화, 판정). 최근 통화가 아니라 **가장 심한** 판정을 고른다 —
+    안전 신호가 나온 뒤 다시 건 전화를 거절해도 '즉시 확인'이 목록에서 내려가지 않게 (판정규칙.md §5).
+    같은 단계면 확인 기록이 없는 통화 → 점수 높은 통화 → 최근 통화. 통화 중 안전 신호(provisional)도 포함한다."""
+    best = None
+    for c in day_calls:   # 최근 것부터
+        a = calls.assessment_out(c['assessment'])
+        if a is None or (c['status'] not in calls.FINISHED and not a['provisional']):
+            continue
+        key = (GRADE_ORDER[a['grade']], 1 if c['staff_check_at'] else 0, -a['score'])
+        if best is None or key < best[0]:
+            best = (key, c, a)
+    return (best[1], best[2]) if best else (None, None)
 
 
 @router.get('/dashboard')
@@ -59,15 +83,18 @@ def dashboard(conn=Depends(get_conn)):
         day_calls = _calls_of_day(conn, r['id'], today)
         latest = day_calls[0] if day_calls else None
         status = latest['status'] if latest else 'not_called'
-        checked = next((c for c in day_calls if c['staff_check_at']), None)
+        rep, a = _representative(day_calls)
         rows.append({
             **calls.resident_out(r),
             'today': {'call_id': latest['id'] if latest else None, 'status': status,
-                      'status_label': CALL_STATUS_LABELS[status]},
-            'assessment': _last_assessment(day_calls),
-            'staff_check': calls.staff_check_of(checked) if checked else None,
+                      'status_label': CALL_STATUS_LABELS[status], 'calls': len(day_calls)},
+            'assessment': a,
+            'assessment_call_id': rep['id'] if rep else None,
+            # 확인 기록은 대표 판정을 만든 그 통화의 것만 — 예전 통화를 확인했다고 새 판정까지 확인한 것처럼 보이지 않게
+            'staff_check': calls.staff_check_of(rep) if rep else None,
         })
     rows.sort(key=lambda x: (GRADE_ORDER[x['assessment']['grade']] if x['assessment'] else 4,
+                             1 if x['staff_check'] else 0,
                              -(x['assessment']['score'] if x['assessment'] else 0), x['id']))
     counts = {'total': len(rows), 'urgent': 0, 'today': 0, 'watch': 0, 'ok': 0, 'missed': 0, 'not_called': 0}
     for x in rows:
@@ -78,10 +105,25 @@ def dashboard(conn=Depends(get_conn)):
     return {'date': today, 'counts': counts, 'residents': rows}
 
 
+@router.get('/alerts')
+def alerts(conn=Depends(get_conn)):
+    """오늘 나온 안전 신호 중 생활지원사가 아직 확인하지 않은 것 (통화 중인 것 포함). 웹이 몇 초마다 확인해 알림을 띄운다."""
+    today = db.kst_today().isoformat()
+    out = []
+    for row in conn.execute(
+            'SELECT s.id, s.call_id, s.category, s.quote, s.at, c.resident_id, c.status, r.name, r.code '
+            'FROM safety_signals s JOIN calls c ON c.id = s.call_id JOIN residents r ON r.id = c.resident_id '
+            'WHERE c.kst_date = ? AND (c.staff_check_at IS NULL OR s.at > c.staff_check_at) ORDER BY s.id DESC', (today,)):
+        out.append({'id': row['id'], 'call_id': row['call_id'], 'resident_id': row['resident_id'],
+                    'resident_name': row['name'], 'code': row['code'], 'category': row['category'],
+                    'quote': row['quote'], 'at': db.kst(row['at']), 'live': row['status'] in calls.ACTIVE})
+    return {'alerts': out}
+
+
 def _day(conn, rid: int, day: str) -> dict:
     day_calls = _calls_of_day(conn, rid, day)
     merged = calls.day_items(conn, rid, day)
-    a = _last_assessment(day_calls)
+    _rep, a = _representative(day_calls)
     return {
         'date': day,
         'call_status': day_calls[0]['status'] if day_calls else 'not_called',

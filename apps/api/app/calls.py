@@ -64,7 +64,18 @@ def assessment_out(raw: str | None) -> dict | None:
     a = json.loads(raw)
     a['grade_label'] = scoring.grade_label(a['grade'])
     a.setdefault('needs', [])
+    a.setdefault('grade_basis', None)
+    a.setdefault('provisional', False)
     return a
+
+
+def store_live_assessment(conn, call_id: int) -> None:
+    """tx() 안에서. 통화 중 안전 신호가 나오면 끝나기를 기다리지 않고 '통화 중 판정'(provisional)을 저장한다.
+    생활지원사 대시보드·알림이 바로 '즉시 확인'을 본다. 통화가 끝나면 finish_call 이 최종 판정으로 덮어쓴다."""
+    call = conn.execute('SELECT * FROM calls WHERE id = ?', (call_id,)).fetchone()
+    a = compute_assessment(conn, call, 'in_progress')
+    a['provisional'] = True
+    conn.execute('UPDATE calls SET assessment = ? WHERE id = ?', (json.dumps(a, ensure_ascii=False), call_id))
 
 
 def call_summary(row) -> dict:
@@ -145,7 +156,15 @@ def compute_assessment(conn, call, status: str, rule_set: dict | None = None) ->
         f"SELECT status, kst_date FROM calls WHERE resident_id = ? AND id != ? AND status IN {FINISHED} "
         "AND kst_date >= ? AND (created_at < ? OR (created_at = ? AND id < ?)) ORDER BY created_at DESC, id DESC",
         (call['resident_id'], call['id'], start, call['created_at'], call['created_at'], call['id']))]
+    if status in ANSWERED and not spoke(conn, call['id']):
+        status = 'silent'
     return scoring.assess(items, sig, history, status, prior, rule_set, needs=call_needs(conn, call['id']))
+
+
+def spoke(conn, call_id: int) -> bool:
+    """어르신이 한마디라도 했는지 (조용함만 있었으면 False)."""
+    return conn.execute("SELECT 1 FROM turns WHERE call_id = ? AND role = 'elder' AND source != 'silence' AND text != ''",
+                        (call_id,)).fetchone() is not None
 
 
 def finish_call(conn, call_id: int, status: str, ended_at: str | None = None) -> dict:
@@ -277,7 +296,15 @@ def _insert_runs(conn, call_id, runs):
 
 
 # ---------- 한 턴 ----------
-def process_turn(conn, llm, call_id: int, text: str, source: str, client_turn_id: str) -> tuple[dict, bool]:
+class StaleTurn(HTTPException):
+    """앱이 보고 있던 질문과 지금 서버의 질문이 다르다 (앞 답의 응답을 못 받은 채 다른 답을 보냄). 앱은 다시 불러온다."""
+
+    def __init__(self):
+        super().__init__(412, '질문이 바뀌었어요. 지금 질문을 다시 보여 드릴게요.')
+
+
+def process_turn(conn, llm, call_id: int, text: str, source: str, client_turn_id: str,
+                 expect_topic: str | None = None) -> tuple[dict, bool]:
     """(TurnResult, 통화가 이번에 끝났는지)."""
     # 0) 읽기 — 같은 client_turn_id 면 저장된 결과 그대로
     dup = conn.execute('SELECT result FROM turns WHERE call_id = ? AND client_turn_id = ?',
@@ -289,6 +316,8 @@ def process_turn(conn, llm, call_id: int, text: str, source: str, client_turn_id
         raise HTTPException(409, '지금 진행 중인 통화가 아니에요.')
     state = dialogue.State(call['step_index'], call['reasks'], call['repeats'])
     asked = state.topic
+    if expect_topic is not None and expect_topic != asked:
+        raise StaleTurn()
     text = (text or '').strip()
     silence = source == 'silence' or not text
 
@@ -311,7 +340,11 @@ def process_turn(conn, llm, call_id: int, text: str, source: str, client_turn_id
             dropped = sum(1 for i in llm_items + llm_needs if not dialogue.quote_in_answer(i['quote'], text))
             if dropped:
                 run['note'] = f'인용 불일치 {dropped}개 버림'
-            intent = res.intent
+            # 규칙이 '다시 말해 달라'를 잡았으면 그대로 둔다. AI가 '다시'라고 해도 지금 질문의 답을 찾았으면 답으로 본다.
+            if rule.intent != 'repeat_request':
+                answered = any(i['topic'] == asked and dialogue.quote_in_answer(i['quote'], text) for i in llm_items)
+                intent = 'answer' if res.intent == 'repeat_request' and (answered or any(
+                    i['topic'] == asked for i in rule.items)) else res.intent
         runs.append(run)
     items = dialogue.combine_extractions(asked, '' if silence else text, rule.items, llm_items)
     found_needs = dialogue.combine_needs(text, rule_needs, llm_needs, needs.labels())
@@ -328,7 +361,11 @@ def process_turn(conn, llm, call_id: int, text: str, source: str, client_turn_id
         elif empathy is None:
             empathy = Q.fallback_empathy(asked, items, text)
     llm_used = any(r['outcome'] == 'ok' for r in runs)
-    result = dialogue.compose(decision, empathy=empathy, silence=silence, safety_hit=bool(hits), llm_used=llm_used)
+    silent_call = decision.finished and silence and not spoke(conn, call_id)
+    result = dialogue.compose(decision, empathy=empathy, silence=silence, safety_hit=bool(hits), llm_used=llm_used,
+                              safety_categories=tuple(h['category'] for h in hits))
+    if silent_call:
+        result = {**result, 'ai_text': Q.SILENT_CLOSING, 'empathy': None}
     timed = [r['ms'] for r in runs if r['step'] in ('extract', 'empathy') and r['ms'] is not None]
     ai_ms = sum(timed) if timed else None
     judged = [{'topic': i['topic'], 'status': i['status'], 'origin': i['origin']} for i in items]
@@ -344,7 +381,7 @@ def process_turn(conn, llm, call_id: int, text: str, source: str, client_turn_id
         cur = conn.execute('SELECT status, step_index, reasks, repeats FROM calls WHERE id = ?', (call_id,)).fetchone()
         if cur['status'] != 'in_progress' or (cur['step_index'], cur['reasks'], cur['repeats']) != (
                 state.index, state.reasks, state.repeats):
-            raise HTTPException(409, '다른 답변이 먼저 처리됐어요. 화면을 새로 불러와 주세요.')
+            raise StaleTurn()
         t = now_iso()
         tid = conn.execute(
             "INSERT INTO turns (call_id, role, text, topic, at, source, judged, needs, client_turn_id, result) "
@@ -368,7 +405,10 @@ def process_turn(conn, llm, call_id: int, text: str, source: str, client_turn_id
         conn.execute('UPDATE calls SET step_index = ?, reasks = ?, repeats = ?, last_activity_at = ? WHERE id = ?',
                      (ns.index, ns.reasks, ns.repeats, t, call_id))
         if decision.finished:
-            finish_call(conn, call_id, 'completed', t)
+            # 한마디도 듣지 못하고 다섯 질문이 지나갔으면 '통화 완료'가 아니다
+            finish_call(conn, call_id, 'completed' if spoke(conn, call_id) else 'interrupted', t)
+        elif hits or conn.execute('SELECT 1 FROM safety_signals WHERE call_id = ?', (call_id,)).fetchone():
+            store_live_assessment(conn, call_id)
     return result, decision.finished
 
 

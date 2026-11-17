@@ -45,7 +45,7 @@ def test_bug1_with_llm_repeat_intent(make_client):
 # 2. 위험 확인 상태에서 정확히 "아니요"가 아니면 빠져나올 수 없었음
 def test_bug2_safety_signal_never_traps_the_call(client):
     cid = start_call(client, resident_id(client, '박정호'))
-    r = say(client, cid, '어제 넘어졌어')
+    r = say(client, cid, '어제 넘어져서 못 일어났어')
     assert r['action'] == 'safety' and r['safety'] is True
     assert r['ai_text'].startswith(Q.SAFETY_NOTICE) and r['topic'] == 'meal'
     r = say(client, cid, '응')                       # 아무 답이나 → 그대로 다음

@@ -40,7 +40,7 @@ const realApi: ElderApi = {
   turn: (callId, body) => request('POST', `/elder/calls/${callId}/turn`, body),
   hangup: (callId) => request('POST', `/elder/calls/${callId}/hangup`),
   call: (callId) => request('GET', `/elder/calls/${callId}`),
-  ringMe: async (id) => { await request('POST', `/staff/residents/${id}/call`) },
+  ringMe: async (id) => { await request('POST', `/elder/${id}/ring`) },
 }
 
 export const isMock = import.meta.env.VITE_MOCK === '1'

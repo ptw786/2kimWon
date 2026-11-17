@@ -7,7 +7,7 @@ import { Empty, GradeBadge, Kpi, Loading, NeedChip, RowBadge, circled, uniqNeeds
 import { WelfarePanel } from '../../shared/WelfarePanel';
 import { api } from '../../shared/api';
 import { GRADE, ITEM, TOPICS, TOPIC_LABEL, TOPIC_SHORT, WEEK_CELL, contactLine, isLive } from '../../shared/status';
-import { dayLabel, duration, hhmm, kstDate, nowHeadline } from '../../shared/time';
+import { dayLabel, duration, hhmm, nowHeadline } from '../../shared/time';
 import { usePoll } from '../../shared/usePoll';
 import type { ItemStatus, Need, ResidentDetail, ResidentRow } from '../../shared/types';
 
@@ -134,7 +134,7 @@ export function DashboardPage() {
                 selected={sel?.id === r.id}
                 onSelect={() => setSelId(narrow && selId === r.id ? null : r.id)}
                 onCall={() => void callResident(r.id, r.name)}
-                onOpen={() => (isLive(r.today.status) ? nav(`/staff/live?call=${r.today.call_id}`) : r.today.call_id ? nav(`/staff/calls/${r.today.call_id}`) : setSelId(r.id))}
+                onOpen={() => (isLive(r.today.status) ? nav(`/staff/live?call=${r.today.call_id}`) : (r.assessment_call_id ?? r.today.call_id) ? nav(`/staff/calls/${r.assessment_call_id ?? r.today.call_id}`) : setSelId(r.id))}
               />
               {narrow && sel?.id === r.id && <DetailPanel row={sel} inline onCall={() => void callResident(sel.id, sel.name)} />}
             </Fragment>
@@ -155,9 +155,11 @@ function QueueCard({ row, first, selected, onSelect, onCall, onOpen }: { row: Re
   const needs = uniqNeeds(a?.needs);
   const quote = a?.safety[0]?.quote ?? reasons.find((x) => x.quote)?.quote ?? null;
   const line = s === 'completed' ? null : contactLine(s, row.call_time);
+  const loud = a?.grade === 'urgent' || a?.grade === 'today';
   const live = isLive(s);
   const needsCall = s === 'missed' || s === 'declined' || s === 'not_called' || s === 'interrupted';
-  const sub = line ?? (quote ? `“${quote}”` : null);
+  // 즉시·우선 확인이면 그 뒤 통화 상태보다 어르신 말씀을 먼저 보인다
+  const sub = loud && quote ? `“${quote}”` : line ?? (quote ? `“${quote}”` : null);
 
   let button;
   if (live) button = <button type="button" className={`btn ${first ? 'p' : 'o'}`} onClick={(e) => (e.stopPropagation(), onOpen())}>☎ 통화 보기 ›</button>;
@@ -211,9 +213,12 @@ function DetailPanel({ row, onCall, inline = false }: { row: ResidentRow; onCall
   const [checking, setChecking] = useState(false);
   const a = row.assessment;
   const d = detail.data;
-  const call = d?.calls.find((x) => x.id === row.today.call_id) ?? d?.calls.find((x) => x.assessment);
+  // 판정을 만든 통화 = 대표 판정 통화(없으면 오늘 마지막 통화). 오늘 통화가 없으면 어제 통화를 끌어오지 않는다 (QA #8)
+  const callId = row.assessment_call_id ?? row.today.call_id;
+  const call = callId ? d?.calls.find((x) => x.id === callId) : undefined;
   const dur = call ? duration(call.started_at, call.ended_at) : null;
-  const checkCallId = d?.calls.find((x) => x.assessment && kstDate(new Date(x.created_at)) === kstDate())?.id ?? null;
+  // 확인 기록은 대표 판정을 만든 그 통화에 남긴다 (외부 리뷰 #4)
+  const checkCallId = row.assessment_call_id ?? null;
 
   const said: { q: string; t: string; needs: Need[] }[] = [];
   if (a) {
@@ -263,15 +268,16 @@ function DetailPanel({ row, onCall, inline = false }: { row: ResidentRow; onCall
                 ))}
               </ol>
             ) : (
-              <span className="subtle">인용할 말씀이 없어요 (전화를 받지 않으셨어요)</span>
+              <span className="subtle">인용할 말씀이 없어요{call?.status === 'missed' ? ' (전화를 받지 않으셨어요)' : call?.status === 'declined' ? ' (전화를 거절하셨어요)' : call?.status === 'interrupted' ? ' (말씀을 듣기 전에 끊겼어요)' : ''}</span>
             )}
           </div>
           <div className={`k-ai${checked ? ' done' : ''}`}>
-            <b className="h">{checked ? 'AI 판단 · ✓ 생활지원사 확인함' : 'AI 판단 · 확인 전'}</b>
+            <b className="h">{checked ? 'AI 판단 · ✓ 생활지원사 확인함' : a.provisional ? 'AI 판단 · 통화 중 (끝나면 다시 계산)' : 'AI 판단 · 확인 전'}</b>
             <span style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
               <GradeBadge grade={a.grade} label={a.grade === 'urgent' ? a.grade_label || GRADE.urgent.label : `${a.grade_label || GRADE[a.grade].label} · ${a.score}점`} />
               {judged.length ? judged.join(' · ') : '판정한 항목이 없어요'}
             </span>
+            {a.grade_basis && <div>단계 이유: {a.grade_basis}</div>}
             {checked && row.staff_check?.note && <div>메모: {row.staff_check.note}</div>}
           </div>
           <div className="k-next">
@@ -307,7 +313,7 @@ function DetailPanel({ row, onCall, inline = false }: { row: ResidentRow; onCall
         ) : (
           <button type="button" className="btn p" onClick={onCall}>☎ 전화 걸기</button>
         )}
-        <button type="button" className="btn g" disabled={!checkCallId} onClick={() => setChecking(true)} title={checkCallId ? undefined : '오늘 끝난 통화가 있어야 기록할 수 있어요'}>
+        <button type="button" className="btn g" disabled={!checkCallId} onClick={() => setChecking(true)} title={checkCallId ? undefined : '오늘 판정이 나온 통화가 있어야 기록할 수 있어요'}>
           확인 기록 남기기
         </button>
       </div>

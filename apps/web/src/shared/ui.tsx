@@ -29,8 +29,11 @@ export function CallBadge({ status }: { status: CallStatus | 'not_called' }) {
 /** 대기열·목록에서 한 어르신을 대표하는 배지: 미응답·거절·통화 전이면 연락 상태, 아니면 단계 */
 export function RowBadge({ row }: { row: ResidentRow }) {
   const s = row.today.status;
-  if (s === 'missed' || s === 'declined' || s === 'ringing' || s === 'in_progress' || !row.assessment) return <CallBadge status={s} />;
-  return <GradeBadge grade={row.assessment.grade} label={row.assessment.grade_label} />;
+  const a = row.assessment;
+  // 즉시·우선 확인은 그 뒤 통화(거절·미응답·통화 중)보다 먼저 보인다 — 외부 리뷰 #3
+  if (a && (a.grade === 'urgent' || a.grade === 'today')) return <GradeBadge grade={a.grade} label={a.provisional ? `${a.grade_label} · 통화 중` : a.grade_label} />;
+  if (s === 'missed' || s === 'declined' || s === 'ringing' || s === 'in_progress' || !a) return <CallBadge status={s} />;
+  return <GradeBadge grade={a.grade} label={a.grade_label} />;
 }
 
 export function Empty({ icon = '◌', title, reason, action }: { icon?: string; title: string; reason?: string; action?: ReactNode }) {

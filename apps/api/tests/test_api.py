@@ -11,7 +11,8 @@ KST_SUFFIX = '+09:00'
 
 def test_health(client):
     h = client.get('/api/health').json()
-    assert h == {'ok': True, 'db': True, 'llm': {'mode': 'rules', 'model': None, 'reachable': False}}
+    assert h == {'ok': True, 'db': True, 'llm': {'mode': 'rules', 'model': None, 'reachable': False},
+                 'auth': {'required': False}, 'demo': True}
 
 
 def test_full_call_flow_completes_with_assessment(client):
@@ -40,7 +41,7 @@ def test_full_call_flow_completes_with_assessment(client):
     a = d['assessment']
     assert {t: v['status'] for t, v in a['items'].items()} == {
         'body': 'good', 'meal': 'caution', 'sleep': 'caution', 'med': 'good', 'mood': 'caution'}
-    assert a['score'] == 15 and a['grade'] == 'watch' and a['grade_label'] == '추가 확인' and a['rule_version'] == 'r2.1'
+    assert a['score'] == 15 and a['grade'] == 'watch' and a['grade_label'] == '추가 확인' and a['rule_version'] == 'r3'
     assert [n['type'] for n in a['needs']] == ['loneliness']
     assert d['summary'] and d['ended_at'].endswith(KST_SUFFIX)
     assert len(d['turns']) == 11 and d['turns'][0]['role'] == 'ai'

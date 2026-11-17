@@ -1,12 +1,13 @@
 // 생활지원사 화면 공통 셸: 240px 사이드바(그룹 라벨) + 하단 AI 연결 카드 + 상단 상태칩·리셋·다크 토글 (함께반·TTA 패턴)
 import { useCallback, useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
-import { ApiError, api, errMsg, useApiDown } from './api';
+import { ApiError, api, errMsg, useApiDown, useNeedLogin } from './api';
+import { AlertBar, LoginScreen } from './StaffGate';
 import { IS_MOCK } from './config';
 import { Icon } from './icons';
 import { nowHeadline } from './time';
 import { usePoll, type Poll } from './usePoll';
-import type { CallSummary, Dashboard, Health } from './types';
+import type { Alert, CallSummary, Dashboard, Health } from './types';
 
 export type StaffCtx = {
   dash: Poll<Dashboard>;
@@ -54,6 +55,9 @@ export function StaffLayout() {
   const [theme, toggleTheme] = useTheme();
   const dash = usePoll(() => api.get<Dashboard>('/staff/dashboard'), 5000);
   const healthPoll = usePoll(() => api.get<Health>('/health'), 15000);
+  const needLogin = useNeedLogin();
+  const alertPoll = usePoll(needLogin ? null : () => api.get<{ alerts: Alert[] }>('/staff/alerts'), 3000, needLogin);
+  const alerts = alertPoll.data?.alerts ?? [];
   const health = healthPoll.data;
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [more, setMore] = useState(false);
@@ -99,6 +103,10 @@ export function StaffLayout() {
     }
   }
 
+  useEffect(() => {
+    if (!needLogin) void dash.refresh();
+  }, [needLogin]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const crumb = CRUMB.find(([re]) => re.test(loc.pathname)) ?? CRUMB[0];
   const counts = dash.data?.counts;
   const badge = counts ? counts.urgent + counts.today : 0;
@@ -125,6 +133,8 @@ export function StaffLayout() {
     <><b className="rule"><i className="dot" />규칙 판정 모드</b>로컬 AI(Ollama)에 연결되지 않아 키워드 규칙으로 판정해요.</>
   );
   const moreOn = /^\/staff\/(rules|principles)/.test(loc.pathname);
+
+  if (needLogin) return <LoginScreen />;
 
   return (
     <div className="shell">
@@ -162,13 +172,14 @@ export function StaffLayout() {
           <span className="m-title">{crumb[2]}</span>
           <div className="r">
             <span className="chips">{chips}</span>
-            <button type="button" className="icon-btn d-only" onClick={reset} title="데모 리셋" aria-label="데모 리셋">↺</button>
+            {health?.demo !== false && <button type="button" className="icon-btn d-only" onClick={reset} title="데모 리셋" aria-label="데모 리셋">↺</button>}
             <button type="button" className="icon-btn" onClick={toggleTheme} title={theme === 'dark' ? '밝은 화면' : '어두운 화면'} aria-label={theme === 'dark' ? '밝은 화면으로' : '어두운 화면으로'}>{theme === 'dark' ? '☀' : '☾'}</button>
           </div>
         </div>
         {down && (
           <div className="banner" role="alert"><span aria-hidden>⚠</span>서버에 연결할 수 없어요. 127.0.0.1:8010에서 API가 켜져 있는지 확인해 주세요.</div>
         )}
+        <AlertBar alerts={alerts} />
         <Outlet context={{ dash, health, toast, callResident } satisfies StaffCtx} />
         <div className="foot-note">이 화면의 어르신·통화는 모두 가상 데이터예요. 점수는 확인 순서를 돕는 참고값이며 의료 판단이 아니에요. 나이·성별은 점수에 넣지 않아요.</div>
       </div>
@@ -188,7 +199,7 @@ export function StaffLayout() {
             <Link to="/staff/principles" className="sheet-link"><Icon name="shield" />데이터 원칙<span aria-hidden>›</span></Link>
             <div className="sheet-chips">{chips}</div>
             <div className="sheet-ai">{aiCard}</div>
-            <button type="button" className="btn o block" onClick={reset}>↺ 데모 리셋</button>
+            {health?.demo !== false && <button type="button" className="btn o block" onClick={reset}>↺ 데모 리셋</button>}
           </div>
         </div>
       )}

@@ -22,6 +22,38 @@ export const useApiDown = () =>
     () => down,
   );
 
+// ── 생활지원사 로그인 토큰 (서버 /staff/login 이 PIN을 받고 준다) ─────────
+const TOKEN_KEY = 'ansimon-staff-token';
+let token: string | null = (() => {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch {
+    return null;
+  }
+})();
+let needLogin = false;
+const authListeners = new Set<() => void>();
+function setNeedLogin(v: boolean) {
+  if (needLogin === v) return;
+  needLogin = v;
+  authListeners.forEach((l) => l());
+}
+export const useNeedLogin = () =>
+  useSyncExternalStore(
+    (l) => (authListeners.add(l), () => authListeners.delete(l)),
+    () => needLogin,
+  );
+export function setToken(t: string | null) {
+  token = t;
+  try {
+    if (t) localStorage.setItem(TOKEN_KEY, t);
+    else localStorage.removeItem(TOKEN_KEY);
+  } catch {
+    /* 저장소를 못 쓰면 이 탭에서만 로그인 유지 */
+  }
+  setNeedLogin(!t);
+}
+
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   if (IS_MOCK) {
     const { mockFetch } = await import('../mock/server');
@@ -31,7 +63,10 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
   try {
     res = await fetch(`/api${path}`, {
       method,
-      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
+      headers: {
+        ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+        ...(token && path.startsWith('/staff/') ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
   } catch {
@@ -47,6 +82,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
   }
   if (!res.ok) {
     const detail = (data as { detail?: unknown } | null)?.detail;
+    if (res.status === 401 && path.startsWith('/staff/') && path !== '/staff/login') setToken(null);
     // Vite 프록시는 API가 꺼져 있으면 본문 없는 5xx를 돌려준다.
     const isDown = res.status >= 500 && typeof detail !== 'string';
     setDown(isDown);

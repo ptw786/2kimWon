@@ -19,7 +19,7 @@ export type RecordDay = {
   time: string | null
   minutes: number | null
   status_label: string
-  chips: { label: string; tone: 'ok' | 'watch' }[]
+  chips: { label: string; tone: 'ok' | 'watch' | 'unknown' }[]
 }
 
 export type Incoming = {
@@ -42,11 +42,20 @@ export type TurnResult = {
   llm_used: boolean
 }
 
-export type TurnRequest = { text: string; source: TurnSource; client_turn_id: string }
+/** topic: 앱이 지금 보여 주는 질문의 주제. 서버의 현재 질문과 다르면 412가 온다. */
+export type TurnRequest = { text: string; source: TurnSource; client_turn_id: string; topic?: Topic | null }
 
 export type Turn = { role: 'ai' | 'elder'; text: string; topic: Topic | null; at: string; source?: TurnSource }
 
-export type CallState = { status: CallStatus; step: Step; question: string | null; turns: Turn[] }
+export type CallState = {
+  status: CallStatus
+  step: Step
+  question: string | null
+  topic: Topic | null
+  options: string[]
+  last_ai_text: string | null
+  turns: Turn[]
+}
 
 export interface ElderApi {
   residents(): Promise<ResidentRef[]>
@@ -59,6 +68,6 @@ export interface ElderApi {
   turn(callId: number, body: TurnRequest): Promise<TurnResult>
   hangup(callId: number): Promise<{ status: string }>
   call(callId: number): Promise<CallState>
-  /** 시연용: 생활지원사 웹의 '전화 걸기'와 같은 요청(POST /api/staff/residents/{id}/call). */
+  /** 시연용: 어르신 앱에서 벨 울리기(POST /api/elder/{id}/ring → 201 {call_id}, 이미 울리는 중이면 409). */
   ringMe(residentId: number): Promise<void>
 }

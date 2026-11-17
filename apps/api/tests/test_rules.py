@@ -67,21 +67,43 @@ def test_unknown_when_no_answer_after_two_reasks():
 
 # ---- §3 안전 신호 ----
 @pytest.mark.parametrize('category,text', [
-    ('낙상', '넘어졌어'), ('낙상', '쓰러졌어'), ('낙상', '못 일어나'),
-    ('호흡·가슴', '숨이 차'), ('호흡·가슴', '숨차'), ('호흡·가슴', '숨을 못 쉬겠어'),
-    ('호흡·가슴', '가슴이 아파'), ('호흡·가슴', '가슴이 답답해'),
-    ('의식·마비', '정신이 없어'), ('의식·마비', '말이 안 나와'), ('의식·마비', '한쪽이 마비된 것 같아'),
-    ('자해·삶의 의지', '죽고 싶어'), ('자해·삶의 의지', '살기 싫어'),
-    ('도움 요청', '119 불러줘'), ('도움 요청', '살려줘'), ('도움 요청', '도와줘'),
+    ('낙상', '넘어져서 못 일어나'), ('낙상', '일어날 수가 없어'), ('낙상', '넘어져서 머리를 부딪혔어'),
+    ('낙상', '넘어졌는데 많이 아파'), ('낙상', '넘어지고 나서 토했어'),
+    ('호흡·가슴', '숨이 차'), ('호흡·가슴', '숨차'), ('호흡·가슴', '숨을 못 쉬겠어'), ('호흡·가슴', '숨이 안 쉬어져요'),
+    ('호흡·가슴', '숨을 쉴 수가 없어요'), ('호흡·가슴', '가슴에 통증이 있어요'), ('호흡·가슴', '가슴이 쥐어짜듯 아파'),
+    ('호흡·가슴', '가슴이 아파'), ('호흡·가슴', '가슴이 답답해'), ('호흡·가슴', '체한 것 같은데 식은땀이 나'),
+    ('뇌졸중 의심', '입이 돌아갔어'), ('뇌졸중 의심', '말이 어눌해'), ('뇌졸중 의심', '말이 안 나와'),
+    ('뇌졸중 의심', '한쪽 팔에 힘이 없어'), ('뇌졸중 의심', '한쪽이 마비된 것 같아'), ('뇌졸중 의심', '갑자기 앞이 안 보여'),
+    ('뇌졸중 의심', '물건이 두 개로 보여'), ('뇌졸중 의심', '머리가 깨질 것 같아'), ('뇌졸중 의심', '어지러워서 서 있을 수가 없어'),
+    ('의식', '정신을 잃었어'), ('의식', '아까 쓰러졌었어'), ('의식', '기절했었어'),
+    ('출혈·화상·중독', '피가 안 멈춰'), ('출혈·화상·중독', '피를 토했어'), ('출혈·화상·중독', '약을 한꺼번에 먹었어'),
+    ('화재·가스', '불이 났어'), ('화재·가스', '가스 냄새가 나'),
+    ('자해·삶의 의지', '죽고 싶어'), ('자해·삶의 의지', '살기 싫어'), ('자해·삶의 의지', '살아서 뭐해'),
+    ('자해·삶의 의지', '사라지고 싶어'), ('자해·삶의 의지', '나 같은 거 없어져야 해'), ('자해·삶의 의지', '짐만 되는 것 같아'),
+    ('도움 요청', '119 불러줘'), ('도움 요청', '살려줘'), ('도움 요청', '도와줘'), ('도움 요청', '사람 좀 보내줘'),
 ])
 def test_safety_categories(category, text):
     assert category in [h['category'] for h in safety.detect(text)]
 
 
-def test_safety_keeps_negated_or_past_expressions():
-    hits = safety.detect('어제 넘어질 뻔했는데 괜찮아')
+def test_safety_keeps_past_expressions():
+    """일이 있었다는 말은 지금 괜찮다고 해도 안전 신호로 남긴다 (생활지원사가 판단)."""
+    hits = safety.detect('어제 넘어져서 못 일어났는데 지금은 괜찮아')
     assert hits and hits[0]['category'] == '낙상'
-    assert hits[0]['quote'] in '어제 넘어질 뻔했는데 괜찮아'
+    assert hits[0]['quote'] in '어제 넘어져서 못 일어났는데 지금은 괜찮아'
+
+
+@pytest.mark.parametrize('text', ['넘어졌어', '넘어질 뻔했는데 괜찮아', '식은땀이 나', '미끄러졌어'])
+def test_fall_or_sweat_alone_is_body_risk_not_safety(text):
+    """넘어짐·식은땀만으로는 우선 확인(몸 상태 위험). 못 일어남·머리·구토·흉통이 같이 나와야 즉시 확인."""
+    assert safety.detect(text) == []
+    assert status_of('body', text) == 'risk'
+
+
+@pytest.mark.parametrize('text', ['숨 차는 건 없어', '가슴 아픈 데는 없어요', '넘어진 적은 없어', '요즘 정신이 없네',
+                                  '힘들어 죽겠어', '배고파 죽겠네', '약 다 먹었어', '말벗이 없어 심심해', '다리가 좀 저려'])
+def test_safety_skips_clear_denials_and_idioms(text):
+    assert safety.detect(text) == []
 
 
 def test_safety_no_false_hit_on_plain_answers():
@@ -193,7 +215,7 @@ def test_age_and_gender_are_not_inputs():
 
 # ---- §5 단계 ----
 def test_grade_urgent_on_any_safety_signal_regardless_of_score():
-    a = scoring.assess(items(), [{'category': '낙상', 'quote': '넘어졌어'}], [None] * 6, 'completed', [])
+    a = scoring.assess(items(), [{'category': '낙상', 'quote': '넘어져서 못 일어나'}], [None] * 6, 'completed', [])
     assert a['grade'] == 'urgent' and a['grade_label'] == '즉시 확인' and a['score'] == 0
 
 
@@ -203,21 +225,54 @@ def test_grade_today_at_40():
     assert a['score'] == 40 and a['grade'] == 'today'
 
 
-def test_grade_today_on_two_risk_items():
-    a = A(meal='risk', med='risk')
-    assert a['score'] == 20 and a['grade'] == 'today'
+def test_grade_today_on_one_risk_item():
+    a = A(meal='risk')
+    assert a['score'] == 10 and a['grade'] == 'today' and a['grade_basis'] == '위험 항목 (식사)'
 
 
 @pytest.mark.parametrize('st,expected', [
-    ({'meal': 'risk', 'sleep': 'caution'}, 'watch'),                                       # 15
-    ({'body': 'risk', 'meal': 'risk', 'sleep': 'risk'}, 'today'),                          # 30 이지만 위험 3개
-    ({'meal': 'caution', 'sleep': 'caution'}, 'ok'),                                       # 10
+    ({'meal': 'risk', 'sleep': 'caution'}, 'today'),                                       # 15점이지만 위험 1개
+    ({'body': 'risk'}, 'today'),                                                           # 외부 리뷰 #5: "많이 아파요" → 특이 표현 없음 X
+    ({'meal': 'caution', 'sleep': 'caution'}, 'watch'),                                    # 10점이지만 주의가 있음
+    ({'mood': 'caution'}, 'watch'),
     ({'meal': 'unknown', 'sleep': 'unknown'}, 'watch'),                                    # 미확인 2개
     ({'meal': 'unknown'}, 'ok'),                                                           # 미확인 1개
+    ({}, 'ok'),
 ])
-def test_grade_watch_and_ok(st, expected):
+def test_grade_follows_facts_not_only_score(st, expected):
     a = A(**st)
     assert a['grade'] == expected
+
+
+def test_grade_ok_only_when_nothing_to_report():
+    """'특이 표현 없음'이면 이유 목록이 비어 있어야 한다 (라벨과 기록이 모순되지 않게)."""
+    import itertools
+    for combo in itertools.product(['good', 'caution', 'risk', 'unknown'], repeat=5):
+        st = dict(zip(['body', 'meal', 'sleep', 'med', 'mood'], combo))
+        a = A(**st)
+        if a['grade'] == 'ok':
+            assert not [x for x in a['reasons'] if x['points'] or x['kind'] != 'item'] and 'risk' not in combo \
+                and 'caution' not in combo
+
+
+def test_grade_contact_problems_are_not_ok():
+    for status in ('missed', 'declined', 'interrupted'):
+        a = scoring.assess(items(), [], [None] * 6, status, [])
+        assert a['grade'] == 'watch', status
+
+
+def test_grade_today_on_two_consecutive_missed():
+    a = scoring.assess(items(), [], [None] * 6, 'missed', [{'status': 'missed', 'days_ago': 0}])
+    assert a['score'] == 20 and a['grade'] == 'today' and a['grade_basis'] == '연속 미응답 2회'
+    # 연락이 닿으면(이번 통화 완료) 앞선 미응답은 점수로만 남는다
+    a = scoring.assess(items(), [], [None] * 6, 'completed', [{'status': 'missed', 'days_ago': 0}] * 2)
+    assert a['grade'] == 'watch'
+
+
+def test_grade_needs_alone_is_watch_and_score_unchanged():
+    need = [{'type': 'meal_difficulty', 'label': '식사 어려움', 'quote': '먹을 게 없어', 'origin': 'rule'}]
+    a = scoring.assess(items(), [], [None] * 6, 'completed', [], needs=need)
+    assert a['score'] == 0 and a['grade'] == 'watch' and a['grade_basis'] == '어려움 (식사 어려움)'
 
 
 def test_grade_with_trend_and_contact_mixed():
@@ -227,11 +282,14 @@ def test_grade_with_trend_and_contact_mixed():
     a = scoring.assess(items(body='caution', meal='caution', sleep='caution'), [], hist(1, body='caution', meal='caution'),
                        'completed', [{'status': 'missed', 'days_ago': 1}])
     assert a['score'] == 15 + 10 + 10 and a['grade'] == 'watch'
+    a = scoring.assess(items(body='caution', meal='caution', sleep='caution', mood='caution'), [],
+                       hist(3, body='caution', meal='caution', sleep='caution', mood='caution'), 'completed', [])
+    assert a['score'] == 20 + 30 and a['grade'] == 'today' and a['grade_basis'].startswith('확인 점수 50점')
 
 
 def test_needs_check_lists_unknown_and_rule_version():
     a = A(meal='unknown', mood='unknown')
-    assert a['needs_check'] == ['meal', 'mood'] and a['rule_version'] == 'r2.1'
+    assert a['needs_check'] == ['meal', 'mood'] and a['rule_version'] == 'r3'
 
 
 def test_rules_yaml_matches_document_values():
@@ -240,6 +298,6 @@ def test_rules_yaml_matches_document_values():
     assert (r['trend']['two_days'], r['trend']['three_plus_days'], r['trend']['cap']) == (5, 10, 30)
     c = r['contact']
     assert (c['missed_once'], c['missed_consecutive'], c['interrupted'], c['declined'], c['cap']) == (10, 20, 5, 5, 20)
-    assert r['grades']['today'] == {'min_score': 40, 'min_risk_items': 2}
-    assert r['grades']['watch'] == {'min_score': 15, 'min_unknown_items': 2}
+    assert r['grades']['today'] == {'min_score': 40, 'min_risk_items': 1, 'min_missed_streak': 2}
+    assert r['grades']['watch'] == {'min_unknown_items': 2}
     assert r['grade_labels'] == {'urgent': '즉시 확인', 'today': '우선 확인', 'watch': '추가 확인', 'ok': '특이 표현 없음'}

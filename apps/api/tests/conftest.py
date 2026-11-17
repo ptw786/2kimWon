@@ -13,6 +13,7 @@ os.environ['ANSIMON_DB'] = str(_TMP / 'import.db')
 os.environ['ANSIMON_LLM'] = 'off'
 os.environ['ANSIMON_SCHEDULER'] = '0'
 os.environ['ANSIMON_DEMO'] = '1'
+os.environ['ANSIMON_STAFF_PIN'] = 'off'   # 인증은 test_auth.py 에서 따로 켠다
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from fastapi.testclient import TestClient  # noqa: E402

@@ -4,6 +4,8 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PY="${ANSIMON_PYTHON:-python3}"
+# 시연용: 데이터 되돌리기·어르신 목록을 켠다. 생활지원사 웹 비밀번호는 ANSIMON_STAFF_PIN(없으면 서버가 6자리를 만들어 보여 줌)
+export ANSIMON_DEMO="${ANSIMON_DEMO:-1}"
 pids=()
 cleanup() { echo; echo "[dev-up] 종료합니다"; for p in "${pids[@]}"; do kill "$p" 2>/dev/null || true; done; }
 trap cleanup EXIT INT TERM
@@ -17,6 +19,6 @@ done
 (cd "$ROOT/apps/app" && exec npm run dev) & pids+=($!)
 
 echo "[dev-up] API  http://127.0.0.1:8010/docs"
-echo "[dev-up] 웹   http://127.0.0.1:5180  (생활지원사: /staff)"
+echo "[dev-up] 웹   http://127.0.0.1:5180  (생활지원사: /staff · 비밀번호는 API 로그의 ▶ 줄${ANSIMON_STAFF_PIN:+ · 지정한 ANSIMON_STAFF_PIN})"
 echo "[dev-up] 앱   http://127.0.0.1:5181/r/KY-01"
 wait

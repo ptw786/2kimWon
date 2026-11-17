@@ -111,7 +111,7 @@ export function CallScreen() {
         {r.safety && (
           <div className="card safety" role="status">
             <Icon name="heart" filled />
-            <p>말씀하신 내용을 생활지원사님께 알려 드릴게요. 많이 급하시면 119에 전화해 주세요.</p>
+            <p>말씀하신 내용은 생활지원사님 화면에 바로 떠요. 많이 급하시면 119에 전화해 주세요.</p>
           </div>
         )}
         <section className="voice" aria-label="말로 답하기">

@@ -4,7 +4,7 @@ assess() 입력은 전부 이미 읽어 온 값이다 — DB를 보지 않는다
 - items: {topic: {status, quote, origin}}  (이 통화)
 - safety: [{category, quote}]               (이 통화)
 - history: 어제부터 거슬러 6일, 각 날의 {topic: status} 또는 None(답을 들은 통화가 없던 날)
-- call_status: 이 통화의 끝 상태 (completed | interrupted | missed | declined)
+- call_status: 이 통화의 끝 상태 (completed | interrupted | missed | declined | silent=받았지만 대답 없음 | in_progress)
 - prior_calls: 이 통화 앞의 끝난 통화들, 최근 것부터 [{status, days_ago}] (7일 안)
 - needs: 이 통화에서 찾은 어려움 유형 [{type, label, quote, origin}] — 점수에 넣지 않고 그대로 싣는다
 """
@@ -59,14 +59,24 @@ def trend_streak(today_status: str, past: list) -> int:
     return n
 
 
-def contact_reasons(call_status: str, prior_calls: list[dict], r: dict) -> list[dict]:
-    c = r['contact']
-    out = []
+def _missed_lead(prior_calls: list[dict]) -> int:
     lead = 0
     for pc in prior_calls:
         if pc['status'] != 'missed':
             break
         lead += 1
+    return lead
+
+
+def missed_streak(call_status: str, prior_calls: list[dict]) -> int:
+    """이 통화까지 이어진 미응답 횟수 (이 통화가 미응답이 아니면 0 — 지금 연락이 닿았다)."""
+    return 1 + _missed_lead(prior_calls) if call_status == 'missed' else 0
+
+
+def contact_reasons(call_status: str, prior_calls: list[dict], r: dict) -> list[dict]:
+    c = r['contact']
+    out = []
+    lead = _missed_lead(prior_calls)
     if call_status == 'missed':
         run = 1 + lead
         if run >= 2:
@@ -81,6 +91,8 @@ def contact_reasons(call_status: str, prior_calls: list[dict], r: dict) -> list[
             out.append(_reason('contact', f'{when} 미응답', c['missed_once']))
     if call_status == 'interrupted':
         out.append(_reason('contact', '통화 중단', c['interrupted']))
+    if call_status == 'silent':   # 받았지만 한마디도 듣지 못함 — 받고 나서 쓰러졌을 수도 있어 미응답만큼 본다
+        out.append(_reason('contact', '받았지만 대답 없음', c['missed_once']))
     if call_status == 'declined':
         out.append(_reason('contact', '수신 거절', c['declined']))
     return _cap(out, c['cap'])
@@ -114,24 +126,16 @@ def assess(items: dict, safety: list[dict], history: list, call_status: str, pri
     score = min(100, sum(x['points'] for x in reasons))
 
     unknown = [t for t in TOPICS if items[t]['status'] == 'unknown']
-    risk_count = sum(1 for t in TOPICS if items[t]['status'] == 'risk')
     g = r['grades']
     if len(unknown) >= g['watch']['min_unknown_items']:
         reasons.append(_reason('item', f"미확인 {len(unknown)}개 ({'·'.join(TOPIC_LABELS[t] for t in unknown)})", 0))
-
-    if safety:
-        grade = 'urgent'
-    elif score >= g['today']['min_score'] or risk_count >= g['today']['min_risk_items']:
-        grade = 'today'
-    elif score >= g['watch']['min_score'] or len(unknown) >= g['watch']['min_unknown_items']:
-        grade = 'watch'
-    else:
-        grade = 'ok'
+    grade, basis = grade_of(items, safety, score, missed_streak(call_status, prior_calls), reasons, needs or [], g)
 
     return {
         'score': score,
         'grade': grade,
         'grade_label': r['grade_labels'][grade],
+        'grade_basis': basis,
         'reasons': reasons,
         'items': {t: dict(items[t]) for t in TOPICS},
         'safety': [dict(s) for s in safety],
@@ -139,6 +143,34 @@ def assess(items: dict, safety: list[dict], history: list, call_status: str, pri
         'needs': [dict(n) for n in needs or []],
         'rule_version': r['version'],
     }
+
+
+def grade_of(items: dict, safety: list[dict], score: int, missed_run: int, reasons: list[dict], needs: list[dict],
+             g: dict) -> tuple[str, str]:
+    """(단계, 그 단계인 이유 한 줄) — 판정규칙.md §5 (r3).
+    단계는 들은 사실로 정한다. 점수는 같은 단계 안에서 누구를 먼저 볼지만 정한다.
+    그래서 '위험'이 하나라도 있으면 점수가 낮아도 '특이 표현 없음'이 될 수 없다."""
+    risk = [TOPIC_LABELS[t] for t in TOPICS if items[t]['status'] == 'risk']
+    caution = [TOPIC_LABELS[t] for t in TOPICS if items[t]['status'] == 'caution']
+    unknown = [t for t in TOPICS if items[t]['status'] == 'unknown']
+    if safety:
+        return 'urgent', f"안전 신호 ({'·'.join(dict.fromkeys(s['category'] for s in safety))})"
+    if len(risk) >= g['today']['min_risk_items']:
+        return 'today', f"위험 항목 ({'·'.join(risk)})"
+    if missed_run >= g['today']['min_missed_streak']:
+        return 'today', f'연속 미응답 {missed_run}회'
+    if score >= g['today']['min_score']:
+        return 'today', f"확인 점수 {score}점 (기준 {g['today']['min_score']}점)"
+    if caution:
+        return 'watch', f"주의 항목 ({'·'.join(caution)})"
+    contact = [x['chip'] for x in reasons if x['kind'] in ('contact', 'trend')]
+    if contact:
+        return 'watch', contact[0]
+    if needs:
+        return 'watch', f"어려움 ({'·'.join(n['label'] for n in needs)})"
+    if len(unknown) >= g['watch']['min_unknown_items']:
+        return 'watch', f'미확인 {len(unknown)}개'
+    return 'ok', '걱정되는 표현을 듣지 못함'
 
 
 def grade_label(grade: str) -> str:

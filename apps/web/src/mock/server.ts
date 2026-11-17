@@ -154,6 +154,7 @@ function dashboard(): Dashboard {
       ...r,
       today: latest ? { call_id: latest.id, status: latest.status, status_label: STATUS_LABEL[latest.status] } : { call_id: null, status: 'not_called', status_label: '통화 전' },
       assessment: ended?.assessment ?? null,
+      assessment_call_id: ended?.id ?? null,
       staff_check: ended?.staff_check ?? null,
     };
   });
@@ -272,6 +273,12 @@ export async function mockFetch<T>(method: string, fullPath: string, body?: unkn
       out = { ...summary(c), turns: c.turns.map(toTurn), ai_runs: c.runs, staff_check: c.staff_check, step: stepOf(c), welfare } satisfies CallDetail;
       break;
     }
+    case 'GET /staff/alerts':
+      out = { alerts: [] };
+      break;
+    case 'POST /staff/login':
+      out = { token: 'mock', required: false };
+      break;
     case 'GET /staff/live':
       out = { calls: allViews().filter((c) => c.status === 'ringing' || c.status === 'in_progress').map((c) => ({ ...summary(c), step: stepOf(c) }) satisfies LiveCall) };
       break;

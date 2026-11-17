@@ -32,18 +32,18 @@ export function ErrorCard({ message, onRetry }: { message: string; onRetry: () =
   )
 }
 
-/** 하루 기록 칩: 걱정된 것만 보여 주고, 모두 괜찮으면 한 줄로. 걱정 칩은 놀라지 않게 버터색 + 하트 + 쉬운 말. */
+/** 하루 기록 칩: 걱정된 것·확인 못 한 것만 보여 주고, 모두 괜찮으면 한 줄로(확인 못 한 게 있으면 '모두 괜찮음'이라고 하지 않는다). 걱정 칩은 놀라지 않게 버터색 + 하트 + 쉬운 말. */
 export function RecordChips({ chips }: { chips: RecordDay['chips'] }) {
   if (chips.length === 0) return null
-  const watch = chips.filter((c) => c.tone === 'watch')
-  if (watch.length === 0) {
+  const shown = chips.filter((c) => c.tone !== 'ok')
+  if (shown.length === 0) {
     return <p className="rk-all"><Icon name="check" stroke={3} />모두 괜찮으셨어요</p>
   }
   return (
     <ul className="rk-row">
-      {watch.map((c) => (
-        <li key={c.label} className="rk-wt"><Icon name={c.label.includes('알렸') ? 'bell' : 'heart'} />{c.label}</li>
-      ))}
+      {shown.map((c) => c.tone === 'unknown'
+        ? <li key={c.label} className="rk-un"><Icon name="help" />{c.label}</li>
+        : <li key={c.label} className="rk-wt"><Icon name={c.label.includes('알렸') ? 'bell' : 'heart'} />{c.label}</li>)}
     </ul>
   )
 }

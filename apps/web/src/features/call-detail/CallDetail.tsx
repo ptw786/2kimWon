@@ -150,7 +150,8 @@ export function CallDetailPage() {
 function Timeline({ c }: { c: CallDetail }) {
   const steps = buildSteps(c);
   const retries = steps.reduce((s, x) => s + x.retries, 0);
-  const done = c.status === 'completed' ? c.step.total : Math.max(0, c.step.index - (isLive(c.status) ? 1 : 0));
+  // step.index = 지금(또는 마지막으로) 묻던 질문 번호 → 끝낸 질문 수는 index-1 (완료면 전부) — QA #7
+  const done = c.status === 'completed' ? c.step.total : Math.max(0, c.step.index - 1);
   const pct = Math.round((done / c.step.total) * 100);
   const live = isLive(c.status);
   const noTalk = c.turns.length === 0;
@@ -166,7 +167,7 @@ function Timeline({ c }: { c: CallDetail }) {
 
       {noTalk ? (
         <div style={{ marginTop: 16 }}>
-          <Empty icon="☎" title="대화 기록이 없어요" reason={c.status === 'missed' ? '어르신이 30초 안에 전화를 받지 않으셨어요.' : c.status === 'ringing' ? '어르신이 전화를 받으면 여기에 대화가 쌓여요.' : '이 통화는 대화 원문을 남기지 않았어요.'} />
+          <Empty icon="☎" title="대화 기록이 없어요" reason={c.status === 'missed' ? '어르신이 30초 안에 전화를 받지 않으셨어요.' : c.status === 'declined' ? '어르신이 전화를 받지 않고 거절하셨어요.' : c.status === 'ringing' ? '어르신이 전화를 받으면 여기에 대화가 쌓여요.' : '받으신 뒤 말씀을 나누기 전에 끊겼어요.'} />
         </div>
       ) : (
         <ol className="tl" style={{ listStyle: 'none', paddingLeft: 0 }}>

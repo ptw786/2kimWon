@@ -120,6 +120,22 @@ mark { background: var(--butter-300); color: inherit; border-radius: 3px; paddin
 
 .banner { display: flex; gap: 10px; align-items: center; background: var(--urgent-bg); color: var(--urgent); font-weight: 700; padding: 12px 28px; border-bottom: 1px solid #f2b8b8; font-size: 17px; }
 .banner.info { background: var(--butter-100); color: var(--watch); border-color: var(--butter-300); }
+/* 안전 신호 알림 막대 — 빨강은 '즉시 확인'에만 (규칙 6). 아이콘 + 글자로 */
+.alert-bar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; background: var(--urgent-fill); color: #fff; padding: 14px 28px; font-size: 17px; }
+.alert-bar .ic { font-size: 26px; line-height: 1; }
+.alert-bar .txt { display: grid; gap: 2px; flex: 1 1 320px; min-width: 0; }
+.alert-bar .txt b { font-size: 18px; }
+.alert-bar .btn.w { background: #fff; color: var(--urgent); border-color: #fff; }
+.alert-bar .btn.ghost-w { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.7); }
+/* 생활지원사 로그인 */
+.login { min-height: 100vh; display: grid; place-items: center; background: var(--bg); padding: 24px 16px; }
+.login-card { box-sizing: border-box; width: min(420px, 100%); display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px; }
+.login-card h1 { margin: 6px 0 0; font-size: 26px; }
+.login-card p { margin: 0; color: var(--ink-subtle); }
+.login-card label { font-weight: 700; }
+.login-card input { box-sizing: border-box; width: 100%; min-width: 0; font: inherit; font-size: 22px; letter-spacing: 0.3em; padding: 12px 14px; border: 1px solid var(--border-input); border-radius: 12px; background: var(--bg); color: var(--ink); }
+.login-card small { color: var(--ink-subtle); font-size: 16px; }
+.login-card .err { color: var(--urgent); font-weight: 700; }
 .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 12px 20px; border-radius: 12px; font-weight: 700; z-index: 60; max-width: calc(100vw - 32px); box-shadow: 0 10px 30px #3a142640; }
 
 /* ═════ ① 소개 ═════ */
