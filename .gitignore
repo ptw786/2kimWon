@@ -25,3 +25,7 @@ apps/*/screenshots/
 *.hwpx
 .fablize/
 *.tsbuildinfo
+
+# 공공데이터 인증키 (공유 스냅샷 JSON은 재현 가능한 시연을 위해 버전 관리)
+공공데이터포털 api 키.txt
+**/public_data_cache.tmp

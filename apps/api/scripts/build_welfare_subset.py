@@ -50,15 +50,23 @@ def _detail(row) -> dict:
     return d if isinstance(d, dict) else {}
 
 
-def _contact(d: dict) -> str | None:
-    lst = d.get('inqplCtadrList')
-    if isinstance(lst, dict):
-        lst = [lst]
-    for x in lst or []:
-        if isinstance(x, dict) and x.get('wlfareInfoReldCn'):
-            name = _clean(x.get('wlfareInfoReldNm'))
-            return f"{name} {_clean(x['wlfareInfoReldCn'])}".strip()
-    return None
+def _contact(detail: dict) -> str | None:
+    """XML의 직접 필드·중첩 목록 모두에서 실제 문의처만 추출한다."""
+    contacts = []
+    def visit(value):
+        if isinstance(value, list):
+            for item in value:
+                visit(item)
+        elif isinstance(value, dict):
+            phone = value.get('wlfareInfoReldCn') or value.get('rprsCtadr') or value.get('inqplCtadr')
+            if isinstance(phone, str) and phone.strip():
+                name = _clean(value.get('wlfareInfoReldNm'))
+                contacts.append(f'{name} {_clean(phone)}'.strip())
+            for item in value.values():
+                if isinstance(item, (dict, list)):
+                    visit(item)
+    visit(detail)
+    return ' · '.join(dict.fromkeys(contacts)) or None
 
 
 def _needs_of(text: str) -> list[str]:
@@ -73,14 +81,14 @@ def _is_elderly(name: str, text: str, life: str) -> bool:
     return '노년' in (life or '') or bool(ELDERLY.search(text))
 
 
-def _local(row, detail: dict) -> dict | None:
+def _local(row, detail: dict, *, select: bool = True) -> dict | None:
     name = _clean(row['servNm'])
     summary = _clean(row.get('servDgst'))
-    texts = {k: _clean(detail.get(k))[:MAX_TEXT] or None for k in TEXT_FIELDS}
-    if not _is_elderly(name, ' '.join([name, summary, texts['sprtTrgtCn'] or '']), row.get('lifeNmArray')):
+    texts = {k: _clean(detail.get(k)) or None for k in TEXT_FIELDS}
+    if select and not _is_elderly(name, ' '.join([name, summary, texts['sprtTrgtCn'] or '']), row.get('lifeNmArray')):
         return None
     needs = _needs_of(' '.join([name, summary]))
-    if not needs:
+    if select and not needs:
         return None
     return {
         'id': row['servId'], 'name': name, 'source': '지자체복지서비스',

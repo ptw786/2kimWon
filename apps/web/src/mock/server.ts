@@ -254,13 +254,21 @@ export async function mockFetch<T>(method: string, fullPath: string, body?: unkn
       out = summary(view(c));
       break;
     }
+    case 'GET /staff/public-data': {
+      out = { catalog: { total: 0, reviewed: 0, pending: 0, excluded: 0, unavailable: 0,
+        warning: '예시 화면에서는 공공데이터를 조회하지 않아요. 실제 API에 연결하면 자료를 볼 수 있어요.' },
+        statistics: { source: '목업 모드 · 실제 통계 아님', year: null, source_file: '', regions: [] } };
+      break;
+    }
     case 'GET /staff/calls': {
       const date = q.get('date');
       const rid = q.get('resident_id');
+      const grade = q.get('grade');
+      const offset = Number(q.get('offset') ?? 0);
       out = allViews()
-        .filter((c) => (!date || kstDate(new Date(c.created_at)) === date) && (!rid || c.resident_id === Number(rid)))
+        .filter((c) => (!date || kstDate(new Date(c.created_at)) === date) && (!rid || c.resident_id === Number(rid)) && (!grade || (grade === 'none' ? !c.assessment : c.assessment?.grade === grade)))
         .sort((a, b) => b.created_at.localeCompare(a.created_at))
-        .slice(0, Number(q.get('limit') ?? 50))
+        .slice(offset, offset + Number(q.get('limit') ?? 50))
         .map(summary);
       break;
     }

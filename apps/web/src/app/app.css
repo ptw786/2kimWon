@@ -350,7 +350,7 @@ mark { background: var(--butter-300); color: inherit; border-radius: 3px; paddin
 .wf-q { color: var(--ink-subtle); }
 .wf-link { justify-self: start; color: var(--rose-700); font-weight: 700; text-decoration: underline; min-height: 32px; display: inline-flex; align-items: center; }
 .wf-foot { margin: 0; color: var(--ink-subtle); }
-.wf-foot .nowrap { white-space: nowrap; }
+.wf-foot .nowrap { white-space: normal; overflow-wrap: anywhere; }
 .btnrow .btn { flex: 1; }
 
 /* ③ 통화 상세 3단 */
@@ -628,3 +628,16 @@ mark { background: var(--butter-300); color: inherit; border-radius: 3px; paddin
   .ed-n { font-size: 26px; }
   .ed-list h2 { font-size: 23px; }
 }
+
+/* 공공데이터: 같은 계층의 지역만 비교한다. */
+.pd-overview { margin-bottom: var(--space-5); padding: var(--space-5); }
+.pd-overview h2 { margin: 0 0 var(--space-4); }
+.pd-controls { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-block: var(--space-4); }
+.pd-controls label { display: grid; gap: var(--space-2); }
+.pd-controls input, .pd-controls select { max-width: 100%; min-height: var(--tap-web); font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-2); }
+.pd-regions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--space-4); margin-block: var(--space-4); }
+.pd-region { border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-4); overflow-wrap: anywhere; }
+.wf-svc details { margin-block: var(--space-3); }
+.wf-note ul { padding-left: var(--space-5); }
+.pd-controls label { max-width: 100%; min-width: 0; }
+.pd-controls input { width: 100%; min-width: 0; }

@@ -175,8 +175,11 @@ class OllamaClient:
         if self._reach_cache and now - self._reach_cache[0] < 15:
             return self._reach_cache[1]
         try:
-            ok = httpx.get(f'{self.host}/api/tags', timeout=1.0).status_code == 200
-        except httpx.HTTPError:
+            response = httpx.get(f'{self.host}/api/tags', timeout=1.0)
+            wanted = self.model if ':' in self.model else self.model + ':latest'
+            models = response.json().get('models', []) if response.status_code == 200 else []
+            ok = any(isinstance(m, dict) and (m.get('name') == wanted or m.get('model') == wanted) for m in models)
+        except (httpx.HTTPError, ValueError, TypeError, AttributeError):
             ok = False
         self._reach_cache = (now, ok)
         return ok

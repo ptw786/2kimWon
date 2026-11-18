@@ -423,6 +423,11 @@ def finalize_summary(conn, llm, call_id: int) -> None:
     if call['status'] == 'interrupted':
         quotes.append('통화가 중간에 끊김')
     text, run = _attempt(llm, 'summary', lambda: llm.summary(a['items'], quotes), validate=clean_summary)
+    needs_rule_summary = (bool(a['safety']) or bool(a.get('needs')) or call['status'] == 'interrupted'
+                          or any(it['status'] != 'good' for it in a['items'].values()))
+    if text and needs_rule_summary:
+        text = None
+        run.update(outcome='fallback', note=getattr(llm, 'seed_note', None) or '확인 필요 통화 · 확정 사실 요약 유지')
     with tx(conn):
         _insert_runs(conn, call_id, [run])
         if text:

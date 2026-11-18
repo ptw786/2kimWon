@@ -1,3 +1,4 @@
+import { PublicDataPage } from '../features/public-data/PublicData';
 import { Link, Route, Routes } from 'react-router-dom';
 import { StaffLayout } from '../shared/StaffLayout';
 import { Empty } from '../shared/ui';
@@ -22,6 +23,7 @@ export function App() {
         <Route path="calls/:id" element={<CallDetailPage />} />
         <Route path="rules" element={<RulesPage />} />
         <Route path="principles" element={<PrinciplesPage />} />
+        <Route path="public-data" element={<PublicDataPage />} />
         <Route path="*" element={<div className="page"><Empty title="없는 화면이에요" reason="주소를 다시 확인해 주세요." action={<Link to="/staff" className="btn p">오늘 확인 순서로</Link>} /></div>} />
       </Route>
       <Route path="*" element={<div className="page"><Empty title="없는 화면이에요" reason="주소를 다시 확인해 주세요." action={<Link to="/" className="btn p">처음으로</Link>} /></div>} />

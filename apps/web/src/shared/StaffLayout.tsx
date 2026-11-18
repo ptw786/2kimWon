@@ -24,6 +24,7 @@ const CRUMB: [RegExp, string, string][] = [
   [/^\/staff\/calls\/\d+/, '어르신', '통화 상세'],
   [/^\/staff\/calls/, '어르신', '통화 기록'],
   [/^\/staff\/rules/, '근거', '판정 기준'],
+  [/^\/staff\/public-data/, '근거', '공공데이터'],
   [/^\/staff\/principles/, '근거', '데이터 원칙'],
 ];
 
@@ -132,7 +133,7 @@ export function StaffLayout() {
   ) : (
     <><b className="rule"><i className="dot" />규칙 판정 모드</b>로컬 AI(Ollama)에 연결되지 않아 키워드 규칙으로 판정해요.</>
   );
-  const moreOn = /^\/staff\/(rules|principles)/.test(loc.pathname);
+  const moreOn = /^\/staff\/(rules|principles|public-data)/.test(loc.pathname);
 
   if (needLogin) return <LoginScreen />;
 
@@ -150,6 +151,7 @@ export function StaffLayout() {
           <h6>근거</h6>
           <NavLink to="/staff/rules"><Icon name="rules" />판정 기준</NavLink>
           <NavLink to="/staff/principles"><Icon name="shield" />데이터 원칙</NavLink>
+          <NavLink to="/staff/public-data"><Icon name="rules" />공공데이터</NavLink>
         </nav>
         <div className="side-today" aria-label="오늘 요약">
           <small>{nowHeadline().split(' · ')[0]}</small>
@@ -197,6 +199,7 @@ export function StaffLayout() {
             <div className="sheet-h"><b>더보기</b><button type="button" className="icon-btn" aria-label="닫기" onClick={() => setMore(false)}>✕</button></div>
             <Link to="/staff/rules" className="sheet-link"><Icon name="rules" />판정 기준<span aria-hidden>›</span></Link>
             <Link to="/staff/principles" className="sheet-link"><Icon name="shield" />데이터 원칙<span aria-hidden>›</span></Link>
+            <Link to="/staff/public-data" className="sheet-link"><Icon name="rules" />공공데이터<span aria-hidden>›</span></Link>
             <div className="sheet-chips">{chips}</div>
             <div className="sheet-ai">{aiCard}</div>
             {health?.demo !== false && <button type="button" className="btn o block" onClick={reset}>↺ 데모 리셋</button>}

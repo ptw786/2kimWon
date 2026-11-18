@@ -9,7 +9,7 @@ export function WelfarePanel({ matches }: { matches: WelfareMatch[] }) {
     <section className="welfare" aria-label="연계할 만한 지원">
       <div className="wf-hd">
         <h4>연계할 만한 지원</h4>
-        <span className="subtle">어르신 말씀 + 사는 지역 기준</span>
+        <span className="subtle">생활지원 후보 · 최종 신청 자격은 기관 확인</span>
       </div>
       {matches.length === 0 ? (
         <p className="wf-empty">아직 연계할 어려움이 없어요</p>
@@ -30,8 +30,22 @@ export function WelfarePanel({ matches }: { matches: WelfareMatch[] }) {
                 </div>
                 <div className="subtle">{s.area}{s.org && ` · ${s.org}`}</div>
                 {s.summary && <p>{s.summary}</p>}
+                {s.eligibility && <div className="wf-note" role="note">
+                  <b>ⓘ 신청 자격 확인 필요</b>
+                  <ul>{s.eligibility.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
+                </div>}
+                {s.checked_at && <p className="subtle">사업 정보 확인일: {s.checked_at}</p>}
+                <p className="subtle">연락처: {s.contact || '미제공 · 공식 상세에서 확인해 주세요'}</p>
+                {!s.apply_quote && <p className="subtle">신청방법: 미제공 · 공식 상세에서 확인해 주세요</p>}
+                {s.source_area && s.source_area !== s.area && <p className="subtle">출처의 지역명: {s.source_area}</p>}
                 {s.target_quote && <p className="wf-q"><span className="tag t-rule">지원대상</span> “{s.target_quote}”</p>}
                 {s.apply_quote && <p className="wf-q"><span className="tag t-rule">신청방법</span> “{s.apply_quote}”</p>}
+                {(s.target_text || s.criteria_text || s.apply_text) && <details>
+                  <summary>지원 조건·신청방법 원문 보기</summary>
+                  {s.target_text && <p><b>지원대상</b> {s.target_text}</p>}
+                  {s.criteria_text && <p><b>선정기준</b> {s.criteria_text}</p>}
+                  {s.apply_text && <p><b>신청방법</b> {s.apply_text}</p>}
+                </details>}
                 {s.link && (
                   <a href={s.link} target="_blank" rel="noopener noreferrer" className="wf-link">
                     복지로에서 보기 <span aria-hidden>↗</span><span className="sr"> (새 창)</span>
@@ -42,7 +56,7 @@ export function WelfarePanel({ matches }: { matches: WelfareMatch[] }) {
           </div>
         ))
       )}
-      <p className="wf-foot">출처: 한국사회보장정보원 지자체·중앙부처 복지서비스 (공공데이터포털){asOf && <> · <span className="nowrap">조회 {asOf}</span></>}</p>
+      <p className="wf-foot">출처: 한국사회보장정보원 지자체·중앙부처 복지서비스 (공공데이터포털){asOf && <> · <span className="nowrap">자료 기준 {asOf} · 사업별 확인일은 위에 표시</span></>}</p>
     </section>
   );
 }

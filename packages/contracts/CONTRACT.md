@@ -1,6 +1,22 @@
 # 안심온 API 계약 v3
 
 > v3 (2026-11-16, 외부 리뷰·QA 반영): 단계 규칙 r3(사실로 단계·`grade_basis`), 통화 중 안전 신호 판정(`provisional`)·`/staff/alerts`, 대시보드 대표 판정(`assessment_call_id`), 생활지원사 로그인(`/staff/login`, `Authorization: Bearer`), 어르신 '지금 전화 받기'(`/elder/{id}/ring`), 턴의 `topic`(412), 이어 받기 응답 확장, 기록 칩 `unknown`.
+> F11 통합(2026-11-18): 복지 후보는 내용 해시가 검토 기록과 일치하는 사업만 반환한다.
+> 아래 부가 필드는 웹에서 표시하고 앱은 복지 API를 사용하지 않는다. 위험 점수 계약은 그대로다.
+
+## F11 부가 계약
+
+- `WelfareService` 추가: `eligibility: {status:'needs_check', reasons:string[]}`, `checked_at:string|null`,
+  `contact:string|null`, `missing_fields:string[]`, `target_text:string|null`, `criteria_text:string|null`,
+  `apply_text:string|null`, `review_note:string`, `source_area:string`.
+- `checked_at`은 해당 사업 상세를 조회한 날짜다. 파일 갱신일과 구분하며, 선정 확정을 뜻하지 않는다.
+- 나이는 신청 자격에만 사용한다. 소득·가구·장애·중복수혜 등 알 수 없는 조건을 추측하지 않는다.
+- `GET /staff/public-data`: `{catalog:{total,reviewed,pending,excluded,unavailable}, statistics:{source,year,source_file,regions:KosisRegion[]}}`.
+  KosisRegion은 원본 `region,level,elderly_single_households,all_households,ratio_percent`와
+  `normalized_region:string`, `aggregation_level:'national'|'province'|'district'|'subdistrict'`를 포함한다.
+- 원본 지역명은 보존한다. 제공 KOSIS의 계층으로 만든 대응표에 없는 모호한 지역은 추천하지 않는다.
+- KOSIS 통계는 지역 규모 비교용이며 개인 판정·지원 자격에 사용하지 않는다. 서로 다른 계층은 합산하지 않는다.
+
 > v2.1 (2026-11-14): 단계 라벨을 팀 용어로 통일, 어려움 유형(`needs`) 추가, 복지서비스 연계(`welfare`) 추가. 키(grade 값)는 그대로라 기존 코드는 라벨만 바뀐다.
 
 웹(`apps/web`)·앱(`apps/app`)·서버(`apps/api`)가 지키는 약속. 바꿀 때는 이 파일을 먼저 고친다.
@@ -149,3 +165,11 @@ type TurnResult = {
 - `source: 'silence'`는 앱이 10초 동안 아무 말도 못 들었을 때 보낸다(`text`는 빈 문자열).
 - 다섯 질문 동안 조용함만 있었으면 통화는 `interrupted`로 닫히고 판정 이유에 '받았지만 대답 없음'(+10)이 붙는다.
 - 안전 신호 턴의 `ai_text`는 '생활지원사님 화면에 바로 알렸어요. 위급하시면 지금 119에 전화하세요.'(자해·삶의 의지면 109 안내를 덧붙임).
+
+## 2026-11-18 통합 보완
+
+- `GET /staff/calls`에 `offset`(0 이상), `grade`(`urgent|today|watch|ok|none`, 생략 시 전체)를 추가한다.
+  단계 필터는 페이지를 자르기 전에 적용한다. 응답 배열·기본 limit=50·최대 limit=200은 유지한다.
+- `health.llm.reachable`은 Ollama 서버 응답과 지정 모델 설치 여부를 모두 확인한다.
+- 안전 신호·주의/위험/미확인·생활 어려움·중단이 있는 통화는 확정 사실의 규칙 요약을 유지한다.
+  AI 요약을 거절한 이유는 `ai_runs`에 남긴다. 문제 없는 완료 통화의 AI 요약은 기존과 같다.

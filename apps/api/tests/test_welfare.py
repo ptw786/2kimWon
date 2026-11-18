@@ -3,15 +3,19 @@ import sqlite3
 
 from app import db
 from app.domain import matching
+from app.domain.welfare_policy import fingerprint
 from app.services import welfare
 
 from .conftest import resident_id, say, start_call
 
 
 def svc(id_, name, source='지자체복지서비스', ctpv='서울특별시', sgg='서대문구', summary='', target=None):
-    return {'id': id_, 'name': name, 'source': source, 'ctpv': ctpv if source != '중앙부처복지서비스' else None,
+    service = {'id': id_, 'name': name, 'source': source, 'ctpv': ctpv if source != '중앙부처복지서비스' else None,
             'sgg': sgg if source != '중앙부처복지서비스' else None, 'org': None, 'summary': summary,
             'target': target, 'apply': None, 'link': None}
+    service['_review'] = {'decision': 'exclude' if id_ == 'L2' else 'include', 'needs': ['meal_difficulty'],
+                          'source_sha256': fingerprint(service), 'reason': '테스트에서 명시적으로 검토한 직접 지원'}
+    return service
 
 
 SERVICES = [
@@ -32,9 +36,9 @@ def test_match_ranks_same_district_then_province_then_central():
     assert m['need_label'] == '식사 어려움' and m['data_as_of'] == '2026-11-13'
 
 
-def test_match_excludes_existing_care_service_with_note():
+def test_match_excludes_service_marked_excluded_in_review():
     m = matching.match('meal_difficulty', '서울특별시 서대문구', SERVICES, 'd')
-    assert 'L2' not in [s['id'] for s in m['services']] and '노인맞춤돌봄서비스' in m['note']
+    assert 'L2' not in [s['id'] for s in m['services']]
 
 
 def test_match_falls_back_to_central_with_note():

@@ -1,0 +1,1729 @@
+{
+  "source": "KOSIS 독거노인가구비율(시도/시/군/구)",
+  "year": 2025,
+  "source_file": "독거노인가구비율_시도_시_군_구__20261113150651.xlsx",
+  "regions": [
+    {
+      "region": "전국",
+      "level": "national",
+      "elderly_single_households": 2455947,
+      "all_households": 22495096,
+      "ratio_percent": 10.9
+    },
+    {
+      "region": "서울특별시",
+      "level": "province",
+      "elderly_single_households": 382064,
+      "all_households": 4194215,
+      "ratio_percent": 9.1
+    },
+    {
+      "region": "서울특별시 종로구",
+      "level": "district",
+      "elderly_single_households": 6560,
+      "all_households": 65131,
+      "ratio_percent": 10.1
+    },
+    {
+      "region": "서울특별시 중구",
+      "level": "district",
+      "elderly_single_households": 6445,
+      "all_households": 59346,
+      "ratio_percent": 10.9
+    },
+    {
+      "region": "서울특별시 용산구",
+      "level": "district",
+      "elderly_single_households": 7757,
+      "all_households": 93448,
+      "ratio_percent": 8.3
+    },
+    {
+      "region": "서울특별시 성동구",
+      "level": "district",
+      "elderly_single_households": 10122,
+      "all_households": 123336,
+      "ratio_percent": 8.2
+    },
+    {
+      "region": "서울특별시 광진구",
+      "level": "district",
+      "elderly_single_households": 12143,
+      "all_households": 160750,
+      "ratio_percent": 7.6
+    },
+    {
+      "region": "서울특별시 동대문구",
+      "level": "district",
+      "elderly_single_households": 15351,
+      "all_households": 163744,
+      "ratio_percent": 9.4
+    },
+    {
+      "region": "서울특별시 중랑구",
+      "level": "district",
+      "elderly_single_households": 20546,
+      "all_households": 174596,
+      "ratio_percent": 11.8
+    },
+    {
+      "region": "서울특별시 성북구",
+      "level": "district",
+      "elderly_single_households": 16962,
+      "all_households": 186466,
+      "ratio_percent": 9.1
+    },
+    {
+      "region": "서울특별시 강북구",
+      "level": "district",
+      "elderly_single_households": 18418,
+      "all_households": 130411,
+      "ratio_percent": 14.1
+    },
+    {
+      "region": "서울특별시 도봉구",
+      "level": "district",
+      "elderly_single_households": 16391,
+      "all_households": 130122,
+      "ratio_percent": 12.6
+    },
+    {
+      "region": "서울특별시 노원구",
+      "level": "district",
+      "elderly_single_households": 25155,
+      "all_households": 205025,
+      "ratio_percent": 12.3
+    },
+    {
+      "region": "서울특별시 은평구",
+      "level": "district",
+      "elderly_single_households": 20803,
+      "all_households": 198997,
+      "ratio_percent": 10.5
+    },
+    {
+      "region": "서울특별시 서대문구",
+      "level": "district",
+      "elderly_single_households": 12193,
+      "all_households": 137778,
+      "ratio_percent": 8.8
+    },
+    {
+      "region": "서울특별시 마포구",
+      "level": "district",
+      "elderly_single_households": 11626,
+      "all_households": 167118,
+      "ratio_percent": 7.0
+    },
+    {
+      "region": "서울특별시 양천구",
+      "level": "district",
+      "elderly_single_households": 16647,
+      "all_households": 169089,
+      "ratio_percent": 9.8
+    },
+    {
+      "region": "서울특별시 강서구",
+      "level": "district",
+      "elderly_single_households": 24974,
+      "all_households": 255799,
+      "ratio_percent": 9.8
+    },
+    {
+      "region": "서울특별시 구로구",
+      "level": "district",
+      "elderly_single_households": 16733,
+      "all_households": 172595,
+      "ratio_percent": 9.7
+    },
+    {
+      "region": "서울특별시 금천구",
+      "level": "district",
+      "elderly_single_households": 11572,
+      "all_households": 113400,
+      "ratio_percent": 10.2
+    },
+    {
+      "region": "서울특별시 영등포구",
+      "level": "district",
+      "elderly_single_households": 14269,
+      "all_households": 178380,
+      "ratio_percent": 8.0
+    },
+    {
+      "region": "서울특별시 동작구",
+      "level": "district",
+      "elderly_single_households": 13772,
+      "all_households": 175902,
+      "ratio_percent": 7.8
+    },
+    {
+      "region": "서울특별시 관악구",
+      "level": "district",
+      "elderly_single_households": 20307,
+      "all_households": 268074,
+      "ratio_percent": 7.6
+    },
+    {
+      "region": "서울특별시 서초구",
+      "level": "district",
+      "elderly_single_households": 9943,
+      "all_households": 161177,
+      "ratio_percent": 6.2
+    },
+    {
+      "region": "서울특별시 강남구",
+      "level": "district",
+      "elderly_single_households": 15540,
+      "all_households": 225873,
+      "ratio_percent": 6.9
+    },
+    {
+      "region": "서울특별시 송파구",
+      "level": "district",
+      "elderly_single_households": 19068,
+      "all_households": 267887,
+      "ratio_percent": 7.1
+    },
+    {
+      "region": "서울특별시 강동구",
+      "level": "district",
+      "elderly_single_households": 18767,
+      "all_households": 209771,
+      "ratio_percent": 8.9
+    },
+    {
+      "region": "전남광주통합특별시 광주광역시",
+      "level": "district",
+      "elderly_single_households": 65155,
+      "all_households": 630552,
+      "ratio_percent": 10.3
+    },
+    {
+      "region": "전남광주통합특별시 광주광역시 동구",
+      "level": "subdistrict",
+      "elderly_single_households": 6345,
+      "all_households": 53307,
+      "ratio_percent": 11.9
+    },
+    {
+      "region": "전남광주통합특별시 광주광역시 서구",
+      "level": "subdistrict",
+      "elderly_single_households": 13375,
+      "all_households": 126967,
+      "ratio_percent": 10.5
+    },
+    {
+      "region": "전남광주통합특별시 광주광역시 남구",
+      "level": "subdistrict",
+      "elderly_single_households": 10932,
+      "all_households": 91385,
+      "ratio_percent": 12.0
+    },
+    {
+      "region": "전남광주통합특별시 광주광역시 북구",
+      "level": "subdistrict",
+      "elderly_single_households": 22339,
+      "all_households": 193049,
+      "ratio_percent": 11.6
+    },
+    {
+      "region": "전남광주통합특별시 광주광역시 광산구",
+      "level": "subdistrict",
+      "elderly_single_households": 12164,
+      "all_households": 165844,
+      "ratio_percent": 7.3
+    },
+    {
+      "region": "전남광주통합특별시 전라남도",
+      "level": "district",
+      "elderly_single_households": 133880,
+      "all_households": 801686,
+      "ratio_percent": 16.7
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 목포시",
+      "level": "subdistrict",
+      "elderly_single_households": 13563,
+      "all_households": 96053,
+      "ratio_percent": 14.1
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 여수시",
+      "level": "subdistrict",
+      "elderly_single_households": 15809,
+      "all_households": 116227,
+      "ratio_percent": 13.6
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 순천시",
+      "level": "subdistrict",
+      "elderly_single_households": 13828,
+      "all_households": 118293,
+      "ratio_percent": 11.7
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 나주시",
+      "level": "subdistrict",
+      "elderly_single_households": 7992,
+      "all_households": 52978,
+      "ratio_percent": 15.1
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 광양시",
+      "level": "subdistrict",
+      "elderly_single_households": 6408,
+      "all_households": 66103,
+      "ratio_percent": 9.7
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 담양군",
+      "level": "subdistrict",
+      "elderly_single_households": 3782,
+      "all_households": 19256,
+      "ratio_percent": 19.6
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 곡성군",
+      "level": "subdistrict",
+      "elderly_single_households": 3218,
+      "all_households": 13087,
+      "ratio_percent": 24.6
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 구례군",
+      "level": "subdistrict",
+      "elderly_single_households": 2710,
+      "all_households": 11248,
+      "ratio_percent": 24.1
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 고흥군",
+      "level": "subdistrict",
+      "elderly_single_households": 8679,
+      "all_households": 30149,
+      "ratio_percent": 28.8
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 보성군",
+      "level": "subdistrict",
+      "elderly_single_households": 4925,
+      "all_households": 17783,
+      "ratio_percent": 27.7
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 화순군",
+      "level": "subdistrict",
+      "elderly_single_households": 5538,
+      "all_households": 26731,
+      "ratio_percent": 20.7
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 장흥군",
+      "level": "subdistrict",
+      "elderly_single_households": 4136,
+      "all_households": 16475,
+      "ratio_percent": 25.1
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 강진군",
+      "level": "subdistrict",
+      "elderly_single_households": 3838,
+      "all_households": 15229,
+      "ratio_percent": 25.2
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 해남군",
+      "level": "subdistrict",
+      "elderly_single_households": 6754,
+      "all_households": 28952,
+      "ratio_percent": 23.3
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 영암군",
+      "level": "subdistrict",
+      "elderly_single_households": 4519,
+      "all_households": 24376,
+      "ratio_percent": 18.5
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 무안군",
+      "level": "subdistrict",
+      "elderly_single_households": 4858,
+      "all_households": 41208,
+      "ratio_percent": 11.8
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 함평군",
+      "level": "subdistrict",
+      "elderly_single_households": 3551,
+      "all_households": 13614,
+      "ratio_percent": 26.1
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 영광군",
+      "level": "subdistrict",
+      "elderly_single_households": 4551,
+      "all_households": 23554,
+      "ratio_percent": 19.3
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 장성군",
+      "level": "subdistrict",
+      "elderly_single_households": 3433,
+      "all_households": 18480,
+      "ratio_percent": 18.6
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 완도군",
+      "level": "subdistrict",
+      "elderly_single_households": 4736,
+      "all_households": 20970,
+      "ratio_percent": 22.6
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 진도군",
+      "level": "subdistrict",
+      "elderly_single_households": 3371,
+      "all_households": 13497,
+      "ratio_percent": 25.0
+    },
+    {
+      "region": "전남광주통합특별시 전라남도 신안군",
+      "level": "subdistrict",
+      "elderly_single_households": 3681,
+      "all_households": 17423,
+      "ratio_percent": 21.1
+    },
+    {
+      "region": "부산광역시",
+      "level": "province",
+      "elderly_single_households": 198989,
+      "all_households": 1471777,
+      "ratio_percent": 13.5
+    },
+    {
+      "region": "부산광역시 중구",
+      "level": "district",
+      "elderly_single_households": 4133,
+      "all_households": 21018,
+      "ratio_percent": 19.7
+    },
+    {
+      "region": "부산광역시 서구",
+      "level": "district",
+      "elderly_single_households": 8700,
+      "all_households": 49001,
+      "ratio_percent": 17.8
+    },
+    {
+      "region": "부산광역시 동구",
+      "level": "district",
+      "elderly_single_households": 7464,
+      "all_households": 41726,
+      "ratio_percent": 17.9
+    },
+    {
+      "region": "부산광역시 영도구",
+      "level": "district",
+      "elderly_single_households": 9999,
+      "all_households": 49004,
+      "ratio_percent": 20.4
+    },
+    {
+      "region": "부산광역시 부산진구",
+      "level": "district",
+      "elderly_single_households": 21570,
+      "all_households": 176676,
+      "ratio_percent": 12.2
+    },
+    {
+      "region": "부산광역시 동래구",
+      "level": "district",
+      "elderly_single_households": 14309,
+      "all_households": 115777,
+      "ratio_percent": 12.4
+    },
+    {
+      "region": "부산광역시 남구",
+      "level": "district",
+      "elderly_single_households": 13916,
+      "all_households": 113194,
+      "ratio_percent": 12.3
+    },
+    {
+      "region": "부산광역시 북구",
+      "level": "district",
+      "elderly_single_households": 17059,
+      "all_households": 115732,
+      "ratio_percent": 14.7
+    },
+    {
+      "region": "부산광역시 해운대구",
+      "level": "district",
+      "elderly_single_households": 20418,
+      "all_households": 159868,
+      "ratio_percent": 12.8
+    },
+    {
+      "region": "부산광역시 사하구",
+      "level": "district",
+      "elderly_single_households": 18847,
+      "all_households": 130444,
+      "ratio_percent": 14.4
+    },
+    {
+      "region": "부산광역시 금정구",
+      "level": "district",
+      "elderly_single_households": 14178,
+      "all_households": 99367,
+      "ratio_percent": 14.3
+    },
+    {
+      "region": "부산광역시 강서구",
+      "level": "district",
+      "elderly_single_households": 4179,
+      "all_households": 59105,
+      "ratio_percent": 7.1
+    },
+    {
+      "region": "부산광역시 연제구",
+      "level": "district",
+      "elderly_single_households": 11823,
+      "all_households": 94261,
+      "ratio_percent": 12.5
+    },
+    {
+      "region": "부산광역시 수영구",
+      "level": "district",
+      "elderly_single_households": 10501,
+      "all_households": 81182,
+      "ratio_percent": 12.9
+    },
+    {
+      "region": "부산광역시 사상구",
+      "level": "district",
+      "elderly_single_households": 13241,
+      "all_households": 92443,
+      "ratio_percent": 14.3
+    },
+    {
+      "region": "부산광역시 기장군",
+      "level": "district",
+      "elderly_single_households": 8652,
+      "all_households": 72979,
+      "ratio_percent": 11.9
+    },
+    {
+      "region": "대구광역시",
+      "level": "province",
+      "elderly_single_households": 126129,
+      "all_households": 1052190,
+      "ratio_percent": 12.0
+    },
+    {
+      "region": "대구광역시 중구",
+      "level": "district",
+      "elderly_single_households": 4491,
+      "all_households": 47243,
+      "ratio_percent": 9.5
+    },
+    {
+      "region": "대구광역시 동구",
+      "level": "district",
+      "elderly_single_households": 21457,
+      "all_households": 154575,
+      "ratio_percent": 13.9
+    },
+    {
+      "region": "대구광역시 서구",
+      "level": "district",
+      "elderly_single_households": 12732,
+      "all_households": 77461,
+      "ratio_percent": 16.4
+    },
+    {
+      "region": "대구광역시 남구",
+      "level": "district",
+      "elderly_single_households": 11123,
+      "all_households": 70435,
+      "ratio_percent": 15.8
+    },
+    {
+      "region": "대구광역시 북구",
+      "level": "district",
+      "elderly_single_households": 19779,
+      "all_households": 186385,
+      "ratio_percent": 10.6
+    },
+    {
+      "region": "대구광역시 수성구",
+      "level": "district",
+      "elderly_single_households": 18154,
+      "all_households": 168197,
+      "ratio_percent": 10.8
+    },
+    {
+      "region": "대구광역시 달서구",
+      "level": "district",
+      "elderly_single_households": 26260,
+      "all_households": 230843,
+      "ratio_percent": 11.4
+    },
+    {
+      "region": "대구광역시 달성군",
+      "level": "district",
+      "elderly_single_households": 9662,
+      "all_households": 106165,
+      "ratio_percent": 9.1
+    },
+    {
+      "region": "대구광역시 군위군",
+      "level": "district",
+      "elderly_single_households": 2471,
+      "all_households": 10886,
+      "ratio_percent": 22.7
+    },
+    {
+      "region": "인천광역시",
+      "level": "province",
+      "elderly_single_households": 123354,
+      "all_households": 1296146,
+      "ratio_percent": 9.5
+    },
+    {
+      "region": "인천광역시 중구",
+      "level": "district",
+      "elderly_single_households": 6517,
+      "all_households": 80148,
+      "ratio_percent": 8.1
+    },
+    {
+      "region": "인천광역시 동구",
+      "level": "district",
+      "elderly_single_households": 4062,
+      "all_households": 25224,
+      "ratio_percent": 16.1
+    },
+    {
+      "region": "인천광역시 연수구",
+      "level": "district",
+      "elderly_single_households": 9882,
+      "all_households": 158326,
+      "ratio_percent": 6.2
+    },
+    {
+      "region": "인천광역시 남동구",
+      "level": "district",
+      "elderly_single_households": 22952,
+      "all_households": 209564,
+      "ratio_percent": 11.0
+    },
+    {
+      "region": "인천광역시 부평구",
+      "level": "district",
+      "elderly_single_households": 22016,
+      "all_households": 212695,
+      "ratio_percent": 10.4
+    },
+    {
+      "region": "인천광역시 계양구",
+      "level": "district",
+      "elderly_single_households": 12128,
+      "all_households": 119005,
+      "ratio_percent": 10.2
+    },
+    {
+      "region": "인천광역시 서구",
+      "level": "district",
+      "elderly_single_households": 17855,
+      "all_households": 261188,
+      "ratio_percent": 6.8
+    },
+    {
+      "region": "인천광역시 미추홀구",
+      "level": "district",
+      "elderly_single_households": 20619,
+      "all_households": 189548,
+      "ratio_percent": 10.9
+    },
+    {
+      "region": "인천광역시 강화군",
+      "level": "district",
+      "elderly_single_households": 5558,
+      "all_households": 30579,
+      "ratio_percent": 18.2
+    },
+    {
+      "region": "인천광역시 옹진군",
+      "level": "district",
+      "elderly_single_households": 1765,
+      "all_households": 9869,
+      "ratio_percent": 17.9
+    },
+    {
+      "region": "대전광역시",
+      "level": "province",
+      "elderly_single_households": 63246,
+      "all_households": 665714,
+      "ratio_percent": 9.5
+    },
+    {
+      "region": "대전광역시 동구",
+      "level": "district",
+      "elderly_single_households": 13621,
+      "all_households": 108281,
+      "ratio_percent": 12.6
+    },
+    {
+      "region": "대전광역시 중구",
+      "level": "district",
+      "elderly_single_households": 13509,
+      "all_households": 101624,
+      "ratio_percent": 13.3
+    },
+    {
+      "region": "대전광역시 서구",
+      "level": "district",
+      "elderly_single_households": 17336,
+      "all_households": 213944,
+      "ratio_percent": 8.1
+    },
+    {
+      "region": "대전광역시 유성구",
+      "level": "district",
+      "elderly_single_households": 9537,
+      "all_households": 165339,
+      "ratio_percent": 5.8
+    },
+    {
+      "region": "대전광역시 대덕구",
+      "level": "district",
+      "elderly_single_households": 9243,
+      "all_households": 76526,
+      "ratio_percent": 12.1
+    },
+    {
+      "region": "울산광역시",
+      "level": "province",
+      "elderly_single_households": 43774,
+      "all_households": 465856,
+      "ratio_percent": 9.4
+    },
+    {
+      "region": "울산광역시 중구",
+      "level": "district",
+      "elderly_single_households": 10665,
+      "all_households": 88470,
+      "ratio_percent": 12.1
+    },
+    {
+      "region": "울산광역시 남구",
+      "level": "district",
+      "elderly_single_households": 11988,
+      "all_households": 135243,
+      "ratio_percent": 8.9
+    },
+    {
+      "region": "울산광역시 동구",
+      "level": "district",
+      "elderly_single_households": 5986,
+      "all_households": 63860,
+      "ratio_percent": 9.4
+    },
+    {
+      "region": "울산광역시 북구",
+      "level": "district",
+      "elderly_single_households": 5331,
+      "all_households": 85231,
+      "ratio_percent": 6.3
+    },
+    {
+      "region": "울산광역시 울주군",
+      "level": "district",
+      "elderly_single_households": 9804,
+      "all_households": 93052,
+      "ratio_percent": 10.5
+    },
+    {
+      "region": "세종특별자치시",
+      "level": "province",
+      "elderly_single_households": 9074,
+      "all_households": 161163,
+      "ratio_percent": 5.6
+    },
+    {
+      "region": "경기도",
+      "level": "province",
+      "elderly_single_households": 484832,
+      "all_households": 5665748,
+      "ratio_percent": 8.6
+    },
+    {
+      "region": "경기도 수원시",
+      "level": "district",
+      "elderly_single_households": 38751,
+      "all_households": 510479,
+      "ratio_percent": 7.6
+    },
+    {
+      "region": "경기도 성남시",
+      "level": "district",
+      "elderly_single_households": 35853,
+      "all_households": 382964,
+      "ratio_percent": 9.4
+    },
+    {
+      "region": "경기도 의정부시",
+      "level": "district",
+      "elderly_single_households": 21171,
+      "all_households": 196898,
+      "ratio_percent": 10.8
+    },
+    {
+      "region": "경기도 안양시",
+      "level": "district",
+      "elderly_single_households": 19306,
+      "all_households": 227335,
+      "ratio_percent": 8.5
+    },
+    {
+      "region": "경기도 부천시",
+      "level": "district",
+      "elderly_single_households": 33007,
+      "all_households": 321814,
+      "ratio_percent": 10.3
+    },
+    {
+      "region": "경기도 광명시",
+      "level": "district",
+      "elderly_single_households": 10343,
+      "all_households": 114276,
+      "ratio_percent": 9.1
+    },
+    {
+      "region": "경기도 평택시",
+      "level": "district",
+      "elderly_single_households": 19408,
+      "all_households": 266997,
+      "ratio_percent": 7.3
+    },
+    {
+      "region": "경기도 동두천시",
+      "level": "district",
+      "elderly_single_households": 6473,
+      "all_households": 39169,
+      "ratio_percent": 16.5
+    },
+    {
+      "region": "경기도 안산시",
+      "level": "district",
+      "elderly_single_households": 22717,
+      "all_households": 268000,
+      "ratio_percent": 8.5
+    },
+    {
+      "region": "경기도 고양시",
+      "level": "district",
+      "elderly_single_households": 38668,
+      "all_households": 431423,
+      "ratio_percent": 9.0
+    },
+    {
+      "region": "경기도 과천시",
+      "level": "district",
+      "elderly_single_households": 1743,
+      "all_households": 27111,
+      "ratio_percent": 6.4
+    },
+    {
+      "region": "경기도 구리시",
+      "level": "district",
+      "elderly_single_households": 7065,
+      "all_households": 75638,
+      "ratio_percent": 9.3
+    },
+    {
+      "region": "경기도 남양주시",
+      "level": "district",
+      "elderly_single_households": 25474,
+      "all_households": 282498,
+      "ratio_percent": 9.0
+    },
+    {
+      "region": "경기도 오산시",
+      "level": "district",
+      "elderly_single_households": 7124,
+      "all_households": 107981,
+      "ratio_percent": 6.6
+    },
+    {
+      "region": "경기도 시흥시",
+      "level": "district",
+      "elderly_single_households": 15457,
+      "all_households": 214655,
+      "ratio_percent": 7.2
+    },
+    {
+      "region": "경기도 군포시",
+      "level": "district",
+      "elderly_single_households": 10568,
+      "all_households": 104790,
+      "ratio_percent": 10.1
+    },
+    {
+      "region": "경기도 의왕시",
+      "level": "district",
+      "elderly_single_households": 4849,
+      "all_households": 61774,
+      "ratio_percent": 7.8
+    },
+    {
+      "region": "경기도 하남시",
+      "level": "district",
+      "elderly_single_households": 9787,
+      "all_households": 131208,
+      "ratio_percent": 7.5
+    },
+    {
+      "region": "경기도 용인시",
+      "level": "district",
+      "elderly_single_households": 29367,
+      "all_households": 421152,
+      "ratio_percent": 7.0
+    },
+    {
+      "region": "경기도 파주시",
+      "level": "district",
+      "elderly_single_households": 17404,
+      "all_households": 208758,
+      "ratio_percent": 8.3
+    },
+    {
+      "region": "경기도 이천시",
+      "level": "district",
+      "elderly_single_households": 8310,
+      "all_households": 94578,
+      "ratio_percent": 8.8
+    },
+    {
+      "region": "경기도 안성시",
+      "level": "district",
+      "elderly_single_households": 9171,
+      "all_households": 88746,
+      "ratio_percent": 10.3
+    },
+    {
+      "region": "경기도 김포시",
+      "level": "district",
+      "elderly_single_households": 14898,
+      "all_households": 191653,
+      "ratio_percent": 7.8
+    },
+    {
+      "region": "경기도 화성시",
+      "level": "district",
+      "elderly_single_households": 21721,
+      "all_households": 400047,
+      "ratio_percent": 5.4
+    },
+    {
+      "region": "경기도 광주시",
+      "level": "district",
+      "elderly_single_households": 12386,
+      "all_households": 160550,
+      "ratio_percent": 7.7
+    },
+    {
+      "region": "경기도 양주시",
+      "level": "district",
+      "elderly_single_households": 11239,
+      "all_households": 120811,
+      "ratio_percent": 9.3
+    },
+    {
+      "region": "경기도 포천시",
+      "level": "district",
+      "elderly_single_households": 8650,
+      "all_households": 62773,
+      "ratio_percent": 13.8
+    },
+    {
+      "region": "경기도 여주시",
+      "level": "district",
+      "elderly_single_households": 6584,
+      "all_households": 49951,
+      "ratio_percent": 13.2
+    },
+    {
+      "region": "경기도 연천군",
+      "level": "district",
+      "elderly_single_households": 3592,
+      "all_households": 19043,
+      "ratio_percent": 18.9
+    },
+    {
+      "region": "경기도 가평군",
+      "level": "district",
+      "elderly_single_households": 4985,
+      "all_households": 28034,
+      "ratio_percent": 17.8
+    },
+    {
+      "region": "경기도 양평군",
+      "level": "district",
+      "elderly_single_households": 8761,
+      "all_households": 54642,
+      "ratio_percent": 16.0
+    },
+    {
+      "region": "강원특별자치도",
+      "level": "province",
+      "elderly_single_households": 104079,
+      "all_households": 706987,
+      "ratio_percent": 14.7
+    },
+    {
+      "region": "강원특별자치도 춘천시",
+      "level": "district",
+      "elderly_single_households": 15291,
+      "all_households": 131228,
+      "ratio_percent": 11.7
+    },
+    {
+      "region": "강원특별자치도 원주시",
+      "level": "district",
+      "elderly_single_households": 18104,
+      "all_households": 166698,
+      "ratio_percent": 10.9
+    },
+    {
+      "region": "강원특별자치도 강릉시",
+      "level": "district",
+      "elderly_single_households": 14485,
+      "all_households": 99671,
+      "ratio_percent": 14.5
+    },
+    {
+      "region": "강원특별자치도 동해시",
+      "level": "district",
+      "elderly_single_households": 6244,
+      "all_households": 39787,
+      "ratio_percent": 15.7
+    },
+    {
+      "region": "강원특별자치도 태백시",
+      "level": "district",
+      "elderly_single_households": 3727,
+      "all_households": 18372,
+      "ratio_percent": 20.3
+    },
+    {
+      "region": "강원특별자치도 속초시",
+      "level": "district",
+      "elderly_single_households": 5770,
+      "all_households": 38027,
+      "ratio_percent": 15.2
+    },
+    {
+      "region": "강원특별자치도 삼척시",
+      "level": "district",
+      "elderly_single_households": 5468,
+      "all_households": 30130,
+      "ratio_percent": 18.1
+    },
+    {
+      "region": "강원특별자치도 홍천군",
+      "level": "district",
+      "elderly_single_households": 5991,
+      "all_households": 31223,
+      "ratio_percent": 19.2
+    },
+    {
+      "region": "강원특별자치도 횡성군",
+      "level": "district",
+      "elderly_single_households": 4279,
+      "all_households": 21286,
+      "ratio_percent": 20.1
+    },
+    {
+      "region": "강원특별자치도 영월군",
+      "level": "district",
+      "elderly_single_households": 3919,
+      "all_households": 17839,
+      "ratio_percent": 22.0
+    },
+    {
+      "region": "강원특별자치도 평창군",
+      "level": "district",
+      "elderly_single_households": 4000,
+      "all_households": 19364,
+      "ratio_percent": 20.7
+    },
+    {
+      "region": "강원특별자치도 정선군",
+      "level": "district",
+      "elderly_single_households": 3483,
+      "all_households": 16602,
+      "ratio_percent": 21.0
+    },
+    {
+      "region": "강원특별자치도 철원군",
+      "level": "district",
+      "elderly_single_households": 2894,
+      "all_households": 17362,
+      "ratio_percent": 16.7
+    },
+    {
+      "region": "강원특별자치도 화천군",
+      "level": "district",
+      "elderly_single_households": 1767,
+      "all_households": 10259,
+      "ratio_percent": 17.2
+    },
+    {
+      "region": "강원특별자치도 양구군",
+      "level": "district",
+      "elderly_single_households": 1363,
+      "all_households": 9052,
+      "ratio_percent": 15.1
+    },
+    {
+      "region": "강원특별자치도 인제군",
+      "level": "district",
+      "elderly_single_households": 2083,
+      "all_households": 14098,
+      "ratio_percent": 14.8
+    },
+    {
+      "region": "강원특별자치도 고성군",
+      "level": "district",
+      "elderly_single_households": 2492,
+      "all_households": 12795,
+      "ratio_percent": 19.5
+    },
+    {
+      "region": "강원특별자치도 양양군",
+      "level": "district",
+      "elderly_single_households": 2719,
+      "all_households": 13194,
+      "ratio_percent": 20.6
+    },
+    {
+      "region": "충청북도",
+      "level": "province",
+      "elderly_single_households": 90139,
+      "all_households": 735873,
+      "ratio_percent": 12.2
+    },
+    {
+      "region": "충청북도 충주시",
+      "level": "district",
+      "elderly_single_households": 12934,
+      "all_households": 99551,
+      "ratio_percent": 13.0
+    },
+    {
+      "region": "충청북도 제천시",
+      "level": "district",
+      "elderly_single_households": 9517,
+      "all_households": 59984,
+      "ratio_percent": 15.9
+    },
+    {
+      "region": "충청북도 청주시",
+      "level": "district",
+      "elderly_single_households": 35991,
+      "all_households": 386887,
+      "ratio_percent": 9.3
+    },
+    {
+      "region": "충청북도 보은군",
+      "level": "district",
+      "elderly_single_households": 3335,
+      "all_households": 14339,
+      "ratio_percent": 23.3
+    },
+    {
+      "region": "충청북도 옥천군",
+      "level": "district",
+      "elderly_single_households": 4437,
+      "all_households": 21990,
+      "ratio_percent": 20.2
+    },
+    {
+      "region": "충청북도 영동군",
+      "level": "district",
+      "elderly_single_households": 4599,
+      "all_households": 21256,
+      "ratio_percent": 21.6
+    },
+    {
+      "region": "충청북도 진천군",
+      "level": "district",
+      "elderly_single_households": 4085,
+      "all_households": 38940,
+      "ratio_percent": 10.5
+    },
+    {
+      "region": "충청북도 괴산군",
+      "level": "district",
+      "elderly_single_households": 3986,
+      "all_households": 18220,
+      "ratio_percent": 21.9
+    },
+    {
+      "region": "충청북도 음성군",
+      "level": "district",
+      "elderly_single_households": 6105,
+      "all_households": 44215,
+      "ratio_percent": 13.8
+    },
+    {
+      "region": "충청북도 단양군",
+      "level": "district",
+      "elderly_single_households": 2909,
+      "all_households": 13062,
+      "ratio_percent": 22.3
+    },
+    {
+      "region": "충청북도 증평군",
+      "level": "district",
+      "elderly_single_households": 2241,
+      "all_households": 17429,
+      "ratio_percent": 12.9
+    },
+    {
+      "region": "충청남도",
+      "level": "province",
+      "elderly_single_households": 119740,
+      "all_households": 973861,
+      "ratio_percent": 12.3
+    },
+    {
+      "region": "충청남도 천안시",
+      "level": "district",
+      "elderly_single_households": 22315,
+      "all_households": 300564,
+      "ratio_percent": 7.4
+    },
+    {
+      "region": "충청남도 공주시",
+      "level": "district",
+      "elderly_single_households": 7657,
+      "all_households": 47013,
+      "ratio_percent": 16.3
+    },
+    {
+      "region": "충청남도 보령시",
+      "level": "district",
+      "elderly_single_households": 7777,
+      "all_households": 43463,
+      "ratio_percent": 17.9
+    },
+    {
+      "region": "충청남도 아산시",
+      "level": "district",
+      "elderly_single_households": 13666,
+      "all_households": 157127,
+      "ratio_percent": 8.7
+    },
+    {
+      "region": "충청남도 서산시",
+      "level": "district",
+      "elderly_single_households": 9278,
+      "all_households": 78336,
+      "ratio_percent": 11.8
+    },
+    {
+      "region": "충청남도 논산시",
+      "level": "district",
+      "elderly_single_households": 8920,
+      "all_households": 49946,
+      "ratio_percent": 17.9
+    },
+    {
+      "region": "충청남도 계룡시",
+      "level": "district",
+      "elderly_single_households": 1668,
+      "all_households": 18541,
+      "ratio_percent": 9.0
+    },
+    {
+      "region": "충청남도 당진시",
+      "level": "district",
+      "elderly_single_households": 9377,
+      "all_households": 79238,
+      "ratio_percent": 11.8
+    },
+    {
+      "region": "충청남도 금산군",
+      "level": "district",
+      "elderly_single_households": 4547,
+      "all_households": 23472,
+      "ratio_percent": 19.4
+    },
+    {
+      "region": "충청남도 부여군",
+      "level": "district",
+      "elderly_single_households": 6352,
+      "all_households": 27478,
+      "ratio_percent": 23.1
+    },
+    {
+      "region": "충청남도 서천군",
+      "level": "district",
+      "elderly_single_households": 5442,
+      "all_households": 22623,
+      "ratio_percent": 24.1
+    },
+    {
+      "region": "충청남도 청양군",
+      "level": "district",
+      "elderly_single_households": 3079,
+      "all_households": 13685,
+      "ratio_percent": 22.5
+    },
+    {
+      "region": "충청남도 홍성군",
+      "level": "district",
+      "elderly_single_households": 6971,
+      "all_households": 46511,
+      "ratio_percent": 15.0
+    },
+    {
+      "region": "충청남도 예산군",
+      "level": "district",
+      "elderly_single_households": 6903,
+      "all_households": 36909,
+      "ratio_percent": 18.7
+    },
+    {
+      "region": "충청남도 태안군",
+      "level": "district",
+      "elderly_single_households": 5788,
+      "all_households": 28955,
+      "ratio_percent": 20.0
+    },
+    {
+      "region": "전북특별자치도",
+      "level": "province",
+      "elderly_single_households": 117039,
+      "all_households": 791547,
+      "ratio_percent": 14.8
+    },
+    {
+      "region": "전북특별자치도 전주시",
+      "level": "district",
+      "elderly_single_households": 30280,
+      "all_households": 283782,
+      "ratio_percent": 10.7
+    },
+    {
+      "region": "전북특별자치도 군산시",
+      "level": "district",
+      "elderly_single_households": 16017,
+      "all_households": 118651,
+      "ratio_percent": 13.5
+    },
+    {
+      "region": "전북특별자치도 익산시",
+      "level": "district",
+      "elderly_single_households": 17085,
+      "all_households": 123255,
+      "ratio_percent": 13.9
+    },
+    {
+      "region": "전북특별자치도 정읍시",
+      "level": "district",
+      "elderly_single_households": 9329,
+      "all_households": 47114,
+      "ratio_percent": 19.8
+    },
+    {
+      "region": "전북특별자치도 남원시",
+      "level": "district",
+      "elderly_single_households": 6966,
+      "all_households": 34877,
+      "ratio_percent": 20.0
+    },
+    {
+      "region": "전북특별자치도 김제시",
+      "level": "district",
+      "elderly_single_households": 7814,
+      "all_households": 37044,
+      "ratio_percent": 21.1
+    },
+    {
+      "region": "전북특별자치도 완주군",
+      "level": "district",
+      "elderly_single_households": 5932,
+      "all_households": 45563,
+      "ratio_percent": 13.0
+    },
+    {
+      "region": "전북특별자치도 진안군",
+      "level": "district",
+      "elderly_single_households": 2492,
+      "all_households": 11030,
+      "ratio_percent": 22.6
+    },
+    {
+      "region": "전북특별자치도 무주군",
+      "level": "district",
+      "elderly_single_households": 2420,
+      "all_households": 10770,
+      "ratio_percent": 22.5
+    },
+    {
+      "region": "전북특별자치도 장수군",
+      "level": "district",
+      "elderly_single_households": 2167,
+      "all_households": 9431,
+      "ratio_percent": 23.0
+    },
+    {
+      "region": "전북특별자치도 임실군",
+      "level": "district",
+      "elderly_single_households": 2787,
+      "all_households": 11869,
+      "ratio_percent": 23.5
+    },
+    {
+      "region": "전북특별자치도 순창군",
+      "level": "district",
+      "elderly_single_households": 2706,
+      "all_households": 12119,
+      "ratio_percent": 22.3
+    },
+    {
+      "region": "전북특별자치도 고창군",
+      "level": "district",
+      "elderly_single_households": 5882,
+      "all_households": 23841,
+      "ratio_percent": 24.7
+    },
+    {
+      "region": "전북특별자치도 부안군",
+      "level": "district",
+      "elderly_single_households": 5162,
+      "all_households": 22201,
+      "ratio_percent": 23.3
+    },
+    {
+      "region": "경상북도",
+      "level": "province",
+      "elderly_single_households": 176940,
+      "all_households": 1176178,
+      "ratio_percent": 15.0
+    },
+    {
+      "region": "경상북도 포항시",
+      "level": "district",
+      "elderly_single_households": 28440,
+      "all_households": 220773,
+      "ratio_percent": 12.9
+    },
+    {
+      "region": "경상북도 경주시",
+      "level": "district",
+      "elderly_single_households": 18006,
+      "all_households": 116834,
+      "ratio_percent": 15.4
+    },
+    {
+      "region": "경상북도 김천시",
+      "level": "district",
+      "elderly_single_households": 9724,
+      "all_households": 61621,
+      "ratio_percent": 15.8
+    },
+    {
+      "region": "경상북도 안동시",
+      "level": "district",
+      "elderly_single_households": 12333,
+      "all_households": 73100,
+      "ratio_percent": 16.9
+    },
+    {
+      "region": "경상북도 구미시",
+      "level": "district",
+      "elderly_single_households": 13208,
+      "all_households": 181883,
+      "ratio_percent": 7.3
+    },
+    {
+      "region": "경상북도 영주시",
+      "level": "district",
+      "elderly_single_households": 8266,
+      "all_households": 46161,
+      "ratio_percent": 17.9
+    },
+    {
+      "region": "경상북도 영천시",
+      "level": "district",
+      "elderly_single_households": 9166,
+      "all_households": 45718,
+      "ratio_percent": 20.0
+    },
+    {
+      "region": "경상북도 상주시",
+      "level": "district",
+      "elderly_single_households": 9229,
+      "all_households": 43495,
+      "ratio_percent": 21.2
+    },
+    {
+      "region": "경상북도 문경시",
+      "level": "district",
+      "elderly_single_households": 6662,
+      "all_households": 30815,
+      "ratio_percent": 21.6
+    },
+    {
+      "region": "경상북도 경산시",
+      "level": "district",
+      "elderly_single_households": 13877,
+      "all_households": 129315,
+      "ratio_percent": 10.7
+    },
+    {
+      "region": "경상북도 의성군",
+      "level": "district",
+      "elderly_single_households": 6769,
+      "all_households": 24224,
+      "ratio_percent": 27.9
+    },
+    {
+      "region": "경상북도 청송군",
+      "level": "district",
+      "elderly_single_households": 2952,
+      "all_households": 11952,
+      "ratio_percent": 24.7
+    },
+    {
+      "region": "경상북도 영양군",
+      "level": "district",
+      "elderly_single_households": 2007,
+      "all_households": 7775,
+      "ratio_percent": 25.8
+    },
+    {
+      "region": "경상북도 영덕군",
+      "level": "district",
+      "elderly_single_households": 4622,
+      "all_households": 16727,
+      "ratio_percent": 27.6
+    },
+    {
+      "region": "경상북도 청도군",
+      "level": "district",
+      "elderly_single_households": 4877,
+      "all_households": 19237,
+      "ratio_percent": 25.4
+    },
+    {
+      "region": "경상북도 고령군",
+      "level": "district",
+      "elderly_single_households": 3110,
+      "all_households": 14027,
+      "ratio_percent": 22.2
+    },
+    {
+      "region": "경상북도 성주군",
+      "level": "district",
+      "elderly_single_households": 3997,
+      "all_households": 18819,
+      "ratio_percent": 21.2
+    },
+    {
+      "region": "경상북도 칠곡군",
+      "level": "district",
+      "elderly_single_households": 5649,
+      "all_households": 48321,
+      "ratio_percent": 11.7
+    },
+    {
+      "region": "경상북도 예천군",
+      "level": "district",
+      "elderly_single_households": 5179,
+      "all_households": 24866,
+      "ratio_percent": 20.8
+    },
+    {
+      "region": "경상북도 봉화군",
+      "level": "district",
+      "elderly_single_households": 3535,
+      "all_households": 13910,
+      "ratio_percent": 25.4
+    },
+    {
+      "region": "경상북도 울진군",
+      "level": "district",
+      "elderly_single_households": 4635,
+      "all_households": 22324,
+      "ratio_percent": 20.8
+    },
+    {
+      "region": "경상북도 울릉군",
+      "level": "district",
+      "elderly_single_households": 697,
+      "all_households": 4281,
+      "ratio_percent": 16.3
+    },
+    {
+      "region": "경상남도",
+      "level": "province",
+      "elderly_single_households": 190447,
+      "all_households": 1424912,
+      "ratio_percent": 13.4
+    },
+    {
+      "region": "경상남도 진주시",
+      "level": "district",
+      "elderly_single_households": 18739,
+      "all_households": 153728,
+      "ratio_percent": 12.2
+    },
+    {
+      "region": "경상남도 통영시",
+      "level": "district",
+      "elderly_single_households": 8574,
+      "all_households": 53883,
+      "ratio_percent": 15.9
+    },
+    {
+      "region": "경상남도 사천시",
+      "level": "district",
+      "elderly_single_households": 8037,
+      "all_households": 50132,
+      "ratio_percent": 16.0
+    },
+    {
+      "region": "경상남도 김해시",
+      "level": "district",
+      "elderly_single_households": 20418,
+      "all_households": 223994,
+      "ratio_percent": 9.1
+    },
+    {
+      "region": "경상남도 밀양시",
+      "level": "district",
+      "elderly_single_households": 10067,
+      "all_households": 47765,
+      "ratio_percent": 21.1
+    },
+    {
+      "region": "경상남도 거제시",
+      "level": "district",
+      "elderly_single_households": 8947,
+      "all_households": 99710,
+      "ratio_percent": 9.0
+    },
+    {
+      "region": "경상남도 양산시",
+      "level": "district",
+      "elderly_single_households": 16905,
+      "all_households": 155237,
+      "ratio_percent": 10.9
+    },
+    {
+      "region": "경상남도 창원시",
+      "level": "district",
+      "elderly_single_households": 48964,
+      "all_households": 433649,
+      "ratio_percent": 11.3
+    },
+    {
+      "region": "경상남도 의령군",
+      "level": "district",
+      "elderly_single_households": 3515,
+      "all_households": 12296,
+      "ratio_percent": 28.6
+    },
+    {
+      "region": "경상남도 함안군",
+      "level": "district",
+      "elderly_single_households": 5282,
+      "all_households": 26316,
+      "ratio_percent": 20.1
+    },
+    {
+      "region": "경상남도 창녕군",
+      "level": "district",
+      "elderly_single_households": 6266,
+      "all_households": 26575,
+      "ratio_percent": 23.6
+    },
+    {
+      "region": "경상남도 고성군",
+      "level": "district",
+      "elderly_single_households": 5050,
+      "all_households": 22172,
+      "ratio_percent": 22.8
+    },
+    {
+      "region": "경상남도 남해군",
+      "level": "district",
+      "elderly_single_households": 5015,
+      "all_households": 19377,
+      "ratio_percent": 25.9
+    },
+    {
+      "region": "경상남도 하동군",
+      "level": "district",
+      "elderly_single_households": 4716,
+      "all_households": 19233,
+      "ratio_percent": 24.5
+    },
+    {
+      "region": "경상남도 산청군",
+      "level": "district",
+      "elderly_single_households": 4082,
+      "all_households": 16091,
+      "ratio_percent": 25.4
+    },
+    {
+      "region": "경상남도 함양군",
+      "level": "district",
+      "elderly_single_households": 4347,
+      "all_households": 17228,
+      "ratio_percent": 25.2
+    },
+    {
+      "region": "경상남도 거창군",
+      "level": "district",
+      "elderly_single_households": 5735,
+      "all_households": 27726,
+      "ratio_percent": 20.7
+    },
+    {
+      "region": "경상남도 합천군",
+      "level": "district",
+      "elderly_single_households": 5788,
+      "all_households": 19800,
+      "ratio_percent": 29.2
+    },
+    {
+      "region": "제주특별자치도",
+      "level": "province",
+      "elderly_single_households": 27066,
+      "all_households": 280691,
+      "ratio_percent": 9.6
+    },
+    {
+      "region": "제주특별자치도 제주시",
+      "level": "district",
+      "elderly_single_households": 18108,
+      "all_households": 204292,
+      "ratio_percent": 8.9
+    },
+    {
+      "region": "제주특별자치도 서귀포시",
+      "level": "district",
+      "elderly_single_households": 8958,
+      "all_households": 76399,
+      "ratio_percent": 11.7
+    }
+  ]
+}

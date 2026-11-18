@@ -7,7 +7,7 @@ import { api, errMsg } from '../../shared/api';
 import type { Resident, ResidentInput, ResidentRow } from '../../shared/types';
 
 // 복지서비스 검색에 쓰는 시도+시군구. 자유 입력이고, 자주 쓰는 값만 제안한다.
-const REGION_EXAMPLES = ['대전광역시 중구', '대전광역시 동구', '대전광역시 서구', '대전광역시 유성구', '대전광역시 대덕구', '서울특별시 서대문구', '서울특별시 종로구'];
+const REGION_EXAMPLES = ['대전광역시 중구', '대전광역시 동구', '대전광역시 서구', '대전광역시 유성구', '대전광역시 대덕구', '서울특별시 서대문구', '서울특별시 종로구', '세종특별자치시', '광주광역시 동구'];
 const dong = (n: string) => n.split(' ').pop() ?? n;
 
 export function ResidentsPage() {
@@ -100,7 +100,7 @@ function ResidentForm({ initial, onClose, onSaved }: { initial: Resident | null;
     if (!f.name.trim()) return setError('이름을 적어 주세요.');
     if (!Number.isInteger(age) || age < 50 || age > 120) return setError('나이는 50~120 사이 숫자로 적어 주세요.');
     const region = f.region.trim().replace(/\s+/g, ' ');
-    if (region.split(' ').length < 2) return setError('지역을 시도와 시군구까지 적어 주세요. 예: 대전광역시 중구');
+    if (region !== '세종특별자치시' && region !== '세종' && region.split(' ').length < 2) return setError('지역을 시도와 시군구까지 적어 주세요. 예: 대전광역시 중구');
     if (!f.neighborhood.trim()) return setError('사는 동네(동)를 적어 주세요.');
     const body: ResidentInput = { name: f.name.trim(), age, region, neighborhood: f.neighborhood.trim(), call_time: f.call_time, memo: f.memo.trim() || null };
     setBusy(true);

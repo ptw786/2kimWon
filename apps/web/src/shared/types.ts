@@ -10,6 +10,15 @@ export type NeedType = 'meal_difficulty' | 'sleep_problem' | 'help_request' | 'l
 export type Need = { type: NeedType; label: string; quote: string; origin: 'llm' | 'rule' };
 
 export type WelfareService = {
+  eligibility?: { status: 'needs_check'; reasons: string[] };
+  checked_at?: string | null;
+  contact?: string | null;
+  missing_fields?: string[];
+  target_text?: string | null;
+  criteria_text?: string | null;
+  apply_text?: string | null;
+  review_note?: string;
+  source_area?: string;
   id: string;
   name: string;
   org: string | null;
@@ -117,3 +126,12 @@ export type ResidentDetail = { resident: Resident; week: Day[]; calls: CallSumma
 export type Health = { ok: boolean; db: boolean; llm: { mode: 'ollama' | 'rules'; model: string | null; reachable: boolean }; auth?: { required: boolean }; demo?: boolean };
 
 export type ResidentInput = { name: string; age: number; region: string; neighborhood: string; call_time: string; memo?: string | null };
+
+export type KosisRegion = {
+  region: string; normalized_region: string; level: string; aggregation_level: string;
+  elderly_single_households: number; all_households: number; ratio_percent: number;
+};
+export type PublicDataOverview = {
+  catalog: { total: number; reviewed: number; pending: number; excluded: number; unavailable: number; warning?: string };
+  statistics: { source: string; year: number | null; source_file: string; regions: KosisRegion[] };
+};

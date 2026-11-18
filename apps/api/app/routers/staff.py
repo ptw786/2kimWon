@@ -1,6 +1,6 @@
 """생활지원사 웹용 (/api/staff)."""
 from datetime import timedelta
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field, StringConstraints
@@ -142,7 +142,7 @@ def resident_detail(rid: int, conn=Depends(get_conn)):
                         'WHERE c.resident_id = ? ORDER BY c.created_at DESC, c.id DESC LIMIT 30', (rid,)).fetchall()
     needs = calls.recent_needs(conn, rid, (today - timedelta(days=6)).isoformat())
     return {'resident': calls.resident_out(r), 'week': week, 'calls': [calls.call_summary(c) for c in rows],
-            'welfare': welfare.matches(needs, r['region'])}
+            'welfare': welfare.matches(needs, r['region'], age=r['age'])}
 
 
 @router.post('/residents', status_code=201)
@@ -182,6 +182,8 @@ def start_call(rid: int, conn=Depends(get_conn)):
 @router.get('/calls')
 def list_calls(date: str | None = Query(default=None, pattern=r'^\d{4}-\d{2}-\d{2}$'),
                resident_id: int | None = None, limit: int = Query(default=50, ge=1, le=200),
+               offset: int = Query(default=0, ge=0),
+               grade: Literal['urgent', 'today', 'watch', 'ok', 'none'] | None = None,
                conn=Depends(get_conn)):
     where, args = [], []
     if date:
@@ -190,18 +192,23 @@ def list_calls(date: str | None = Query(default=None, pattern=r'^\d{4}-\d{2}-\d{
     if resident_id is not None:
         where.append('c.resident_id = ?')
         args.append(resident_id)
+    if grade == 'none':
+        where.append('c.assessment IS NULL')
+    elif grade is not None:
+        where.append("json_extract(c.assessment, '$.grade') = ?")
+        args.append(grade)
     sql = ('SELECT c.*, r.name AS resident_name FROM calls c JOIN residents r ON r.id = c.resident_id'
-           + (' WHERE ' + ' AND '.join(where) if where else '') + ' ORDER BY c.created_at DESC, c.id DESC LIMIT ?')
-    return [calls.call_summary(c) for c in conn.execute(sql, (*args, limit)).fetchall()]
+           + (' WHERE ' + ' AND '.join(where) if where else '') + ' ORDER BY c.created_at DESC, c.id DESC LIMIT ? OFFSET ?')
+    return [calls.call_summary(c) for c in conn.execute(sql, (*args, limit, offset)).fetchall()]
 
 
 @router.get('/calls/{cid}')
 def call_detail(cid: int, conn=Depends(get_conn)):
     c = calls.get_call(conn, cid)
-    region = conn.execute('SELECT region FROM residents WHERE id = ?', (c['resident_id'],)).fetchone()['region']
+    region = conn.execute('SELECT region, age FROM residents WHERE id = ?', (c['resident_id'],)).fetchone()
     return {**calls.call_summary(c), 'turns': calls.turns_of(conn, cid), 'ai_runs': calls.ai_runs_of(conn, cid),
             'staff_check': calls.staff_check_of(c), 'step': calls.call_step(c),
-            'welfare': welfare.matches(calls.call_needs(conn, cid), region)}
+            'welfare': welfare.matches(calls.call_needs(conn, cid), region['region'], age=region['age'])}
 
 
 @router.get('/live')
@@ -229,3 +236,8 @@ def staff_check(cid: int, body: CheckIn, conn=Depends(get_conn)):
     with db.tx(conn):
         conn.execute('UPDATE calls SET staff_check_note = ?, staff_check_at = ? WHERE id = ?', (body.note, at, cid))
     return {'checked': True, 'note': body.note, 'at': db.kst(at)}
+
+
+@router.get('/public-data')
+def public_data():
+    return welfare.public_data_overview()
